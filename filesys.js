@@ -9,19 +9,28 @@ module.exports = class FileSystem {
 
 	 
 
-	static async validParam (path, promptTitle) {
+	static async validateParam (path, promptTitle) {
 
 		
 		path = await Readline.readLineAsync( promptTitle );
+		
+		try {
 
-		//Если путь не существует или это не папка то ошибка
-		if (!path || 
-			!fs.statSync(a_dir).isDirectory())
-		console.log(`Path "${path}" is not valid! `);
-		else {
-			console .log(`Path "${path}" is valid! `);
+
+			//Если путь не существует или это не папка то ошибка
+			if  ( fs.statSync(path).isDirectory() )
+
+				console .log(`Path "${path}" is valid! `);
+				 
+			return;
+
+		} catch (err) {
+
+			console .log(`Path "${path}" is not valid! `);
+			return;
+
 		}
-		return;
 	}
 }
+
 

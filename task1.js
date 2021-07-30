@@ -13,12 +13,12 @@ async function getPath() {
 	console.log('START')
 
 	//получаем начальный путь
-	const sourcePath = await FileSystem.validParam( process.argv[2], "Enter Source Path" );
+	const sourcePath = await FileSystem.validateParam( process.argv[2], "Enter Source Path" );
     console.log('sourcePath:', sourcePath );
     if( !sourcePath ) process.exit();
     
     //получаем конечный путь
-    const destPath = await FileSystem.validParam( process.argv[3], "Enter Destination Path" );
+    const destPath = await FileSystem.validateParam( process.argv[3], "Enter Destination Path" );
     if( !destPath ) process.exit();
     console.log('FINISH');
     process.exit();
