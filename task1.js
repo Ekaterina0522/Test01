@@ -50,7 +50,7 @@ getPath();
 
 
 // получает имена файлов с заданным расширением !!!
-      function getFileName() {
+    function getFileName() {
 
 	//делаем из path строку для readdir
 	let strPath = String( path );
@@ -80,13 +80,18 @@ let SceneSubName = '';
 
 
 function parsing( fileName ) {
-	
+
+	counter = 0;
 	let helperString = '';
+
 	for ( let chars of fileName ) {
 
-		if ( chars === '_' ) EpisodeName += chars;
-	}
+		if ( chars === '_' ) {
 
+			EpisodeName += chars;
+			counter += 1;
+		}
+	}
 
 }
 
