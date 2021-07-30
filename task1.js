@@ -35,15 +35,15 @@ async function getPath() {
 	//const startPath =  validParam(path) 
 
 
-function validParam (path) {
-	if (!path || 
-		console.log(fs.statSync(a_dir).isDirectory()))
-	console.log(`Path "${path}" is not valid! `);
-	else {
-		console .log(`Path "${path}" is valid! `);
-	}
-	return;
-}
+// function validParam (path) {
+// 	if (!path || 
+// 		console.log(fs.statSync(a_dir).isDirectory()))
+// 	console.log(`Path "${path}" is not valid! `);
+// 	else {
+// 		console .log(`Path "${path}" is valid! `);
+// 	}
+// 	return;
+// }
 
 
 
