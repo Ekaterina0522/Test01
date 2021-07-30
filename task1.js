@@ -14,13 +14,13 @@ async function getPath() {
 
 	//получаем начальный путь
 	const sourcePath = await FileSystem.validateParam( process.argv[2], "Enter Source Path" );
-    console.log('sourcePath:', sourcePath );
+    console.log(chalk.bgBlue('sourcePath:', sourcePath ));
     if( !sourcePath ) process.exit();
     
     //получаем конечный путь
     const destPath = await FileSystem.validateParam( process.argv[3], "Enter Destination Path" );
     if( !destPath ) process.exit();
-    console.log(chalk.bgMagenta('<<<< FINSH') );
+    console.log(chalk.bgMagenta('FINSH') );
     
     process.exit();
 
@@ -29,10 +29,7 @@ async function getPath() {
 getPath();	
 ///
 
-let EpisodeName = '';
-let SequenceName = '';
-let SceneName = '';
-let SceneSubName = '';
+
 
 
 // Получаем имена источников в заданной директории
@@ -50,20 +47,25 @@ let SceneSubName = '';
 //   }
 // })
 
-// получает имена файлов с заданным расширением
-async function getFileName() {
 
-	let strPath = String( FileSystem.path )
+
+// получает имена файлов с заданным расширением !!!
+      function getFileName() {
+
+	//делаем из path строку для readdir
+	let strPath = String( path );
+
 	fs.readdir(strPath, (err, files) => {
 
   		if (err)
     		console.log(err);
 
   		else {
-    		console.log("\Filenames with the .mov extension:");
-    		files.forEach(file => {
-      			if (path.extname(file) == ".mov")
-        			console.log(file);
+    		console.log("\nFilenames with the .mov extension:");
+    		files.forEach(fileName => {
+    			//смотрим чтобы расширение было mov
+      			if (path.extname(fileName) == ".mov")
+        			return fileName;
     		})
   		}
 	})
@@ -71,13 +73,24 @@ async function getFileName() {
 
 //getFileName();
 
+let EpisodeName = '';
+let SequenceName = '';
+let SceneName = '';
+let SceneSubName = '';
 
-/*
-function parsing(file) {
+
+function parsing( fileName ) {
+	
+	let helperString = '';
+	for ( let chars of fileName ) {
+
+		if ( chars === '_' ) EpisodeName += chars;
+	}
+
 
 }
 
-*/
+
 
 
 
