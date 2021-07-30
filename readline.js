@@ -3,20 +3,21 @@ const chalk = require('chalk');
 
 
 module.exports = class Readline {
-	static async readline(massage) {
+
+	static async readLineAsync(message) {
 
 		const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
+            input: process.stdin,
+            output: process.stdout
         });
 	
-	return new Promise((resolve, reject) => {
+	    return new Promise((resolve, reject) => {
             rl.question( message+': ', (answer) => {
                 resolve(answer);
             });
         });
     }
+
 }
 
         
-    
