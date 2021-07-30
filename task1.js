@@ -9,22 +9,27 @@ process.argv.forEach(function (val, index, array) {
 
 // ввод пользователем пути
 async function getPath() {
+	const sourcePath = await validateParam( process.argv[2], "Enter Source Path" );
+    console.log('sourcePath:', sourcePath );
+    if( !sourcePath ) process.exit();
+    
+    const destPath = await validateParam( process.argv[3], "Enter Destination Path" );
+    if( !destPath ) process.exit();
 
-
-	const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-	rl.question("Enter path: ", function(path) {
+// 	const rl = readline.createInterface({
+//     input: process.stdin,
+//     output: process.stdout
+// });
+// 	rl.question("Enter path: ", function(path) {
     	
    
-        rl.close();
-    });
-		
-}
+//         rl.close();
+//     });
+	
+// }
 	
 
-	const startPath = await validParam(path) 
+	const startPath =  validParam(path) 
 
 
 function validParam (path) {
