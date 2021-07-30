@@ -7,22 +7,20 @@ const chalk = require('chalk');
 //проверяем валидность пути
 module.exports = class FileSystem {
 
-	 
-
 	static async validateParam (path, promptTitle) {
+		
+		if ( !path ){
 
-		
-		path = await Readline.readLineAsync( promptTitle );
-		
+			path = await Readline.readLineAsync( promptTitle );
+
+		}
+
 		try {
-
-
-			//Если путь не существует или это не папка то ошибка
-			if  ( fs.statSync(path).isDirectory() )
-
+			if (fs.statSync(path).isDirectory() ) {
 				console .log(`Path "${path}" is valid! `);
-				 
-			return;
+				return path; 
+			}
+			
 
 		} catch (err) {
 
@@ -32,5 +30,6 @@ module.exports = class FileSystem {
 		}
 	}
 }
+
 
 

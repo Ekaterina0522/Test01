@@ -19,5 +19,4 @@ module.exports = class Readline {
     }
 
 }
-//
-        
+
