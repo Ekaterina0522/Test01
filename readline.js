@@ -2,7 +2,7 @@ const readline = require('readline');
 const chalk = require('chalk');
 
 
-class Readline {
+module.exports = class Readline {
 	static async readline(massage) {
 
 		const rl = readline.createInterface({
