@@ -21,6 +21,10 @@ class Task1 {
 
         await this.parseString(entries);
 
+        await this.generationStructure(this.destPath);
+
+        await this.getSimilarStructure (entries)
+
         // console.log('@3');
     }
 
@@ -49,7 +53,23 @@ class Task1 {
         return entries;
     }
 
+//////////////////////////////////////////////////////////
+    async getSimilarStructure (entries) {
 
+    	entries.forEach( e => {
+    		
+    	
+
+    	const joinEntries = entries.join('--');
+    	//console.log(joinEntries);
+    	let joined = joinEntries.replace(/_sq0_[AB]_0_/g, '_sq000_');
+    	//console.log(joined);
+    	});
+
+    	return joined;
+
+    }
+/////////////////////////////////////////////////////////////
     //парсим имена источников
     parseString = (entries) => {
     	//console.log('@1');
@@ -58,16 +78,22 @@ class Task1 {
     		let eNew = e.split('_')
     		splitEntries.push(eNew);
     		//console.log('@2');
-    	});
+    	}); console.log(splitEntries);
     	return splitEntries;
     }
 
-
-        
-    	
     
-    }
 
+	async generationStructure(path) {
+		// console.log('generationStructure: ',path+'\\3_anim\\subfolder')
+	    fs.mkdir(path + '\\3_anim\\subfolder', { recursive: true }, (err) => {
+	        if (err) throw err;
+	        console.log(`Created in "${path}"`);
+	    });
+
+	}
+
+}
 
 
 //передача аргументов командной строки
