@@ -17,9 +17,9 @@ class Task1 {
 
         // console.log('@2');
 
-        await this.getDirEntries(this.sourcePath);
+        const entries = await this.getDirEntries(this.sourcePath);
 
-        await this.parseString(this.entries);
+        await this.parseString(entries);
 
         // console.log('@3');
     }
