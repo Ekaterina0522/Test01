@@ -8,7 +8,7 @@ class Task1 {
 
 	sourcePath;
 	destPath;
-
+	
     async start() {
 
         // console.log('@1');
@@ -44,24 +44,30 @@ class Task1 {
 
     // Получаем имена источников в заданной директории
     async getDirEntries(path) {
-        var entries = await fs.readdir(path);
+        const entries = await fs.readdir(path);
         console.log('entries', entries);
+        return entries;
     }
-
 
 
     //парсим имена источников
     parseString = (entries) => {
-        let array = entries.split('_'),
-            lastElement;
-        lastElement = array.pop().split(';');
-        lastElement.forEach(e => {
-            array.push(e)
-        })
-        return array;
+    	//console.log('@1');
+    	const splitEntries = [];
+    	entries.forEach( e => {
+    		let eNew = e.split('_')
+    		splitEntries.push(eNew);
+    		//console.log('@2');
+    	});
+    	return splitEntries;
     }
 
-}
+
+        
+    	
+    
+    }
+
 
 
 //передача аргументов командной строки
@@ -71,8 +77,7 @@ process.argv.forEach(function (val, index, array) {
 
 (new Task1).start();
 
-// let task1 = new Task1();
-// task1.start();
+
 
 
 
