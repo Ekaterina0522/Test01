@@ -54,14 +54,15 @@ class Task1 {
     }
 
 //////////////////////////////////////////////////////////
+    //делаем у всех источников одинаковую структуру (не до конца реализовано: ругается на joined)
     async getSimilarStructure (entries) {
 
     	entries.forEach( e => {
-    		
-    	
 
     	const joinEntries = entries.join('--');
     	//console.log(joinEntries);
+
+    	//во всех источниках ищем sq0_A_0 и заменяем на sq000
     	let joined = joinEntries.replace(/_sq0_[AB]_0_/g, '_sq000_');
     	//console.log(joined);
     	});
@@ -69,21 +70,21 @@ class Task1 {
     	return joined;
 
     }
-/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
     //парсим имена источников
     parseString = (entries) => {
-    	//console.log('@1');
+    	
     	const splitEntries = [];
     	entries.forEach( e => {
     		let eNew = e.split('_')
     		splitEntries.push(eNew);
-    		//console.log('@2');
+    		
     	}); console.log(splitEntries);
     	return splitEntries;
     }
 
     
-
+   //генерируем файловую структуру (не до конца реализовано)
 	async generationStructure(path) {
 		// console.log('generationStructure: ',path+'\\3_anim\\subfolder')
 	    fs.mkdir(path + '\\3_anim\\subfolder', { recursive: true }, (err) => {
