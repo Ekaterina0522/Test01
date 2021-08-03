@@ -62,23 +62,38 @@ class Task1 {
         let joined = [];
 
         entries.forEach(e => {
-
+            
+            let cutName = e.slice(0, -4);
             //во всех источниках ищем sq0_A_0 и заменяем на sq000
-            let replaced = e.replace(/_sq0_[AB]_0_/g, '_sq000_');
+            //replaced - источники с замененным sq
+            let replaced = cutName.replace(/_sq0_[AB]_0_/g, '_sq000_');
             joined.push(replaced);
-            //console.log(chalk.green(replaced));
+            console.log(chalk.green(replaced));
 
-            //ищем имена источников с буквой на конце
-            let regexpr = /[A-Z]/g;
+            //берем последний символ theLastLetter
+            let theLastLetter = replaced.slice(-1);
 
-            let letter = regexpr.exec(replaced);
-            if (letter) { //смотрим на какой позиции была буква
-                console.log('Источник с буквой на позиции:', letter['index']);
-            
-            
+            //смотрим где последний символ - это буква
+            if (/[A-Z]/.test(theLastLetter)) {
+                let letterToChar = theLastLetter.charCodeAt(18) - 64;
+                //console.log();
             };
+            
 
-        });
+
+// let regexpr = /[A-Z]/g;   let letterToChar = letter['input'].charCodeAt(letter['index']) - 64;
+
+            // let letter = regexpr.exec(replaced);
+            // if ( letter) { //смотрим на какой позиции была буква
+            //     //console.log(chalk.yellow('Источник с буквой на позиции:', letter['input']));
+            
+            //делаем из буквы цифру
+            
+
+            //console.log(letterToChar);
+            });
+
+        
 
         //console.log(joined);
         return joined;
