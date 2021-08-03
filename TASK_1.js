@@ -70,14 +70,23 @@ class Task1 {
             joined.push(replaced);
             console.log(chalk.green(replaced));
 
-            //берем последний символ theLastLetter
-            let theLastLetter = replaced.slice(-1);
-
             //смотрим где последний символ - это буква
-            if (/[A-Z]/.test(theLastLetter)) {
-                let letterToChar = theLastLetter.charCodeAt(18) - 64;
-                //console.log();
-            };
+            
+            if (replaced.endsWith('A')) {
+                replaced = replaced.slice(0, -1);
+                //console.log(replaced);
+                replaced += '1';
+                console.log(chalk.green(replaced));
+                
+            };  
+            
+            //удаляем ненужные строки
+            // if (replaced.length < 19) {
+
+            // } 
+                //let letterToChar = theLastLetter.charCodeAt(18) - 64;
+                //
+            //};
             
 
 
