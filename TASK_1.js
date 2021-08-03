@@ -19,11 +19,14 @@ class Task1 {
 
         const entries = await this.getDirEntries(this.sourcePath);
 
+        //Заменить в парсинге параметр, после тогго как приведу
+        //имена источников к одному виду, и переместить вызов ниже
+        //функции getSimilarStructure.
         await this.parseString(entries);
 
         await this.generationStructure(this.destPath);
 
-        await this.getSimilarStructure (entries)
+        await this.getSimilarStructure (entries);
 
         // console.log('@3');
     }
@@ -54,22 +57,24 @@ class Task1 {
     }
 
 //////////////////////////////////////////////////////////
-    //делаем у всех источников одинаковую структуру (не до конца реализовано: ругается на joined)
+    //делаем у всех источников одинаковую структуру
     async getSimilarStructure (entries) {
-
         let joined = [];
 
     	entries.forEach( e => {
 
-    	//const joinEntries = entries.join('--');
-    	//console.log(joinEntries);
-
     	//во всех источниках ищем sq0_A_0 и заменяем на sq000
         let replaced = e.replace(/_sq0_[AB]_0_/g, '_sq000_');
         joined.push(replaced);
-    	//
+
+        //ищем имена источников с буквой на конце
+        let regexpr = /[A-Z]/g;
+        regexpr.lastIndex = 18;
+        let digit = regexpr.exec(e);
+        console.log(digit);
+    	
     	});
-        console.log(joined);
+        //console.log(joined);
     	return joined;
 
     }
