@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const chalk = require('chalk');
-const FileSystem = require('./filesys');
+const FileSystem = require('./FileSystem');
 const path = require('path')
 
 //
@@ -57,16 +57,19 @@ class Task1 {
     //делаем у всех источников одинаковую структуру (не до конца реализовано: ругается на joined)
     async getSimilarStructure (entries) {
 
+        let joined = [];
+
     	entries.forEach( e => {
 
-    	const joinEntries = entries.join('--');
+    	//const joinEntries = entries.join('--');
     	//console.log(joinEntries);
 
     	//во всех источниках ищем sq0_A_0 и заменяем на sq000
-    	let joined = joinEntries.replace(/_sq0_[AB]_0_/g, '_sq000_');
-    	//console.log(joined);
+        let replaced = e.replace(/_sq0_[AB]_0_/g, '_sq000_');
+        joined.push(replaced);
+    	//
     	});
-
+        console.log(joined);
     	return joined;
 
     }
