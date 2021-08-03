@@ -260,8 +260,9 @@ console.log(truncate('gdhfujruieufdn', 1));
 
 
 
-function extractCurrencyValue(str) {
-  return str.slice(1);
-}
+// function extractCurrencyValue(str) {
+//   return str.slice(1);
+// }
 
-extractCurrencyValue('$120')
+// extractCurrencyValue('$120')
+
