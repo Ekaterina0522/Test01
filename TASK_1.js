@@ -52,33 +52,39 @@ class Task1 {
     // Получаем имена источников в заданной директории
     async getDirEntries(path) {
         const entries = await fs.readdir(path);
-        console.log('entries', entries);
+        //console.log('entries', entries);
         return entries;
     }
 
-//////////////////////////////////////////////////////////
+
     //делаем у всех источников одинаковую структуру
-    async getSimilarStructure (entries) {
+    async getSimilarStructure(entries) {
         let joined = [];
 
-    	entries.forEach( e => {
+        entries.forEach(e => {
 
-    	//во всех источниках ищем sq0_A_0 и заменяем на sq000
-        let replaced = e.replace(/_sq0_[AB]_0_/g, '_sq000_');
-        joined.push(replaced);
+            //во всех источниках ищем sq0_A_0 и заменяем на sq000
+            let replaced = e.replace(/_sq0_[AB]_0_/g, '_sq000_');
+            joined.push(replaced);
+            //console.log(chalk.green(replaced));
 
-        //ищем имена источников с буквой на конце
-        let regexpr = /[A-Z]/g;
-        regexpr.lastIndex = 18;
-        let digit = regexpr.exec(e);
-        console.log(digit);
-    	
-    	});
+            //ищем имена источников с буквой на конце
+            let regexpr = /[A-Z]/g;
+
+            let letter = regexpr.exec(replaced);
+            if (letter) { //смотрим на какой позиции была буква
+                console.log('Источник с буквой на позиции:', letter['index']);
+            
+            
+            };
+
+        });
+
         //console.log(joined);
-    	return joined;
+        return joined;
 
     }
-/////////////////////////////////////////////////////////
+
     //парсим имена источников
     parseString = (entries) => {
     	
@@ -87,7 +93,7 @@ class Task1 {
     		let eNew = e.split('_')
     		splitEntries.push(eNew);
     		
-    	}); console.log(splitEntries);
+    	}); //console.log(splitEntries);
     	return splitEntries;
     }
 
