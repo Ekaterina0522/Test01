@@ -11,7 +11,7 @@ module.exports = class GeneratorOfStructure {
 
         await this.getNameObject(splitEntries);
 
-        this.getFileStructure(path);
+        await this.getFileStructure(path);
     }
 
     //функция генерирующая имена для названия папок
@@ -51,24 +51,23 @@ module.exports = class GeneratorOfStructure {
         // console.log(chalk.yellow('episodeName_sequenceName: ', episodeName_sequenceName));
         nameObject.sequenceFullName = nameObject.episodeName + '_' + nameObject.sequenceName + '_' + nameObject.sceneName;
         // console.log(chalk.yellow('episodeName_sequenceName_sceneName: ', episodeName_sequenceName_sceneName));
-        // console.log(JSON.stringify(nameObject,true,'  '));
+        //console.log(JSON.stringify(nameObject,true,'  '));
         return nameObject;
 
     }
 
     //генерируем файловую структуру (до конца не реализовано)
-    getFileStructure(path) {
-    	const helperPath = './episodeName/episodeName_sequenceName/episodeName_sequenceName_sceneName'; 
-    	let newPath = path + helperPath;
-        console.log('generationStructure: ', newPath);
-        // nameObject.forEach(e => {
-        //     fs.mkdir(path + `\\3_anim\\"${nameObject.episodeName}"\\"${nameObject.episodeFullName}"\\
+    async getFileStructure(path) {
+
+        await fs.promises.mkdir('\\3_anim\\subfolder', { recursive: true });
+        // splitEntries.forEach(e => {
+        //     fs.mkdir(path + `/3_anim/"${nameObject.episodeName}"/"${nameObject.episodeFullName}"/
         //     	"${nameObject.sequenceFullName}"`, { recursive: true }, (err) => {
         //         if (err) throw err;
         //         console.log(`Created in "${path}"`);
         //     });
 
         // });
-        return newPath;
-    };
+        return ;
+    }
 }
