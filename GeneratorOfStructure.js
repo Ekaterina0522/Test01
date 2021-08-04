@@ -11,7 +11,7 @@ module.exports = class GeneratorOfStructure {
 
         await this.getNameObject(splitEntries);
 
-        await this.getFileStructure(path);
+        await this.getFileStructure(destPath);
     }
 
     //функция генерирующая имена для названия папок
