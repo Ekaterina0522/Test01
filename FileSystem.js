@@ -10,9 +10,7 @@ module.exports = class FileSystem {
 	static async validateParam (path, promptTitle) {
 		
 		if ( !path ){
-
 			path = await Readline.readLineAsync( promptTitle );
-
 		}
 
 		try {
@@ -21,12 +19,9 @@ module.exports = class FileSystem {
 				return path; 
 			}
 			
-
 		} catch (err) {
-
 			console .log(`Path "${path}" is not valid! `);
 			return;
-
 		}
 	}
 }
