@@ -3,12 +3,15 @@ const chalk = require('chalk');
 const path = require('path');
 const TASK_1 = require('./TASK_1');
 
+
 module.exports = class GeneratorOfStructure {
 
 
     async start() {
+
         await this.getNameObject(splitEntries);
-        await this.getFileStructure(path);
+
+        this.getFileStructure(path);
     }
 
     //функция генерирующая имена для названия папок
@@ -54,8 +57,10 @@ module.exports = class GeneratorOfStructure {
     }
 
     //генерируем файловую структуру (до конца не реализовано)
-    async getFileStructure(path) {
-        console.log('generationStructure: ',path + `\\3_anim\\"${nameObject.episodeName}"\\"${nameObject.episodeFullName}"\\"${nameObject.sequenceFullName}"`);
+    getFileStructure(path) {
+    	const helperPath = './episodeName/episodeName_sequenceName/episodeName_sequenceName_sceneName'; 
+    	let newPath = path + helperPath;
+        console.log('generationStructure: ', newPath);
         // nameObject.forEach(e => {
         //     fs.mkdir(path + `\\3_anim\\"${nameObject.episodeName}"\\"${nameObject.episodeFullName}"\\
         //     	"${nameObject.sequenceFullName}"`, { recursive: true }, (err) => {
@@ -64,6 +69,6 @@ module.exports = class GeneratorOfStructure {
         //     });
 
         // });
-        return;
+        return newPath;
     };
 }

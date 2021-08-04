@@ -37,7 +37,7 @@ class Task1 {
             return GeneratorOfStructure.getNameObject(entry);
         });
 
-        console.log(JSON.stringify(splitEntries, true, '  '));
+        //console.log(JSON.stringify(splitEntries, true, '  '));
 
         // console.log('@3');
     }
@@ -89,7 +89,7 @@ class Task1 {
 
         });
 
-        console.log(arrWithoutLetter);
+        //console.log(arrWithoutLetter);
 
         return arrWithoutLetter;
 
