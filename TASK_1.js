@@ -60,7 +60,7 @@ class Task1 {
     //делаем у всех источников одинаковую структуру
     async getSimilarStructure(entries) {
         let joined = [];
-
+        let arrWithoutLetter = [];
         entries.forEach(e => {
             
             let cutName = e.slice(0, -4);
@@ -68,44 +68,19 @@ class Task1 {
             //replaced - источники с замененным sq
             let replaced = cutName.replace(/_sq0_[AB]_0_/g, '_sq000_');
             joined.push(replaced);
-            console.log(chalk.green(replaced));
+            //console.log(chalk.green(replaced));
 
-            //смотрим где последний символ - это буква
-            
-            if (replaced.endsWith('A')) {
-                replaced = replaced.slice(0, -1);
-                //console.log(replaced);
-                replaced += '1';
-                console.log(chalk.green(replaced));
-                
-            };  
-            
-            //удаляем ненужные строки
-            // if (replaced.length < 19) {
+            //замена А на 1 с помощью регулярного выражения
 
-            // } 
-                //let letterToChar = theLastLetter.charCodeAt(18) - 64;
-                //
-            //};
-            
+            let replacedWithoutLetter = replaced.replace(/A/g, '1');
 
+            //console.log(chalk.green(replacedWithoutLetter));
+            arrWithoutLetter.push(replacedWithoutLetter);
 
-// let regexpr = /[A-Z]/g;   let letterToChar = letter['input'].charCodeAt(letter['index']) - 64;
-
-            // let letter = regexpr.exec(replaced);
-            // if ( letter) { //смотрим на какой позиции была буква
-            //     //console.log(chalk.yellow('Источник с буквой на позиции:', letter['input']));
-            
-            //делаем из буквы цифру
-            
-
-            //console.log(letterToChar);
             });
 
-        
-
-        //console.log(joined);
-        return joined;
+        console.log(arrWithoutLetter);
+        return arrWithoutLetter;
 
     }
 
