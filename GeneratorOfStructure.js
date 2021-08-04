@@ -17,16 +17,16 @@ module.exports = class GeneratorOfStructure {
     //функция генерирующая имена для названия папок
     static getNameObject(nameParts) {
 
-    	const episodeName = nameParts[0];
-    	const sequenceName = nameParts[1];
-    	const sceneName = nameParts[2];
-    	let episodeNumber = undefined;
-    	let episodeNameIsUnique;
+        const episodeName = nameParts[0];
+        const sequenceName = nameParts[1];
+        const sceneName = nameParts[2];
+        let episodeNumber = undefined;
+        let episodeNameIsUnique;
 
         const epPattern = episodeName.match(/ep\d\d\d/);
         if (epPattern) {
             console.log('Episode Name is Template');
-            episodeNumber = episodeName.substr(2,episodeName.length);
+            episodeNumber = episodeName.substr(2, episodeName.length);
             episodeNameIsUnique = false;
         } else {
             console.log('Episode Name is Unique');
@@ -60,6 +60,22 @@ module.exports = class GeneratorOfStructure {
     async getFileStructure(path) {
 
         await fs.promises.mkdir('\\3_anim\\subfolder', { recursive: true });
+        //ну или так:
+        // const path = './path/to/my/directory';
+
+        // path.split('/').reduce(
+        //     (directories, directory) => {
+        //         directories += `${directory}/`;
+
+        //         if (!fs.existsSync(directories)) {
+        //             fs.mkdirSync(directories);
+        //         }
+
+        //         return directories;
+        //     },
+        //     '',
+        // );
+        ////////////////////////////////////////////////////////////////////////
         // splitEntries.forEach(e => {
         //     fs.mkdir(path + `/3_anim/"${nameObject.episodeName}"/"${nameObject.episodeFullName}"/
         //     	"${nameObject.sequenceFullName}"`, { recursive: true }, (err) => {
@@ -68,6 +84,6 @@ module.exports = class GeneratorOfStructure {
         //     });
 
         // });
-        return ;
+        return;
     }
 }
