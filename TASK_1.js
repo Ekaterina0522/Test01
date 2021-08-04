@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const chalk = require('chalk');
 const FileSystem = require('./FileSystem');
 const path = require('path')
+const NameGenerator = require('./NameGenerator');
 
 //
 class Task1 {
@@ -19,7 +20,7 @@ class Task1 {
 
         const entries = await this.getDirEntries(this.sourcePath);
         const arrWithoutLetter = await this.getSimilarStructure(entries);
-        
+        const splitEntries = await this.parseString(arrWithoutLetter);
         //Заменить в парсинге параметр, после тогго как приведу
         //имена источников к одному виду, и переместить вызов ниже
         //функции getSimilarStructure.
@@ -29,6 +30,8 @@ class Task1 {
         await this.parseString(arrWithoutLetter);
 
         await this.generationStructure(this.destPath);
+
+        await NameGenerator.generator(splitEntries);
         // console.log('@3');
     }
 
@@ -100,7 +103,7 @@ class Task1 {
     }
 
     
-   //генерируем файловую структуру (не до конца реализовано)
+   //генерируем файловую структуру 
 	async generationStructure(path) {
 		// console.log('generationStructure: ',path+'\\3_anim\\subfolder')
 	    fs.mkdir(path + '\\3_anim\\subfolder', { recursive: true }, (err) => {
