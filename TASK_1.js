@@ -20,7 +20,7 @@ class Task1 {
 
         const entries = await this.getDirEntries(this.sourcePath);
         const arrWithoutLetter = await this.getSimilarStructure(entries);
-        const splitEntries = await this.parseString(arrWithoutLetter);
+        let splitEntries = await this.parseString(arrWithoutLetter);
         //Заменить в парсинге параметр, после тогго как приведу
         //имена источников к одному виду, и переместить вызов ниже
         //функции getSimilarStructure.
@@ -29,9 +29,14 @@ class Task1 {
 
         await this.parseString(arrWithoutLetter);
 
-        await this.generationStructure(this.destPath);
+        //await this.generationStructure(this.destPath);
 
-        await Generator.generator(splitEntries);
+        splitEntries = splitEntries.map( entry => {
+            return Generator.getNameObject(entry);
+        });
+
+        console.log(JSON.stringify(splitEntries,true,'  '));
+
         // console.log('@3');
     }
 
@@ -70,6 +75,7 @@ class Task1 {
             let cutName = e.slice(0, -4);
             //во всех источниках ищем sq0_A_0 и заменяем на sq000
             //replaced - источники с замененным sq
+
             let replaced = cutName.replace(/_sq0_[AB]_0_/g, '_sq000_');
             joined.push(replaced);
             //console.log(chalk.green(replaced));
@@ -84,7 +90,7 @@ class Task1 {
 
             });
 
-        //console.log(arrWithoutLetter);
+        console.log(arrWithoutLetter);
 
         return arrWithoutLetter;
 
@@ -98,7 +104,9 @@ class Task1 {
     		let eNew = e.split('_')
     		splitEntries.push(eNew);
     		
-    	}); console.log(splitEntries);
+    	}); 
+
+        console.log(splitEntries);
     	return splitEntries;
     }
 
