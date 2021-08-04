@@ -18,16 +18,17 @@ class Task1 {
         // console.log('@2');
 
         const entries = await this.getDirEntries(this.sourcePath);
-
+        const arrWithoutLetter = await this.getSimilarStructure(entries);
+        
         //Заменить в парсинге параметр, после тогго как приведу
         //имена источников к одному виду, и переместить вызов ниже
         //функции getSimilarStructure.
-        await this.parseString(entries);
-
-        await this.generationStructure(this.destPath);
-
+        
         await this.getSimilarStructure (entries);
 
+        await this.parseString(arrWithoutLetter);
+
+        await this.generationStructure(this.destPath);
         // console.log('@3');
     }
 
@@ -60,7 +61,7 @@ class Task1 {
     //делаем у всех источников одинаковую структуру
     async getSimilarStructure(entries) {
         let joined = [];
-        let arrWithoutLetter = [];
+        const arrWithoutLetter = [];
         entries.forEach(e => {
             
             let cutName = e.slice(0, -4);
@@ -73,26 +74,28 @@ class Task1 {
             //замена А на 1 с помощью регулярного выражения
 
             let replacedWithoutLetter = replaced.replace(/A/g, '1');
-
             //console.log(chalk.green(replacedWithoutLetter));
+
+            //массив с именами источников без букв в конце
             arrWithoutLetter.push(replacedWithoutLetter);
 
             });
 
-        console.log(arrWithoutLetter);
+        //console.log(arrWithoutLetter);
+
         return arrWithoutLetter;
 
     }
 
     //парсим имена источников
-    parseString = (entries) => {
+    async parseString (arrWithoutLetter) {
     	
     	const splitEntries = [];
-    	entries.forEach( e => {
+        arrWithoutLetter.forEach( e => {
     		let eNew = e.split('_')
     		splitEntries.push(eNew);
     		
-    	}); //console.log(splitEntries);
+    	}); console.log(splitEntries);
     	return splitEntries;
     }
 
