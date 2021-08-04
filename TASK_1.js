@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const chalk = require('chalk');
 const FileSystem = require('./FileSystem');
 const path = require('path')
-const NameGenerator = require('./NameGenerator');
+const Generator = require('./Generator');
 
 //
 class Task1 {
@@ -31,7 +31,7 @@ class Task1 {
 
         await this.generationStructure(this.destPath);
 
-        await NameGenerator.generator(splitEntries);
+        await Generator.generator(splitEntries);
         // console.log('@3');
     }
 
@@ -103,15 +103,6 @@ class Task1 {
     }
 
     
-   //генерируем файловую структуру 
-	async generationStructure(path) {
-		// console.log('generationStructure: ',path+'\\3_anim\\subfolder')
-	    fs.mkdir(path + '\\3_anim\\subfolder', { recursive: true }, (err) => {
-	        if (err) throw err;
-	        console.log(`Created in "${path}"`);
-	    });
-
-	}
 
 }
 
