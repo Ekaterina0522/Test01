@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const chalk = require('chalk');
 const FileSystem = require('./FileSystem');
 const path = require('path')
-const GeneratorOfStructure = require('./GeneratorOfStructure');
+const NameGenerator = require('./NameGenerator');
 const Utils = require('./app/utils/utils');
 
 //
@@ -13,57 +13,50 @@ class Task1 {
 
     async start() {
 
-        // console.log('@1');
         console.log(chalk.bgMagenta('START'));
 
         await this.getPath();
-
-        // console.log('@2');
 
         const entries = await this.getDirEntries(this.sourcePath);
 
         const arrWithoutLetter = this.getSimilarStructure(entries);
 
         let splitEntries = await this.parseString(arrWithoutLetter);
-        //Заменить в парсинге параметр, после тогго как приведу
-        //имена источников к одному виду, и переместить вызов ниже
-        //функции getSimilarStructure.
-
-        // this.getSimilarStructure (entries);
 
         await this.parseString(arrWithoutLetter);
 
-        //await this.generationStructure(this.destPath);
+        //await this.NameGenerator(this.destPath);
         /*
         splitEntries = splitEntries.map(entry => {
-            const nameObject = GeneratorOfStructure.getNameObject(entry);
-            await GeneratorOfStructure.createFolders(this.destPath);
+            const nameObject = NameGenerator.getNameObject(entry);
+            await NameGenerator.createFolders(this.destPath);
             return nameObject;
         });
         */
         const _splitEntries = [];
 
+        //с помощью функции processArray последовательно перебираем массив splitEntries
+        //формируем путь где функция createFolder будет создавать папку(папки)
         await Utils.processArray( splitEntries, async (entry,i) => {
 
-            const nameObject = GeneratorOfStructure.getNameObject(entry);
+            const nameObject = NameGenerator.getNameObject(entry);
 
             await FileSystem.createFolder( this.destPath +`\\3_anim\\${nameObject.episodeName}\\${nameObject.episodeFullName}` );
 
+            //массив с объектами, где хранятся "разобранные" имена источников
             _splitEntries.push(nameObject);
 
         });
         
-        // const nameObject = this.getNameObject(splitEntries);
-        // await GeneratorOfStructure.getFileStructure(nameObject);
-        //console.log(JSON.stringify(splitEntries, true, '  '));
+        // const nameObject = this.getNameObject(splitEntries); скорее всего не понадобится
+        // await NameGenerator.getFileStructure(nameObject); скорее всего не понадобится
+        //console.log(JSON.stringify(splitEntries, true, '  ')); 
 
-        // console.log('@3');
         console.log(chalk.bgMagenta('FINSH'));
     }
 
     // ввод пользователем пути
     async getPath() {
-        
 
         //получаем начальный путь
         this.sourcePath = await FileSystem.validateParam(process.argv[2], "Enter Source Path");
@@ -97,13 +90,11 @@ class Task1 {
             //console.log(chalk.green(replaced));
 
             //замена А на 1 с помощью регулярного выражения
-
             let replacedWithoutLetter = replaced.replace(/A/g, '1').split('_');
 
             //console.log(chalk.green(replacedWithoutLetter));
 
             //массив с именами источников без букв в конце
-
             return replacedWithoutLetter;
 
         });
