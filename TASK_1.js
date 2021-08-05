@@ -68,12 +68,12 @@ class Task1 {
             _splitEntries.push(nameObject);
         });
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-        await FileSystem.addingVideoToCutFolder(splitEntries, async (entry, i) => {
+        // await FileSystem.addingVideoToCutFolder(splitEntries, async (entry, i) => {
 
-            const nameObject = NameGenerator.getNameObject(entry);
-            nameObject.sequenceFullName 
+        //     const nameObject = NameGenerator.getNameObject(entry);
+        //     nameObject.sequenceFullName 
                                                                     
-        });
+        // });
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
         console.log(pathToFfmpeg);
         // const nameObject = this.getNameObject(splitEntries); скорее всего не понадобится
