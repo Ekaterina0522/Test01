@@ -31,8 +31,8 @@ module.exports = class FileSystem {
         return result;
     }
 
-    static async addingVideoToCutFolder(arrOfCutPathes, splitEntries) {
+    // static async addingVideoToCutFolder(arrOfCutPathes, splitEntries) {
         
-    }
+    // }
 
 }
