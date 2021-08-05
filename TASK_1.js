@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const FileSystem = require('./FileSystem');
 const path = require('path')
 const GeneratorOfStructure = require('./GeneratorOfStructure');
+const Utils = require('./app/utils/utils');
 
 //
 class Task1 {
@@ -13,6 +14,7 @@ class Task1 {
     async start() {
 
         // console.log('@1');
+        console.log(chalk.bgMagenta('START'));
 
         await this.getPath();
 
@@ -32,19 +34,36 @@ class Task1 {
         await this.parseString(arrWithoutLetter);
 
         //await this.generationStructure(this.destPath);
-
+        /*
         splitEntries = splitEntries.map(entry => {
-            return GeneratorOfStructure.getNameObject(entry);
+            const nameObject = GeneratorOfStructure.getNameObject(entry);
+            await GeneratorOfStructure.createFolders(this.destPath);
+            return nameObject;
         });
+        */
+        const _splitEntries = [];
 
+        await Utils.processArray( splitEntries, async (entry,i) => {
+
+            const nameObject = GeneratorOfStructure.getNameObject(entry);
+
+            await FileSystem.createFolder( this.destPath +`\\3_anim\\${nameObject.episodeName}\\${nameObject.episodeFullName}` );
+
+            _splitEntries.push(nameObject);
+
+        });
+        
+        // const nameObject = this.getNameObject(splitEntries);
+        // await GeneratorOfStructure.getFileStructure(nameObject);
         //console.log(JSON.stringify(splitEntries, true, '  '));
 
         // console.log('@3');
+        console.log(chalk.bgMagenta('FINSH'));
     }
 
     // ввод пользователем пути
     async getPath() {
-        console.log(chalk.bgMagenta('START'));
+        
 
         //получаем начальный путь
         this.sourcePath = await FileSystem.validateParam(process.argv[2], "Enter Source Path");
@@ -54,7 +73,7 @@ class Task1 {
         //получаем конечный путь
         this.destPath = await FileSystem.validateParam(process.argv[3], "Enter Destination Path");
         if (!this.destPath) return;
-        console.log(chalk.bgMagenta('FINSH'));
+        
     }
 
     // Получаем имена источников в заданной директории
