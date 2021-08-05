@@ -4,7 +4,7 @@ const FileSystem = require('./FileSystem');
 const path = require('path')
 const NameGenerator = require('./NameGenerator');
 const Utils = require('./app/utils/utils');
-//const ffmpeg = require ('fluent-ffmpeg');
+
 
 
 //
@@ -67,7 +67,14 @@ class Task1 {
             //массив с объектами, где хранятся "разобранные" имена источников
             _splitEntries.push(nameObject);
         });
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        await FileSystem.addingVideoToCutFolder(splitEntries, async (entry, i) => {
 
+            const nameObject = NameGenerator.getNameObject(entry);
+            nameObject.sequenceFullName 
+                                                                    
+        });
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
         console.log(pathToFfmpeg);
         // const nameObject = this.getNameObject(splitEntries); скорее всего не понадобится
         // await NameGenerator.getFileStructure(nameObject); скорее всего не понадобится
@@ -132,10 +139,6 @@ class Task1 {
         });
         console.log(splitEntries);
         return splitEntries;
-    }
-
-    async changingVideoFormat(arrOfCutPathes) {
-
     }
 }
 
