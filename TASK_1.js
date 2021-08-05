@@ -4,6 +4,8 @@ const FileSystem = require('./FileSystem');
 const path = require('path')
 const NameGenerator = require('./NameGenerator');
 const Utils = require('./app/utils/utils');
+//const ffmpeg = require ('fluent-ffmpeg');
+
 
 //
 class Task1 {
@@ -33,7 +35,7 @@ class Task1 {
             return nameObject;
         });
         */
-        
+        const pathToFfmpeg = 'C:\\ffmpeg\\bin\\ffmpeg.exe';
         const arrOfCutPathes = [];
         const _splitEntries = [];
        
@@ -66,7 +68,7 @@ class Task1 {
             _splitEntries.push(nameObject);
         });
 
-
+        console.log(pathToFfmpeg);
         // const nameObject = this.getNameObject(splitEntries); скорее всего не понадобится
         // await NameGenerator.getFileStructure(nameObject); скорее всего не понадобится
         //console.log(JSON.stringify(splitEntries, true, '  ')); 
