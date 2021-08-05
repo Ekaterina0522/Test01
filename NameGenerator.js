@@ -3,42 +3,51 @@ const chalk = require('chalk');
 const path = require('path');
 const TASK_1 = require('./TASK_1');
 
-module.exports = class NameGenerator { //extends TASK_1 {
+module.exports = class NameGenerator {
 
 
-	async start() {
-		await this.generator(splitEntries);
-	}
+    //функция генерирующая имена для названия папок
+    static getNameObject(nameParts) {
 
-	//функция генерирующая имена для названия папок
-	static async generator(splitEntries) {
-		//объект в котором хранятся данные об episodeName,sequenceName,sceneName
-		let name1 = {
-			episodeName: splitEntries[0][0],
-			sequenceName: splitEntries[0][1],
-			sceneName: splitEntries[0][2],
-		};
-		console.log(chalk.yellow('episodeName: ', name1.episodeName));
+        const episodeName = nameParts[0];
+        const sequenceName = nameParts[1];
+        const sceneName = nameParts[2];
+        let episodeNumber = undefined;
+        let episodeNameIsUnique;
 
-		let episodeName_sequenceName = name1.episodeName+'_'+name1.sequenceName;
-		console.log(chalk.yellow('episodeName_sequenceName: ', episodeName_sequenceName));
+        //epPattern ищем имя источника с ep и тремя цифрами,
+        //чтобы идентифицировать его как episodeName
+        const epPattern = episodeName.match(/ep\d\d\d/);
+        if (epPattern) {
+        	//если имя источника ep### значит имя не уникально
+            console.log('Episode Name is Template');
+            episodeNumber = episodeName.substr(2, episodeName.length);
+            episodeNameIsUnique = false;
+        } else {
+        	//если имя просто текст, то имя уникально
+            console.log('Episode Name is Unique');
+            episodeNameIsUnique = true;
+        }
 
-		let episodeName_sequenceName_sceneName = name1.episodeName+'_'+name1.sequenceName+'_'+name1.sceneName;
-		console.log(chalk.yellow('episodeName_sequenceName_sceneName: ', episodeName_sequenceName_sceneName));
+        //объект в котором хранятся данные об episodeName,sequenceName,sceneName и тд
+        let nameObject = {
+            episodeName,
+            sequenceName,
+            sceneName,
+            episodeNumber,
+            episodeNameIsUnique,
+            sequenceNumber: undefined,
+            sceneNumber: undefined,
+            sceneSubName: undefined,
+        };
+        // console.log(chalk.yellow('episodeName: ', nameObject.episodeName));
+        nameObject.episodeFullName = nameObject.episodeName + '_' + nameObject.sequenceName;
+        // console.log(chalk.yellow('episodeName_sequenceName: ', episodeName_sequenceName));
+        nameObject.sequenceFullName = nameObject.episodeName + '_' + nameObject.sequenceName + '_' + nameObject.sceneName;
+        // console.log(chalk.yellow('episodeName_sequenceName_sceneName: ', episodeName_sequenceName_sceneName));
+        //console.log(JSON.stringify(nameObject,true,'  '));
+        return nameObject;
 
-		
-		
-
-	}
-
-
-
-
-
-
-
-
-
-
+    }
 
 }
