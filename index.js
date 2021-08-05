@@ -1,4 +1,5 @@
 const readline = require("readline");
+const fs = require('fs');
 
 //console.log('hey')
 /*
@@ -265,4 +266,3 @@ console.log(truncate('gdhfujruieufdn', 1));
 // }
 
 // extractCurrencyValue('$120')
-
