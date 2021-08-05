@@ -41,7 +41,20 @@ class Task1 {
 
             const nameObject = NameGenerator.getNameObject(entry);
 
-            await FileSystem.createFolder( this.destPath +`\\3_anim\\${nameObject.episodeName}\\${nameObject.episodeFullName}` );
+            const pathTo3anim = this.destPath +`\\3_anim`; //+
+            const pathToEpisode = pathTo3anim  + `\\${nameObject.episodeName}`;
+            const pathToSequence = pathTo3anim + `\\${nameObject.episodeName}\\${nameObject.sequenceName}`;
+            const pathToScene = pathTo3anim + `\\${nameObject.episodeName}\\${nameObject.sequenceName}\\${nameObject.sceneName}`;
+
+            await FileSystem.createFolder( pathToEpisode );//+
+            await FileSystem.createFolder( pathToEpisode ); //+
+            await FileSystem.createFolder( pathToSequence );//+
+            await FileSystem.createFolder( pathToScene );//+
+            await FileSystem.createFolder( pathToScene + '\\anim2d' );//+
+            await FileSystem.createFolder( pathToScene + '\\preview' );//+
+            await FileSystem.createFolder( pathToScene + '\\cut' );//+
+            await FileSystem.createFolder( pathToScene + '\\anim2d\\publish' );
+            await FileSystem.createFolder( pathToScene + '\\anim2d\\work' );
 
             //массив с объектами, где хранятся "разобранные" имена источников
             _splitEntries.push(nameObject);
@@ -118,6 +131,8 @@ class Task1 {
         console.log(splitEntries);
         return splitEntries;
     }
+
+
 }
 
 //передача аргументов командной строки
