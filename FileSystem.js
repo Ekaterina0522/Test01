@@ -22,4 +22,12 @@ module.exports = class FileSystem {
 			return;
 		}
 	}
+
+
+	static async createFolder( path ) {
+    	console.log('createFolder: ', path );
+        const result = await fs.mkdir(path, { recursive: true });
+        return result;
+    }
+
 }
