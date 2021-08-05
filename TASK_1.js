@@ -33,34 +33,40 @@ class Task1 {
             return nameObject;
         });
         */
+        
+        const arrOfCutPathes = [];
         const _splitEntries = [];
-
+       
         //с помощью функции processArray последовательно перебираем массив splitEntries
         //формируем путь где функция createFolder будет создавать папку(папки)
-        await Utils.processArray( splitEntries, async (entry,i) => {
+        await Utils.processArray(splitEntries, async (entry, i) => {
 
             const nameObject = NameGenerator.getNameObject(entry);
 
-            const pathTo3anim = this.destPath +`\\3_anim`; //+
-            const pathToEpisode = pathTo3anim  + `\\${nameObject.episodeName}`;
+            const pathTo3anim = this.destPath + `\\3_anim`; //+
+            const pathToEpisode = pathTo3anim + `\\${nameObject.episodeName}`;
             const pathToSequence = pathTo3anim + `\\${nameObject.episodeName}\\${nameObject.sequenceName}`;
             const pathToScene = pathTo3anim + `\\${nameObject.episodeName}\\${nameObject.sequenceName}\\${nameObject.sceneName}`;
 
-            await FileSystem.createFolder( pathToEpisode );//+
-            await FileSystem.createFolder( pathToEpisode ); //+
-            await FileSystem.createFolder( pathToSequence );//+
-            await FileSystem.createFolder( pathToScene );//+
-            await FileSystem.createFolder( pathToScene + '\\anim2d' );//+
-            await FileSystem.createFolder( pathToScene + '\\preview' );//+
-            await FileSystem.createFolder( pathToScene + '\\cut' );//+
-            await FileSystem.createFolder( pathToScene + '\\anim2d\\publish' );
-            await FileSystem.createFolder( pathToScene + '\\anim2d\\work' );
+            await FileSystem.createFolder(pathToEpisode);
+            await FileSystem.createFolder(pathToEpisode); 
+            await FileSystem.createFolder(pathToSequence); 
+            await FileSystem.createFolder(pathToScene); 
+            await FileSystem.createFolder(pathToScene + '\\anim2d'); 
+            await FileSystem.createFolder(pathToScene + '\\preview'); 
+            await FileSystem.createFolder(pathToScene + '\\cut'); 
+            await FileSystem.createFolder(pathToScene + '\\anim2d\\publish');
+            await FileSystem.createFolder(pathToScene + '\\anim2d\\work');
+            
+            const pathToCutFolder = pathToScene + '\\cut';
+            arrOfCutPathes.push(pathToCutFolder);
+            //console.log(arrOfCutPathes);
 
             //массив с объектами, где хранятся "разобранные" имена источников
             _splitEntries.push(nameObject);
-
         });
-        
+
+
         // const nameObject = this.getNameObject(splitEntries); скорее всего не понадобится
         // await NameGenerator.getFileStructure(nameObject); скорее всего не понадобится
         //console.log(JSON.stringify(splitEntries, true, '  ')); 
@@ -79,7 +85,6 @@ class Task1 {
         //получаем конечный путь
         this.destPath = await FileSystem.validateParam(process.argv[3], "Enter Destination Path");
         if (!this.destPath) return;
-        
     }
 
     // Получаем имена источников в заданной директории
@@ -109,13 +114,9 @@ class Task1 {
 
             //массив с именами источников без букв в конце
             return replacedWithoutLetter;
-
         });
-
         //console.log(arrWithoutLetter);
-
         return arrWithoutLetter;
-
     }
 
     //парсим имена источников
@@ -127,12 +128,13 @@ class Task1 {
             splitEntries.push(e);
 
         });
-
         console.log(splitEntries);
         return splitEntries;
     }
 
+    async changingVideoFormat(arrOfCutPathes) {
 
+    }
 }
 
 //передача аргументов командной строки
