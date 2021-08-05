@@ -23,7 +23,8 @@ module.exports = class FileSystem {
 		}
 	}
 
-
+	//создание папки в заданной директории
+	//директория задается в файле TASK_1, функция start()
 	static async createFolder( path ) {
     	console.log('createFolder: ', path );
         const result = await fs.mkdir(path, { recursive: true });
