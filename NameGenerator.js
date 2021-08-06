@@ -19,12 +19,12 @@ module.exports = class NameGenerator {
         //чтобы идентифицировать его как episodeName
         const epPattern = episodeName.match(/ep\d\d\d/);
         if (epPattern) {
-        	//если имя источника ep### значит имя не уникально
+            //если имя источника ep### значит имя не уникально
             console.log('Episode Name is Template');
             episodeNumber = episodeName.substr(2, episodeName.length);
             episodeNameIsUnique = false;
         } else {
-        	//если имя просто текст, то имя уникально
+            //если имя просто текст, то имя уникально
             console.log('Episode Name is Unique');
             episodeNameIsUnique = true;
         }
