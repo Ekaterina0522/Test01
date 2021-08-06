@@ -4,8 +4,9 @@ const FileSystem = require('./FileSystem');
 const path = require('path')
 const NameGenerator = require('./NameGenerator');
 const Utils = require('./app/utils/utils');
-
-
+const child_process = require("child_process");
+const util = require('util');
+const exec = util.promisify(child_process.exec);
 
 //
 class Task1 {
@@ -35,10 +36,10 @@ class Task1 {
             return nameObject;
         });
         */
-        const pathToFfmpeg = 'C:\\ffmpeg\\bin\\ffmpeg.exe';
+        
         const arrOfCutPathes = [];
         const _splitEntries = [];
-       
+
         //с помощью функции processArray последовательно перебираем массив splitEntries
         //формируем путь где функция createFolder будет создавать папку(папки)
         await Utils.processArray(splitEntries, async (entry, i) => {
@@ -51,37 +52,70 @@ class Task1 {
             const pathToScene = pathTo3anim + `\\${nameObject.episodeName}\\${nameObject.sequenceName}\\${nameObject.sceneName}`;
 
             await FileSystem.createFolder(pathToEpisode);
-            await FileSystem.createFolder(pathToEpisode); 
-            await FileSystem.createFolder(pathToSequence); 
-            await FileSystem.createFolder(pathToScene); 
-            await FileSystem.createFolder(pathToScene + '\\anim2d'); 
-            await FileSystem.createFolder(pathToScene + '\\preview'); 
-            await FileSystem.createFolder(pathToScene + '\\cut'); 
+            await FileSystem.createFolder(pathToEpisode);
+            await FileSystem.createFolder(pathToSequence);
+            await FileSystem.createFolder(pathToScene);
+            await FileSystem.createFolder(pathToScene + '\\anim2d');
+            await FileSystem.createFolder(pathToScene + '\\preview');
+            await FileSystem.createFolder(pathToScene + '\\cut');
             await FileSystem.createFolder(pathToScene + '\\anim2d\\publish');
             await FileSystem.createFolder(pathToScene + '\\anim2d\\work');
-            
+            //путь ко всем папкам cut
             const pathToCutFolder = pathToScene + '\\cut';
             arrOfCutPathes.push(pathToCutFolder);
             //console.log(arrOfCutPathes);
 
             //массив с объектами, где хранятся "разобранные" имена источников
             _splitEntries.push(nameObject);
+
+            //конвертация
+            // await FileSystem.getConvertedVideo();
+
+            const src = 'D:\\WORK\\Katya\\task1\\mats\\export\\ep001_sq0_A_0_sh006.mov';
+            const dest = 'D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\ep001\\sq000\\sh006\\cut\\ep001_sq000_sh006.mp4';
+            
+            // try {
+            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -y "${dest}"`);
+                // console.log('stdout:', stdout);
+                // console.log('stderr:', stderr);
+              // } catch (e) {
+                // console.error(e); // should contain code (exit code) and signal (that caused the termination).
+              // }
+
+            // console.log('ENDDDD');
         });
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         // await FileSystem.addingVideoToCutFolder(splitEntries, async (entry, i) => {
 
         //     const nameObject = NameGenerator.getNameObject(entry);
         //     nameObject.sequenceFullName 
-                                                                    
+
         // });
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        console.log(pathToFfmpeg);
+        //console.log(pathToFfmpeg);
         // const nameObject = this.getNameObject(splitEntries); скорее всего не понадобится
         // await NameGenerator.getFileStructure(nameObject); скорее всего не понадобится
         //console.log(JSON.stringify(splitEntries, true, '  ')); 
 
+        //await FileSystem.getVideoInfo();
+
         console.log(chalk.bgMagenta('FINSH'));
     }
+
+    // async exeCMD(){
+
+    //     exec("ls -la", (error, stdout, stderr) => {
+    //         if (error) {
+    //             console.log(`error: ${error.message}`);
+    //             return;
+    //         }
+    //         if (stderr) {
+    //             console.log(`stderr: ${stderr}`);
+    //             return;
+    //         }
+    //         console.log(`stdout: ${stdout}`);
+    //     });
+    // }
 
     // ввод пользователем пути
     async getPath() {
