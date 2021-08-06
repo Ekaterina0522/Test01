@@ -73,8 +73,8 @@ class Task1 {
             //'D:\\WORK\\Katya\\task1\\mats\\export\\ep001_sq0_A_0_sh006.mov';
             //'D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\ep001\\sq000\\sh006\\cut\\ep001_sq000_sh006.mp4'; 
             const src = 'D:\\WORK\\Katya\\task1\\mats\\export\\ep001_sq0_A_0_sh006.mov';            
-            const dest = 'D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\ep001\\sq000\\sh006\\cut\\ep001_sq000_sh006.mp4';            // try {
-            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -y "${dest}"`);                
+            const dest = 'D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\ep001\\sq000\\sh006\\cut\\ep001_sq000_sh006.mp3';            // try {
+            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -vn -ar 44100 -ac 2 -ab 192k -f mp3 "${dest}"`);                
                 // console.log('stdout:', stdout);
                 // console.log('stderr:', stderr);
               // } catch (e) {
