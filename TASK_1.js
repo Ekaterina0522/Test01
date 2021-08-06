@@ -68,10 +68,10 @@ class Task1 {
             //массив с объектами, где хранятся "разобранные" имена источников
             _splitEntries.push(nameObject);
 
-            //конвертация
-            
+            //конвертаци, извлечение аудио, изменение размера видео
             //'D:\\WORK\\Katya\\task1\\mats\\export\\ep001_sq0_A_0_sh006.mov';
             //'D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\ep001\\sq000\\sh006\\cut\\ep001_sq000_sh006.mp4'; 
+            // ffmpeg -i foo.avi -r 1 -s WxH -f image2 foo-%03d.jpeg    из официальной документации: извлечение кадра
             const src = 'D:\\WORK\\Katya\\task1\\mats\\export\\ep001_sq0_A_0_sh006.mov';            
             const dest = 'D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\ep001\\sq000\\sh006\\cut\\ep001_sq000_sh006_720р.mp4';            // try {
             const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -r 60 -s hd720 "${dest}"`);                
