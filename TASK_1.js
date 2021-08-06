@@ -57,7 +57,7 @@ class Task1 {
             await FileSystem.createFolder(pathToScene);
             await FileSystem.createFolder(pathToScene + '\\anim2d');
             await FileSystem.createFolder(pathToScene + '\\preview');
-            await FileSystem.createFolder(pathToScene + '\\cut');
+            const dest = await FileSystem.createFolder(pathToScene + '\\cut');
             await FileSystem.createFolder(pathToScene + '\\anim2d\\publish');
             await FileSystem.createFolder(pathToScene + '\\anim2d\\work');
             //путь ко всем папкам cut
@@ -70,12 +70,12 @@ class Task1 {
 
             //конвертация
             // await FileSystem.getConvertedVideo();
-
-            const src = 'D:\\WORK\\Katya\\task1\\mats\\export\\ep001_sq0_A_0_sh006.mov';
-            const dest = 'D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\ep001\\sq000\\sh006\\cut\\ep001_sq000_sh006.mp4';
-            
+            //'D:\\WORK\\Katya\\task1\\mats\\export\\ep001_sq0_A_0_sh006.mov';
+            //'D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\ep001\\sq000\\sh006\\cut\\ep001_sq000_sh006.mp4'; 
+            const src = splitEntries;
+            const _dest = dest + `"${replacedWithoutLetter}"`
             // try {
-            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -y "${dest}"`);
+            const { stdout, stderr } = await exec(`'c:\\ffmpeg\\bin\\ffmpeg' -i "${src}" -y "${dest}"`);
                 // console.log('stdout:', stdout);
                 // console.log('stderr:', stderr);
               // } catch (e) {
