@@ -8,11 +8,14 @@ module.exports = class NameGenerator {
 
     //функция генерирующая имена для названия папок
     static getNameObject(nameParts) {
-
-    	const episodeName = nameParts[0];
-        const sequenceName = nameParts[1];
-        const sceneName = nameParts[2];
-        let episodeNumber = undefined;
+        //добавила некоторые элементы
+        const episodeName = nameParts[1];
+        const sequenceName = nameParts[2];
+        const sequenceNumber = nameParts[3];
+        const sceneName = nameParts[4];
+        const sceneNumber = nameParts[5];
+        //let episodeNumber = undefined;
+        //let SceneSubName = 0;
         let episodeNameIsUnique;
 
         // const episodeName = nameParts[0];
@@ -42,9 +45,9 @@ module.exports = class NameGenerator {
             sceneName,
             episodeNumber,
             episodeNameIsUnique,
-            sequenceNumber: undefined,
-            sceneNumber: undefined,
-            sceneSubName: undefined,
+            sequenceNumber,
+            sceneNumber,
+            //sceneSubName: 0,
         };
         // console.log(chalk.yellow('episodeName: ', nameObject.episodeName));
         nameObject.sequenceFullName = nameObject.episodeName + '_' + nameObject.sequenceName;
