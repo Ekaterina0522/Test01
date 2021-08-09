@@ -71,10 +71,19 @@ class Task1 {
             //конвертаци, извлечение аудио, изменение размера видео
             //'D:\\WORK\\Katya\\task1\\mats\\export\\ep001_sq0_A_0_sh006.mov';
             //'D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\ep001\\sq000\\sh006\\cut\\ep001_sq000_sh006.mp4'; 
-            // ffmpeg -i foo.avi -r 1 -s WxH -f image2 foo-%03d.jpeg    из официальной документации: извлечение кадра
-            const src = 'D:\\WORK\\Katya\\task1\\mats\\export\\ep001_sq0_A_0_sh006.mov';            
-            const dest = 'D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\ep001\\sq000\\sh006\\cut\\ep001_sq000_sh006_720р.mp4';            // try {
-            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -r 60 -s hd720 "${dest}"`);                
+            // ffmpeg -i "${src}" -r 1 -s WxH -f image2 "${dest}".jpeg    из официальной документации: извлечение кадра
+            //ffmpeg -i "${src}" -vn -ar 44100 -ac 2 -ab 192k -f mp3 "${dest}".mp3    извлечение аудио
+            // let dest1 = nameObject.episodeName;
+            // let dest2 = nameObject.sequenceName;
+            // let dest3 = nameObject.sceneName;
+
+            // const src = `D:\\WORK\\Katya\\task1\\mats\\export\\${entries}`;            
+            // const dest = `D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\${dest1}\\${dest2}\\${dest3}\\cut\\${nameObject.sequenceFullName}.mp4`;            
+            // for (let file in  src) {
+            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 60 -s hd720 ${dest}`); 
+            // }
+             
+            // try {               
                 // console.log('stdout:', stdout);
                 // console.log('stderr:', stderr);
               // } catch (e) {
