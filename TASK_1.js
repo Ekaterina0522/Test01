@@ -67,7 +67,7 @@ class Task1 {
             // let dest1 = nameObject.episodeName;
             // let dest2 = nameObject.sequenceName;
             // let dest3 = nameObject.sceneName 
-            
+
             //console.log(chalk.bgMagenta('entry[i]', entry[0]));
             // const src = `${this.sourcePath} + ${entry[0]}`;
             // const dest = `${this.destPath}\\3_anim\\${nameObject.episodeName}\\${nameObject.sequenceFullName}\\${nameObject.sceneFullName}\\cut\\${nameObject.sceneFullName}`;
@@ -132,22 +132,38 @@ class Task1 {
     //делаем у всех источников одинаковое название
     getSimilarStructure(entries) {
         //let joined = [];
+
         const arrWithoutLetter = entries.map(e => {
             //cutName - имена источников без расширения
+            //console.log(e);
             let cutName = e.slice(0, -4);
-            //во всех источниках ищем sq0_A_0 и заменяем на sq000
-            //replaced - источники с замененным sq
+            
+            //разделяем имя и номер секвенции
+            let _replaced = cutName.replace(/_sq000/g, '_sq_000');
 
-            let replaced = cutName.replace(/_sq0_[AB]_0_/g, '_sq000_');
+            //во всех источниках ищем sq0_A_0 и заменяем на sq_000
+            let _AlmostReplaced = _replaced.replace(/_sq0_[AB]_0_/g, '_sq_000_');
+
+            console.log(chalk.green('>>>>>>>>_AlmostReplaced ', _AlmostReplaced));
             //joined - массив из источников с измененными именами секвенции
             //joined.push(replaced);
             //console.log(chalk.green('>>>>>>>>joined', joined));
 
-            //замена буквы в конце названия
-            if (replaced.slice(-1) == /[AZ]/) {
-                replaced.replace(/_sh0\d[AZ]/, '_sh00\d')
+            //замена буквы в конце названия на цифры и добавление SceneSubName
+            if (_AlmostReplaced.slice(-1) == `${/[AZ]/g}`) {
+                _AlmostReplaced.replace(/_sh0\d[AZ]/g, '_sh_00\d1');
+
+            } else {
+                _AlmostReplaced.replace(/_sh00\d/g, '_sh_00\d0')
             }
+
+            //разделяем имя и номер сцены
+            let replaced = _AlmostReplaced.replace(/_sh/g, '_sh_');
+            
+            console.log('>>>>>>>>replaced1', replaced);
             // let replacedWithoutLetter = replaced.replace(/A/g, '1').split('_');
+
+            //разбиваем имена источников по _
             let replacedWithoutLetter = replaced.split('_');
 
             replacedWithoutLetter.unshift(e);
@@ -161,20 +177,20 @@ class Task1 {
         return arrWithoutLetter;
     }
 
-/*
-    //парсим имена источников
-    async parseString(arrWithoutLetter) {
+    /*
+        //парсим имена источников
+        async parseString(arrWithoutLetter) {
 
-        const splitEntries = [];
-        arrWithoutLetter.forEach(e => {
-            // разделенные на имена сцены, секвенции, кадра имена источников
-            splitEntries.push(e);
+            const splitEntries = [];
+            arrWithoutLetter.forEach(e => {
+                // разделенные на имена сцены, секвенции, кадра имена источников
+                splitEntries.push(e);
 
-        });
-        console.log('splitEntries', splitEntries);
-        return splitEntries;
-    }
-    */
+            });
+            console.log('splitEntries', splitEntries);
+            return splitEntries;
+        }
+        */
 
 }
 
