@@ -1,10 +1,10 @@
 const fs = require('fs-extra');
 const chalk = require('chalk');
-const FileSystem = require('./app/FileSystem');
+const FileSystem = require('./FileSystem');
 const path = require('path')
-const NameGenerator = require('./app/NameGenerator');
+const NameGenerator = require('./NameGenerator');
 const Utils = require('./app/utils/utils');
-const FfmpegUtils = require('./app/FfmpegUtils');
+const FfmpegUtils = require('./FfmpegUtils');
 
 //
 class Task1 {
@@ -51,7 +51,6 @@ class Task1 {
 
             const pathToScene = pathTo3anim + `\\${nameObject.episodeName}\\${nameObject.sequenceFullName}\\${nameObject.sceneFullName}`;
 
-            // await FileSystem.createFolder(pathToScene);
             await fs.copy(__dirname + '\\app\\templates\\task1', pathToScene);
 
             //путь ко всем папкам cut
@@ -67,35 +66,15 @@ class Task1 {
             //ffmpeg -i "${src}" -vn -ar 44100 -ac 2 -ab 192k -f mp3 "${dest}".mp3    извлечение аудио
             // let dest1 = nameObject.episodeName;
             // let dest2 = nameObject.sequenceName;
-            // let dest3 = nameObject.sceneName;
-
-            // const src = `D:\\WORK\\Katya\\task1\\mats\\export\\${entries}`;            
-            // const dest = `D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\${dest1}\\${dest2}\\${dest3}\\cut\\${nameObject.sequenceFullName}.mp4`;            
-            // for (let file in  src) {
-
-
-            // const { stdout, stderr } = await FfmpegUtils.getSrc();
-            //await FfmpegUtils.getSrc();
-            // await FfmpegUtils.creatingMP4();
-            // await FfmpegUtils.extractingMP3();
-            // await FfmpegUtils.extractingFrame();
-/*
-            await Utils.processArray(entries, async (_entry, i) => {
-                //console.log(chalk.bgMagenta('typeof _entry', typeof _entry));//string
-                this.src.push(`${this.sourcePath}\\${_entry}`);
-                return this.src;
-
-            })      
-            */  
+            // let dest3 = nameObject.sceneName 
             
-            
-            console.log(chalk.bgMagenta('entry[i]', entry[i]));
-            const src = `${this.sourcePath} + ${entry[i]}`;
-            const dest = `${this.destPath}\\3_anim\\${nameObject.episodeName}\\${nameObject.sequenceFullName}\\${nameObject.sceneFullName}\\cut\\${nameObject.sceneFullName}`;
+            //console.log(chalk.bgMagenta('entry[i]', entry[0]));
+            // const src = `${this.sourcePath} + ${entry[0]}`;
+            // const dest = `${this.destPath}\\3_anim\\${nameObject.episodeName}\\${nameObject.sequenceFullName}\\${nameObject.sceneFullName}\\cut\\${nameObject.sceneFullName}`;
 
-            await FfmpegUtils.creatingMP4(src, dest);
-            await FfmpegUtils.extractingMP3(src, dest);
-            await FfmpegUtils.extractingFrame(src, dest);
+            // await FfmpegUtils.creatingMP4(src, dest);
+            // await FfmpegUtils.extractingMP3(src, dest);
+            // await FfmpegUtils.extractingFrame(src, dest);
 
 
         });
@@ -164,11 +143,15 @@ class Task1 {
             //joined.push(replaced);
             //console.log(chalk.green('>>>>>>>>joined', joined));
 
-            //замена А на 1 с помощью регулярного выражения
+            //замена буквы в конце названия
+            if (replaced.slice(-1) == /[AZ]/) {
+                replaced.replace(/_sh0\d[AZ]/, '_sh00\d')
+            }
             // let replacedWithoutLetter = replaced.replace(/A/g, '1').split('_');
             let replacedWithoutLetter = replaced.split('_');
 
             replacedWithoutLetter.unshift(e);
+            console.log('>>>>>>>>>>>>>>replacedWithoutLetter', replacedWithoutLetter);
             //console.log(chalk.green('replacedWithoutLetter', replacedWithoutLetter));
 
             //имена источников без букв в конце
