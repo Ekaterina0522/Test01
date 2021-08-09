@@ -1,10 +1,10 @@
 const fs = require('fs-extra');
 const chalk = require('chalk');
-const FileSystem = require('./FileSystem');
+const FileSystem = require('./app/FileSystem');
 const path = require('path')
-const NameGenerator = require('./NameGenerator');
+const NameGenerator = require('./app/NameGenerator');
 const Utils = require('./app/utils/utils');
-const FfmpegUtils = require('./FfmpegUtils');
+const FfmpegUtils = require('./app/FfmpegUtils');
 
 //
 class Task1 {
@@ -20,11 +20,11 @@ class Task1 {
 
         const entries = await this.getDirEntries(this.sourcePath);
 
-        const arrWithoutLetter = this.getSimilarStructure(entries);
+        const splitEntries = this.getSimilarStructure(entries);
 
-        let splitEntries = await this.parseString(arrWithoutLetter);
+        // let splitEntries = await this.parseString(arrWithoutLetter);
 
-        await this.parseString(arrWithoutLetter);
+        // await this.parseString(arrWithoutLetter);
 
         //await this.NameGenerator(this.destPath);
         /*
@@ -34,41 +34,32 @@ class Task1 {
             return nameObject;
         });
         */
-
         const arrOfCutPathes = [];
         const _splitEntries = [];
 
         //с помощью функции processArray последовательно перебираем массив splitEntries
         //формируем путь где функция createFolder будет создавать папку(папки)
-        await Utils.processArray(entries, async (entry, i) => {
+        await Utils.processArray(splitEntries, async (entry, i) => {
 
+            //console.log('>>>>entry', entry);
             const nameObject = NameGenerator.getNameObject(entry);
-
-            console.log('>>>', entry, nameObject );
-            return;
-
-            const pathTo3anim = this.destPath + `\\3_anim`; //+
-            const pathToEpisode = pathTo3anim + `\\${nameObject.episodeName}`;
-            const pathToSequence = pathTo3anim + `\\${nameObject.episodeName}\\${nameObject.sequenceName}`;
-            const pathToScene = pathTo3anim + `\\${nameObject.episodeName}\\${nameObject.sequenceName}\\${nameObject.sceneName}`;
-
-            await FileSystem.createFolder(pathToEpisode);
-            await FileSystem.createFolder(pathToEpisode);
-            await FileSystem.createFolder(pathToSequence);
-            await FileSystem.createFolder(pathToScene);
-            await FileSystem.createFolder(pathToScene + '\\anim2d');
-            await FileSystem.createFolder(pathToScene + '\\preview');
-            await FileSystem.createFolder(pathToScene + '\\cut');
-            await FileSystem.createFolder(pathToScene + '\\anim2d\\publish');
-            await FileSystem.createFolder(pathToScene + '\\anim2d\\work');
-            //путь ко всем папкам cut
-            const pathToCutFolder = pathToScene + '\\cut';
-            arrOfCutPathes.push(pathToCutFolder);
-            //console.log(arrOfCutPathes);
-
             //массив с объектами, где хранятся "разобранные" имена источников
             _splitEntries.push(nameObject);
+            //console.log('>>>', entry, nameObject );
 
+            const pathTo3anim = this.destPath + `\\3_anim`;
+
+            const pathToScene = pathTo3anim + `\\${nameObject.episodeName}\\${nameObject.sequenceFullName}\\${nameObject.sceneFullName}`;
+
+            // await FileSystem.createFolder(pathToScene);
+            await fs.copy(__dirname + '\\app\\templates\\task1', pathToScene);
+
+            //путь ко всем папкам cut
+            // const pathToCutFolder = pathToScene + '\\cut';
+            // arrOfCutPathes.push(pathToCutFolder);
+            //console.log(arrOfCutPathes);
+
+            // console.log('>>>>>>_splitEntries', pathToCutFolder);
             //конвертаци, извлечение аудио, изменение размера видео
             //'D:\\WORK\\Katya\\task1\\mats\\export\\ep001_sq0_A_0_sh006.mov';
             //'D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\ep001\\sq000\\sh006\\cut\\ep001_sq000_sh006.mp4'; 
@@ -85,31 +76,28 @@ class Task1 {
 
             // const { stdout, stderr } = await FfmpegUtils.getSrc();
             //await FfmpegUtils.getSrc();
-            //await FfmpegUtils.creatingMP4();
-            //await FfmpegUtils.extractingMP3();
-            //await FfmpegUtils.extractingFrame();
+            // await FfmpegUtils.creatingMP4();
+            // await FfmpegUtils.extractingMP3();
+            // await FfmpegUtils.extractingFrame();
+/*
+            await Utils.processArray(entries, async (_entry, i) => {
+                //console.log(chalk.bgMagenta('typeof _entry', typeof _entry));//string
+                this.src.push(`${this.sourcePath}\\${_entry}`);
+                return this.src;
 
-            /*
-            ep001
-            ep001_sq001             sq001
-            ep001_sq001_sh0010
-            */
-            const src = `${this.sourcePath}\\${entry}`
-            const dest = `${this.destPath}\\3_anim\\${nameObject.episodeName}\\${nameObject.sequenceFullName}\\${nameObject.sceneFullName}\\cut\\${nameObject.sceneFullName}.mp4`;
-            await FfmpegUtils.creatingMP4( src, dest );
+            })      
+            */  
             
+            
+            console.log(chalk.bgMagenta('entry[i]', entry[i]));
+            const src = `${this.sourcePath} + ${entry[i]}`;
+            const dest = `${this.destPath}\\3_anim\\${nameObject.episodeName}\\${nameObject.sequenceFullName}\\${nameObject.sceneFullName}\\cut\\${nameObject.sceneFullName}`;
+
+            await FfmpegUtils.creatingMP4(src, dest);
+            await FfmpegUtils.extractingMP3(src, dest);
+            await FfmpegUtils.extractingFrame(src, dest);
 
 
-
-            //exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 60 -s hd720 ${dest}`); 
-            // }
-
-            // try {               
-            // console.log('stdout:', stdout);
-            // console.log('stderr:', stderr);
-            // } catch (e) {
-            // console.error(e); // should contain code (exit code) and signal (that caused the termination).
-            // }
         });
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         // await FileSystem.addingVideoToCutFolder(splitEntries, async (entry, i) => {
@@ -158,13 +146,13 @@ class Task1 {
     // Получаем имена источников в заданной директории
     async getDirEntries(path) {
         const entries = await fs.readdir(path);
-        //console.log('entries', entries);
+        console.log('entries', entries);
         return entries;
     }
 
     //делаем у всех источников одинаковое название
     getSimilarStructure(entries) {
-        let joined = [];
+        //let joined = [];
         const arrWithoutLetter = entries.map(e => {
             //cutName - имена источников без расширения
             let cutName = e.slice(0, -4);
@@ -173,21 +161,24 @@ class Task1 {
 
             let replaced = cutName.replace(/_sq0_[AB]_0_/g, '_sq000_');
             //joined - массив из источников с измененными именами секвенции
-            joined.push(replaced);
-            //console.log(chalk.green(replaced));
+            //joined.push(replaced);
+            //console.log(chalk.green('>>>>>>>>joined', joined));
 
             //замена А на 1 с помощью регулярного выражения
-            let replacedWithoutLetter = replaced.replace(/A/g, '1').split('_');
+            // let replacedWithoutLetter = replaced.replace(/A/g, '1').split('_');
+            let replacedWithoutLetter = replaced.split('_');
 
-            //console.log(chalk.green(replacedWithoutLetter));
+            replacedWithoutLetter.unshift(e);
+            //console.log(chalk.green('replacedWithoutLetter', replacedWithoutLetter));
 
-            //массив с именами источников без букв в конце
+            //имена источников без букв в конце
             return replacedWithoutLetter;
         });
-        //console.log(arrWithoutLetter);
+        //console.log('arrWithoutLetter', arrWithoutLetter);
         return arrWithoutLetter;
     }
 
+/*
     //парсим имена источников
     async parseString(arrWithoutLetter) {
 
@@ -197,9 +188,11 @@ class Task1 {
             splitEntries.push(e);
 
         });
-        console.log(splitEntries);
+        console.log('splitEntries', splitEntries);
         return splitEntries;
     }
+    */
+
 }
 
 //передача аргументов командной строки
