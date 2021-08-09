@@ -94,8 +94,6 @@ class Task1 {
         // await NameGenerator.getFileStructure(nameObject); скорее всего не понадобится
         //console.log(JSON.stringify(splitEntries, true, '  ')); 
 
-        //await FileSystem.getVideoInfo();
-
         console.log(chalk.bgMagenta('FINSH'));
     }
 
