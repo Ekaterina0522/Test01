@@ -4,9 +4,7 @@ const FileSystem = require('./FileSystem');
 const path = require('path')
 const NameGenerator = require('./NameGenerator');
 const Utils = require('./app/utils/utils');
-const child_process = require("child_process");
-const util = require('util');
-const exec = util.promisify(child_process.exec);
+const FfmpegUtils = require('./FfmpegUtils');
 
 //
 class Task1 {
@@ -36,15 +34,18 @@ class Task1 {
             return nameObject;
         });
         */
-        
+
         const arrOfCutPathes = [];
         const _splitEntries = [];
 
         //с помощью функции processArray последовательно перебираем массив splitEntries
         //формируем путь где функция createFolder будет создавать папку(папки)
-        await Utils.processArray(splitEntries, async (entry, i) => {
+        await Utils.processArray(entries, async (entry, i) => {
 
             const nameObject = NameGenerator.getNameObject(entry);
+
+            console.log('>>>', entry, nameObject );
+            return;
 
             const pathTo3anim = this.destPath + `\\3_anim`; //+
             const pathToEpisode = pathTo3anim + `\\${nameObject.episodeName}`;
@@ -80,15 +81,35 @@ class Task1 {
             // const src = `D:\\WORK\\Katya\\task1\\mats\\export\\${entries}`;            
             // const dest = `D:\\WORK\\Katya\\task1\\mats\\import\\3_anim\\${dest1}\\${dest2}\\${dest3}\\cut\\${nameObject.sequenceFullName}.mp4`;            
             // for (let file in  src) {
-            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 60 -s hd720 ${dest}`); 
+
+
+            // const { stdout, stderr } = await FfmpegUtils.getSrc();
+            //await FfmpegUtils.getSrc();
+            //await FfmpegUtils.creatingMP4();
+            //await FfmpegUtils.extractingMP3();
+            //await FfmpegUtils.extractingFrame();
+
+            /*
+            ep001
+            ep001_sq001             sq001
+            ep001_sq001_sh0010
+            */
+            const src = `${this.sourcePath}\\${entry}`
+            const dest = `${this.destPath}\\3_anim\\${nameObject.episodeName}\\${nameObject.sequenceFullName}\\${nameObject.sceneFullName}\\cut\\${nameObject.sceneFullName}.mp4`;
+            await FfmpegUtils.creatingMP4( src, dest );
+            
+
+
+
+            //exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 60 -s hd720 ${dest}`); 
             // }
-             
+
             // try {               
-                // console.log('stdout:', stdout);
-                // console.log('stderr:', stderr);
-              // } catch (e) {
-                // console.error(e); // should contain code (exit code) and signal (that caused the termination).
-              // }
+            // console.log('stdout:', stdout);
+            // console.log('stderr:', stderr);
+            // } catch (e) {
+            // console.error(e); // should contain code (exit code) and signal (that caused the termination).
+            // }
         });
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         // await FileSystem.addingVideoToCutFolder(splitEntries, async (entry, i) => {
@@ -145,12 +166,13 @@ class Task1 {
     getSimilarStructure(entries) {
         let joined = [];
         const arrWithoutLetter = entries.map(e => {
-
+            //cutName - имена источников без расширения
             let cutName = e.slice(0, -4);
             //во всех источниках ищем sq0_A_0 и заменяем на sq000
             //replaced - источники с замененным sq
 
             let replaced = cutName.replace(/_sq0_[AB]_0_/g, '_sq000_');
+            //joined - массив из источников с измененными именами секвенции
             joined.push(replaced);
             //console.log(chalk.green(replaced));
 
@@ -171,7 +193,7 @@ class Task1 {
 
         const splitEntries = [];
         arrWithoutLetter.forEach(e => {
-
+            // разделенные на имена сцены, секвенции, кадра имена источников
             splitEntries.push(e);
 
         });

@@ -41,10 +41,11 @@ module.exports = class NameGenerator {
             sceneSubName: undefined,
         };
         // console.log(chalk.yellow('episodeName: ', nameObject.episodeName));
-        nameObject.episodeFullName = nameObject.episodeName + '_' + nameObject.sequenceName;
+        nameObject.sequenceFullName = nameObject.episodeName + '_' + nameObject.sequenceName;
         // console.log(chalk.yellow('episodeName_sequenceName: ', episodeName_sequenceName));
-        nameObject.sequenceFullName = nameObject.episodeName + '_' + nameObject.sequenceName + '_' + nameObject.sceneName;
+        nameObject.sceneFullName = nameObject.episodeName + '_' + nameObject.sequenceName + '_' + nameObject.sceneName;
         // console.log(chalk.yellow('episodeName_sequenceName_sceneName: ', episodeName_sequenceName_sceneName));
+
         //console.log(JSON.stringify(nameObject,true,'  '));
         return nameObject;
 
