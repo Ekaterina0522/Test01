@@ -9,11 +9,17 @@ module.exports = class NameGenerator {
     //функция генерирующая имена для названия папок
     static getNameObject(nameParts) {
 
-        const episodeName = nameParts[0];
+    	const episodeName = nameParts[0];
         const sequenceName = nameParts[1];
         const sceneName = nameParts[2];
         let episodeNumber = undefined;
         let episodeNameIsUnique;
+
+        // const episodeName = nameParts[0];
+        // const sequenceName = nameParts[1];
+        // const sceneName = nameParts[2];
+        // let episodeNumber = undefined;
+        // let episodeNameIsUnique;
 
         //epPattern ищем имя источника с ep и тремя цифрами,
         //чтобы идентифицировать его как episodeName

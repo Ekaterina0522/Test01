@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const Readline = require('./Readline');
+const Readline = require('./app/Readline');
 const chalk = require('chalk');
 const ffmpeg = require('ffmpeg');
 //const FfmpegCommand = require(' fluent-ffmpeg ');
