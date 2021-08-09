@@ -150,7 +150,8 @@ class Task1 {
             //console.log(chalk.green('>>>>>>>>joined', joined));
 
             //замена буквы в конце названия на цифры и добавление SceneSubName,
-            //почему то игнорируется целиком
+            //переписать потому что рег выражения не работают с if else!!!!!
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
             if (_AlmostReplaced.slice(-1) == `${/[AZ]/g}`) {
                 _AlmostReplaced.replace(/_sh0\d[AZ]/g, '_sh_00\d1');
                 console.log('Changed if _AlmostReplaced ', _AlmostReplaced);
@@ -163,7 +164,7 @@ class Task1 {
             if (/ep\d\d\d/) {
                 _AlmostReplaced.replace(/ep\d\d\d/g, 'ep_')
             }
-
+            //////////////////////////////////////////////////////////////////////////////////////////////////
             //разделяем имя и номер сцены
             let replaced = _AlmostReplaced.replace(/_sh/g, '_sh_');
 
