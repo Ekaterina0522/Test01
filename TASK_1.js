@@ -152,14 +152,18 @@ class Task1 {
             //замена буквы в конце названия на цифры и добавление SceneSubName,
             //переписать потому что рег выражения не работают с if else!!!!!
             /////////////////////////////////////////////////////////////////////////////////////////////////////
-            if (_AlmostReplaced.slice(-1) == `${/[AZ]/g}`) {
-                _AlmostReplaced.replace(/_sh0\d[AZ]/g, '_sh_00\d1');
-                console.log('Changed if _AlmostReplaced ', _AlmostReplaced);
+            // if (_AlmostReplaced.slice(-1) == `${/[AZ]/g}`) {
+            //     _AlmostReplaced.replace(/_sh0\d[AZ]/g, '_sh_00\d1');
+            //     console.log('Changed if _AlmostReplaced ', _AlmostReplaced);
 
-            } else {
-                _AlmostReplaced.replace(/_sh00\d/g, '_sh_00\d0');
-                console.log('Changed else _AlmostReplaced ', _AlmostReplaced);
-            }
+            // } else {
+            //     _AlmostReplaced.replace(/_sh00\d/g, '_sh_00\d0');
+            //     console.log('Changed else _AlmostReplaced ', _AlmostReplaced);
+            // }
+
+            _AlmostReplaced.test()
+
+
 
             if (/ep\d\d\d/) {
                 _AlmostReplaced.replace(/ep\d\d\d/g, 'ep_')
