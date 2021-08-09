@@ -137,7 +137,7 @@ class Task1 {
             //cutName - имена источников без расширения
             //console.log(e);
             let cutName = e.slice(0, -4);
-            
+
             //разделяем имя и номер секвенции
             let _replaced = cutName.replace(/_sq000/g, '_sq_000');
 
@@ -149,17 +149,24 @@ class Task1 {
             //joined.push(replaced);
             //console.log(chalk.green('>>>>>>>>joined', joined));
 
-            //замена буквы в конце названия на цифры и добавление SceneSubName
+            //замена буквы в конце названия на цифры и добавление SceneSubName,
+            //почему то игнорируется целиком
             if (_AlmostReplaced.slice(-1) == `${/[AZ]/g}`) {
                 _AlmostReplaced.replace(/_sh0\d[AZ]/g, '_sh_00\d1');
+                console.log('Changed if _AlmostReplaced ', _AlmostReplaced);
 
             } else {
-                _AlmostReplaced.replace(/_sh00\d/g, '_sh_00\d0')
+                _AlmostReplaced.replace(/_sh00\d/g, '_sh_00\d0');
+                console.log('Changed else _AlmostReplaced ', _AlmostReplaced);
+            }
+
+            if (/ep\d\d\d/) {
+                _AlmostReplaced.replace(/ep\d\d\d/g, 'ep_')
             }
 
             //разделяем имя и номер сцены
             let replaced = _AlmostReplaced.replace(/_sh/g, '_sh_');
-            
+
             console.log('>>>>>>>>replaced1', replaced);
             // let replacedWithoutLetter = replaced.replace(/A/g, '1').split('_');
 
