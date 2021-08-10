@@ -8,12 +8,22 @@ module.exports = class NameGenerator {
     //функция генерирующая имена для названия папок
     static getNameObject(nameParts) {
         //добавила некоторые элементы
-    	const episodeName = nameParts[1];
-        const sequenceName = nameParts[2];
-        const sequenceNumber = nameParts[3];
-        const sceneName = nameParts[4];
-        const sceneNumber = nameParts[5];
-        //let episodeNumber = undefined;
+        const episodeName = nameParts[1];
+
+        if (nameParts.startsWith('ep')) {
+            const episodeNumber = nameParts[2];
+            const sequenceName = nameParts[3];
+            const sequenceNumber = nameParts[4];
+            const sceneName = nameParts[5];
+            const sceneNumber = nameParts[6];
+
+        } else {
+            const sequenceName = nameParts[2];
+            const sequenceNumber = nameParts[3];
+            const sceneName = nameParts[4];
+            const sceneNumber = nameParts[5];
+        }
+    	
         //let SceneSubName = 0;
         let episodeNameIsUnique;
 
