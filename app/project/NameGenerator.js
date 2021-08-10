@@ -17,7 +17,7 @@ module.exports = class NameGenerator {
         const sequenceNumber = isValidEpisodeName ? nameParts[4] : nameParts[3];
         const sceneName = isValidEpisodeName ? nameParts[5] : nameParts[4];
         let sceneNumber = isValidEpisodeName ? nameParts[6] : nameParts[5];
-        //const SceneSubName = isValidEpisodeName ? nameParts[7] : nameParts[6];
+        const sceneSubName = sceneNumber.slice(-1);
         
         
         let episodeNameIsUnique;
@@ -46,7 +46,6 @@ module.exports = class NameGenerator {
             sceneNumber = '00000' + sceneNumber
             sceneNumber = sceneNumber.substr(sceneNumber.length - 4);
             //console.log(chalk.bgMagenta(sceneNumber));
-           //return Utils.addZerosToString(sceneNumber, 4);
         }
 
         //объект в котором хранятся данные об episodeName,sequenceName,sceneName и тд
@@ -58,6 +57,7 @@ module.exports = class NameGenerator {
             episodeNameIsUnique,
             sequenceNumber,
             sceneNumber,
+            sceneSubName
             
         };
         // console.log(chalk.yellow('episodeName: ', nameObject.episodeName));
