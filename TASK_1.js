@@ -41,7 +41,7 @@ class Task1 {
         //формируем путь где функция createFolder будет создавать папку(папки)
         await Utils.processArray(splitEntries, async (entry, i) => {
 
-            //console.log('>>>>entry', entry);
+            console.log('>>>>entry', entry);
             const nameObject = NameGenerator.getNameObject(entry);
             //массив с объектами, где хранятся "разобранные" имена источников
             _splitEntries.push(nameObject);
@@ -125,7 +125,7 @@ class Task1 {
     // Получаем имена источников в заданной директории
     async getDirEntries(path) {
         const entries = await fs.readdir(path);
-        console.log('entries', entries);
+        //console.log('entries', entries);
         return entries;
     }
 
@@ -137,20 +137,15 @@ class Task1 {
             //cutName - имена источников без расширения
             //console.log(e);
             let cutName = e.slice(0, -4);
-
+            
             //разделяем имя и номер секвенции
             let _replaced = cutName.replace(/_sq000/g, '_sq_000');
-
+            
             //во всех источниках ищем sq0_A_0 и заменяем на sq_000
             let _AlmostReplaced = _replaced.replace(/_sq0_[AB]_0_/g, '_sq_000_');
 
             //console.log(chalk.green('>>>>>>>>_AlmostReplaced ', _AlmostReplaced));
-            //joined - массив из источников с измененными именами секвенции
-            //joined.push(replaced);
-            //console.log(chalk.green('>>>>>>>>joined', joined));
 
-
-            
             //смотрим есть ли заглавные буквы в названии
             // let lastChar = _AlmostReplaced.match(/[AZ]/g);//возвращает символ
             // console.log(lastChar);
@@ -168,21 +163,22 @@ class Task1 {
             //     _AlmostReplaced += '0';
 
             // }
+            //замена буквы в конце имени на цифру ( не работает )
             _AlmostReplaced.replace(/[A-Z]$/, m => m.charCodeAt() - 64);
 
 
             //разделяем имя и номер сцены
             let replaced = _AlmostReplaced.replace(/_sh/g, '_sh_');
-            console.log(chalk.green('>>>>>>>>_AlmostReplaced ', _AlmostReplaced));
+            //console.log(chalk.green('>>>>>>>>_AlmostReplaced ', _AlmostReplaced));
 
-            console.log('>>>>>>>>replaced1', replaced);
             // let replacedWithoutLetter = replaced.replace(/A/g, '1').split('_');
 
-            //разбиваем имена источников по _
+            //разбиваем имена источников по _ 
             let replacedWithoutLetter = replaced.split('_');
-
+            console.log('>>>>>>>>replacedWithoutLetter', replacedWithoutLetter);
+            //в начало массива ставим исходное имя источника
             replacedWithoutLetter.unshift(e);
-            console.log('>>>>>>>>>>>>>>replacedWithoutLetter', replacedWithoutLetter);
+            //console.log('>>>>>>>>>>>>>>replacedWithoutLetter', replacedWithoutLetter);
             //console.log(chalk.green('replacedWithoutLetter', replacedWithoutLetter));
 
             //имена источников без букв в конце
