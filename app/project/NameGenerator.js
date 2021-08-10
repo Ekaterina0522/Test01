@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const chalk = require('chalk');
 const path = require('path');
+const Utils = require('../utils/utils');
 
 module.exports = class NameGenerator {
 
@@ -15,8 +16,8 @@ module.exports = class NameGenerator {
         const sequenceName = isValidEpisodeName ? nameParts[3] : nameParts[2];
         const sequenceNumber = isValidEpisodeName ? nameParts[4] : nameParts[3];
         const sceneName = isValidEpisodeName ? nameParts[5] : nameParts[4];
-        const sceneNumber = isValidEpisodeName ? nameParts[6] : nameParts[5];
-        const SceneSubName = isValidEpisodeName ? nameParts[7] : nameParts[6];
+        let sceneNumber = isValidEpisodeName ? nameParts[6] : nameParts[5];
+        //const SceneSubName = isValidEpisodeName ? nameParts[7] : nameParts[6];
         
         
         let episodeNameIsUnique;
@@ -41,6 +42,13 @@ module.exports = class NameGenerator {
             episodeNameIsUnique = true;
         }
 
+        if (sceneNumber.length != 4){
+            sceneNumber = '00000' + sceneNumber
+            sceneNumber = sceneNumber.substr(sceneNumber.length - 4);
+            //console.log(chalk.bgMagenta(sceneNumber));
+           //return Utils.addZerosToString(sceneNumber, 4);
+        }
+
         //объект в котором хранятся данные об episodeName,sequenceName,sceneName и тд
         let nameObject = {
             episodeName,
@@ -50,7 +58,7 @@ module.exports = class NameGenerator {
             episodeNameIsUnique,
             sequenceNumber,
             sceneNumber,
-            //sceneSubName: 0,
+            
         };
         // console.log(chalk.yellow('episodeName: ', nameObject.episodeName));
         nameObject.sequenceFullName = nameObject.episodeName + '_' + nameObject.sequenceName;
@@ -58,7 +66,8 @@ module.exports = class NameGenerator {
         nameObject.sceneFullName = nameObject.episodeName + '_' + nameObject.sequenceName + '_' + nameObject.sceneName;
         // console.log(chalk.yellow('episodeName_sequenceName_sceneName: ', episodeName_sequenceName_sceneName));
 
-        //console.log(JSON.stringify(nameObject,true,'  '));
+        console.log(JSON.stringify(nameObject,true,'  '));
+
         return nameObject;
 
     }
