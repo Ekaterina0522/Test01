@@ -48,16 +48,18 @@ module.exports = class NameGenerator {
             //console.log(chalk.bgMagenta(sceneNumber));
         }
 
+        let _sequenceName = sequenceName + sequenceNumber;
+        let _sceneName = sceneName + sceneNumber;
         //объект в котором хранятся данные об episodeName,sequenceName,sceneName и тд
         let nameObject = {
             episodeName,
-            sequenceName,
-            sceneName,
+            sequenceName: _sequenceName,
+            sceneName: _sceneName,
             episodeNumber,
-            episodeNameIsUnique,
-            sequenceNumber,
-            sceneNumber,
-            sceneSubName
+            //episodeNameIsUnique,
+            //sequenceNumber,
+            //sceneNumber,
+            sceneSubName,
             
         };
         // console.log(chalk.yellow('episodeName: ', nameObject.episodeName));
