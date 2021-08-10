@@ -21,4 +21,15 @@ module.exports = class FfmpegUtils {
             return { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 1 -s WxH -f image2 ${dest}.jpeg`);
       
     }
+
+    
+    // static async isNumber(i) {
+    //     return (i >= '0' && i <= '9');
+    // }
+
+
+    // static async isLetter(i) {
+    //     return ((i >= 'a' && i <= 'z') || (i >= 'A' && i <= 'Z'));
+    // }
+
 }

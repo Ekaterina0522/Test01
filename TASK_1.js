@@ -170,8 +170,7 @@ class Task1 {
             // }
 
 
-
-            console.log(chalk.green('>>>>>>>>_AlmostReplaced ', _AlmostReplaced));
+            //console.log(chalk.green('>>>>>>>>_AlmostReplaced ', _AlmostReplaced));
 
 
             //разделяем имя и номер сцены
