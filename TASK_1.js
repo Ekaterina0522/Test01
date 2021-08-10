@@ -1,10 +1,10 @@
 const fs = require('fs-extra');
 const chalk = require('chalk');
-const FileSystem = require('./FileSystem');
+const FileSystem = require('./app/utils/FileSystem');
 const path = require('path')
-const NameGenerator = require('./NameGenerator');
+const NameGenerator = require('./app/project/NameGenerator');
 const Utils = require('./app/utils/utils');
-const FfmpegUtils = require('./FfmpegUtils');
+const FfmpegUtils = require('./app/utils/FfmpegUtils');
 
 //
 class Task1 {
@@ -144,33 +144,36 @@ class Task1 {
             //во всех источниках ищем sq0_A_0 и заменяем на sq_000
             let _AlmostReplaced = _replaced.replace(/_sq0_[AB]_0_/g, '_sq_000_');
 
-            console.log(chalk.green('>>>>>>>>_AlmostReplaced ', _AlmostReplaced));
+            //console.log(chalk.green('>>>>>>>>_AlmostReplaced ', _AlmostReplaced));
             //joined - массив из источников с измененными именами секвенции
             //joined.push(replaced);
             //console.log(chalk.green('>>>>>>>>joined', joined));
 
-            //замена буквы в конце названия на цифры и добавление SceneSubName,
-            //переписать потому что рег выражения не работают с if else!!!!!
-            /////////////////////////////////////////////////////////////////////////////////////////////////////
-            // if (_AlmostReplaced.slice(-1) == `${/[AZ]/g}`) {
-            //     _AlmostReplaced.replace(/_sh0\d[AZ]/g, '_sh_00\d1');
-            //     console.log('Changed if _AlmostReplaced ', _AlmostReplaced);
+
+            
+            //смотрим есть ли заглавные буквы в названии
+            // let lastChar = _AlmostReplaced.match(/[AZ]/g);//возвращает символ
+            // console.log(lastChar);
+            // let lastChar = _AlmostReplaced.matchAll(/[AZ]/g);
+            // let lastChar = _AlmostReplaced.
+            //смотрим на какой позиции эта буква
+            // if (lastChar == _AlmostReplaced.length - 1) {
+            //     //если на последней то заменяем ее на соответствующую цифру
+            //     //а также добавляем _ после названия сцены
+            //     let symbolIndex = _AlmostReplaced.charCodeAt(-1) - 64;
+            //     _AlmostReplaced.replace(/_sh0/g, '_sh_00');
+            //     _AlmostReplaced += '1';
 
             // } else {
-            //     _AlmostReplaced.replace(/_sh00\d/g, '_sh_00\d0');
-            //     console.log('Changed else _AlmostReplaced ', _AlmostReplaced);
+            //     _AlmostReplaced += '0';
+
             // }
-
-            _AlmostReplaced.test()
-
+            _AlmostReplaced.replace(/[A-Z]$/, m => m.charCodeAt() - 64);
 
 
-            if (/ep\d\d\d/) {
-                _AlmostReplaced.replace(/ep\d\d\d/g, 'ep_')
-            }
-            //////////////////////////////////////////////////////////////////////////////////////////////////
             //разделяем имя и номер сцены
             let replaced = _AlmostReplaced.replace(/_sh/g, '_sh_');
+            console.log(chalk.green('>>>>>>>>_AlmostReplaced ', _AlmostReplaced));
 
             console.log('>>>>>>>>replaced1', replaced);
             // let replacedWithoutLetter = replaced.replace(/A/g, '1').split('_');
