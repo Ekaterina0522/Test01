@@ -130,7 +130,7 @@ class Task1 {
 
     //делаем у всех источников одинаковое название
     getSimilarStructure(entries) {
-        //let joined = [];
+
 
         const arrWithoutLetter = entries.map(e => {
             //cutName - имена источников без расширения
@@ -141,7 +141,7 @@ class Task1 {
             let _replaced = cutName.replace(/_sq000/g, '_sq_000');
 
             //во всех источниках ищем sq0_A_0 и заменяем на sq_000
-            let _AlmostReplaced = _replaced.replace(/_sq0_[AB]_0_/g, '_sq_000_');
+            let _AlmostReplaced = _replaced.replace(/_sq0_[AB]_0_/g, '_sq_001_');
 
             
 
@@ -217,3 +217,6 @@ process.argv.forEach(function(val, index, array) {
 });
 
 (new Task1).start();
+
+// на 11.08 секвенцию сделать 001 а не 000
+//собрать фулнеймы, чтоб были с цифрами, как в задании.
