@@ -2,10 +2,10 @@ const fs = require('fs-extra');
 const chalk = require('chalk');
 const path = require('path');
 const Utils = require('../utils/utils');
-
+let nameObject = {};
 module.exports = class NameGenerator {
 
-
+    
     //функция генерирующая имена для названия папок
     static getNameObject(nameParts) {
         //добавила некоторые элементы
@@ -42,6 +42,7 @@ module.exports = class NameGenerator {
             episodeNameIsUnique = true;
         }
 
+        //если в номере сцены не 4 символа, добавляем нули в начало
         if (sceneNumber.length != 4) {
             sceneNumber = '00000' + sceneNumber
             sceneNumber = sceneNumber.substr(sceneNumber.length - 4);
@@ -52,7 +53,8 @@ module.exports = class NameGenerator {
         let _sceneName = sceneName + sceneNumber;
 
         //объект в котором хранятся данные об episodeName,sequenceName,sceneName и тд
-        let nameObject = {
+        nameObject = {
+            originalName: nameParts[0],
             episodeName,
             sequenceName: _sequenceName,
             sceneName: _sceneName,
