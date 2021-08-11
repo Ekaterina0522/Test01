@@ -57,7 +57,7 @@ class Task1 {
             //путь ко всем папкам cut
             const pathToCutFolder = pathToScene + '\\cut';
             arrOfCutPathes.push(pathToCutFolder);
-            console.log('arrOfCutPathes', arrOfCutPathes);
+            //console.log('arrOfCutPathes', arrOfCutPathes);
 
             // console.log('>>>>>>_splitEntries', pathToCutFolder);
             //конвертаци, извлечение аудио, изменение размера видео
@@ -83,18 +83,15 @@ class Task1 {
         // const nameObject = this.getNameObject(splitEntries); скорее всего не понадобится
         // await NameGenerator.getFileStructure(nameObject); скорее всего не понадобится
 
-        //let pathToSourseFiles = this.sourcePath+entries[i];
+
         for (let i = 0; i <= entries.length - 1; i++) {
             let pathToSourseFiles = this.sourcePath+'\\'+entries[i];
             FfmpegUtils.convertingToMP4(pathToSourseFiles, arrOfCutPathes[i]+`\\video`);
+            FfmpegUtils.extractingMP3(pathToSourseFiles, arrOfCutPathes[i]+`\\audio`);
+            //FfmpegUtils.extractingFrame(pathToSourseFiles, arrOfCutPathes[i]+`\\frame`);
             console.log('Успешно!');
         }
 
-
-
-        // arrWithoutLetter.forEach(a => {
-        //     const src = arrWithoutLetter[0];
-        // })
         //console.log(JSON.stringify(splitEntries, true, '  ')); 
         console.log(chalk.bgMagenta('FINSH'));
     }
