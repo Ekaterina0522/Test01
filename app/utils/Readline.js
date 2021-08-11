@@ -18,4 +18,24 @@ module.exports = class Readline {
         });
     }
 
+
+    //проверка валидности пути
+    static async validateParam(path, promptTitle) {
+
+        if (!path) {
+            path = await Readline.readLineAsync(promptTitle);
+        }
+
+        try {
+            if (fs.statSync(path).isDirectory()) {
+                console.log(`Path "${path}" is valid! `);
+                return path;
+            }
+
+        } catch (err) {
+            console.log(`Path "${path}" is not valid! `);
+            return;
+        }
+    }
+
 }

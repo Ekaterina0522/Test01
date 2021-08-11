@@ -5,7 +5,7 @@ const Utils = require('../utils/utils');
 let nameObject = {};
 module.exports = class NameGenerator {
 
-    
+
     //функция генерирующая имена для названия папок
     static getNameObject(nameParts) {
         //добавила некоторые элементы
@@ -25,7 +25,7 @@ module.exports = class NameGenerator {
         //epPattern ищем имя источника с ep и тремя цифрами,
         //чтобы идентифицировать его как episodeName
         const epPattern = episodeName.match(/ep\d\d\d/);
-        
+
         if (epPattern) {
             //если имя источника ep### значит имя не уникально
             console.log('Episode Name is Template');

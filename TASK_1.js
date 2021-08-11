@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const chalk = require('chalk');
 const FileSystem = require('./app/utils/FileSystem');
+const Readline = require('./app/utils/Readline');
 const path = require('path')
 const NameGenerator = require('./app/project/NameGenerator');
 const Utils = require('./app/utils/utils');
@@ -9,14 +10,27 @@ const FfmpegUtils = require('./app/utils/FfmpegUtils');
 //
 class Task1 {
 
-    sourcePath;
-    destPath;
-
     async start() {
 
         console.log(chalk.bgMagenta('START'));
-        await this.getPath();
-        const entries = await this.getDirEntries(this.sourcePath);
+
+
+
+        // await getPath() {
+
+        //получаем начальный путь
+        const sourcePath = await Readline.validateParam(process.argv[2], "Enter Source Path");
+        console.log(chalk.bgBlue('sourcePath:', sourcePath));
+        if (!sourcePath) return;
+
+        //получаем конечный путь
+        const destPath = await Readline.validateParam(process.argv[3], "Enter Destination Path");
+        if (!destPath) return;
+        // }
+
+
+
+        const entries = await FileSystem.getDirEntries(sourcePath);
         const splitEntries = this.getSimilarStructure(entries);
         const arrOfCutPathes = [];
         const _splitEntries = [];
@@ -30,7 +44,7 @@ class Task1 {
 
             //массив с объектами, где хранятся "разобранные" имена источников
             _splitEntries.push(nameObject);
-            const pathTo3anim = this.destPath + `\\3_anim`;
+            const pathTo3anim = destPath + `\\3_anim`;
             const pathToScene = pathTo3anim + `\\${nameObject.episodeName}\\${nameObject.sequenceFullName}\\${nameObject.sceneFullName}`;
 
             await fs.copy(__dirname + '\\app\\templates\\task1', pathToScene);
@@ -38,7 +52,7 @@ class Task1 {
             //путь ко всем папкам cut
             const pathToCutFolder = pathToScene + '\\cut';
 
-            let pathToSourseFiles = this.sourcePath + '\\' + entry[0];
+            let pathToSourseFiles = sourcePath + '\\' + entry[0];
             await FfmpegUtils.convertingToMP4(pathToSourseFiles, pathToCutFolder + `\\${nameObject.sceneFullName}`);
             //192 - битрейт
             await FfmpegUtils.extractingWAV(pathToSourseFiles, pathToCutFolder + `\\${nameObject.sceneFullName}`, 192, 44100);
@@ -52,28 +66,27 @@ class Task1 {
     }
 
     // ввод пользователем пути
-    async getPath() {
+    // async getPath() {
 
-        //получаем начальный путь
-        this.sourcePath = await FileSystem.validateParam(process.argv[2], "Enter Source Path");
-        console.log(chalk.bgBlue('sourcePath:', this.sourcePath));
-        if (!this.sourcePath) return;
+    //     //получаем начальный путь
+    //     this.sourcePath = await Readline.validateParam(process.argv[2], "Enter Source Path");
+    //     console.log(chalk.bgBlue('sourcePath:', this.sourcePath));
+    //     if (!this.sourcePath) return;
 
-        //получаем конечный путь
-        this.destPath = await FileSystem.validateParam(process.argv[3], "Enter Destination Path");
-        if (!this.destPath) return;
-    }
+    //     //получаем конечный путь
+    //     this.destPath = await Readline.validateParam(process.argv[3], "Enter Destination Path");
+    //     if (!this.destPath) return;
+    // }
 
     // Получаем имена источников в заданной директории
-    async getDirEntries(path) {
-        const entries = await fs.readdir(path);
-        console.log('entries', entries);
-        return entries;
-    }
+    // async getDirEntries(path) {
+    //     const entries = await fs.readdir(path);
+    //     console.log('entries', entries);
+    //     return entries;
+    // }
 
     //делаем у всех источников одинаковое название
     getSimilarStructure(entries) {
-
 
         const arrWithoutLetter = entries.map(e => {
             //cutName - имена источников без расширения
@@ -110,8 +123,8 @@ class Task1 {
 }
 
 //передача аргументов командной строки
-process.argv.forEach(function(val, index, array) {
-    console.log(index + ': ' + val);
-});
+// process.argv.forEach(function(val, index, array) {
+//     console.log(index + ': ' + val);
+// });
 
 (new Task1).start();
