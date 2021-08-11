@@ -18,8 +18,8 @@ module.exports = class NameGenerator {
         const sceneName = isValidEpisodeName ? nameParts[5] : nameParts[4];
         let sceneNumber = isValidEpisodeName ? nameParts[6] : nameParts[5];
         const sceneSubName = sceneNumber.slice(-1);
-        
-        
+
+
         let episodeNameIsUnique;
 
         // const episodeName = nameParts[0];
@@ -42,7 +42,7 @@ module.exports = class NameGenerator {
             episodeNameIsUnique = true;
         }
 
-        if (sceneNumber.length != 4){
+        if (sceneNumber.length != 4) {
             sceneNumber = '00000' + sceneNumber
             sceneNumber = sceneNumber.substr(sceneNumber.length - 4);
             //console.log(chalk.bgMagenta(sceneNumber));
@@ -50,6 +50,7 @@ module.exports = class NameGenerator {
 
         let _sequenceName = sequenceName + sequenceNumber;
         let _sceneName = sceneName + sceneNumber;
+
         //объект в котором хранятся данные об episodeName,sequenceName,sceneName и тд
         let nameObject = {
             episodeName,
@@ -59,8 +60,8 @@ module.exports = class NameGenerator {
             //episodeNameIsUnique,
             //sequenceNumber,
             //sceneNumber,
-            sceneSubName,
-            
+            sceneSubName
+
         };
         // console.log(chalk.yellow('episodeName: ', nameObject.episodeName));
         nameObject.sequenceFullName = nameObject.episodeName + '_' + nameObject.sequenceName;
@@ -68,7 +69,7 @@ module.exports = class NameGenerator {
         nameObject.sceneFullName = nameObject.episodeName + '_' + nameObject.sequenceName + '_' + nameObject.sceneName;
         // console.log(chalk.yellow('episodeName_sequenceName_sceneName: ', episodeName_sequenceName_sceneName));
 
-        console.log(JSON.stringify(nameObject,true,'  '));
+        console.log(JSON.stringify(nameObject, true, '  '));
 
         return nameObject;
 
