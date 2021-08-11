@@ -22,8 +22,7 @@ module.exports = class FfmpegUtils {
     //извлекаем кадр
     static async extractingFrame( src, dest ) {
         try{
-
-            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -ss 0 -i "${src}" -vframes 1 -y "${dest}.jpg"`);
+            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -ss 0 -i "${src}" -vframes 1 -vf "scale=-1:320" -y "${dest}.jpg"`);
             console.log('extractingFrame Complete. ');
             return { stdout, stderr };
         }catch(e) {console.log('extractingFrame.Error:',e);}
