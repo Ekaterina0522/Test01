@@ -5,19 +5,12 @@ const exec = util.promisify(child_process.exec);
 
 module.exports = class FfmpegUtils {
 
-    // изменение размера
-    // static async resizingVideo( src, dest ) {
-    //     return { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 60 -s hd720 ${dest}`);
-    // }
-
-
-    //конвертация в mp4
+    //конвертация в wav
     static async convertingToMP4( src, dest ){
         try{
             await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 60 -s hd720 -y ${dest}.mp4`);
         }catch(e) {console.log('convertingToMP4.Error:',e);}
     }
-
 
     // извлекаем аудио 192 изменяемым сделать, WAV!!!
     static async extractingMP3( src, dest ) {
@@ -36,5 +29,4 @@ module.exports = class FfmpegUtils {
         }catch(e) {console.log('extractingFrame.Error:',e);}
       
     }
-
 }
