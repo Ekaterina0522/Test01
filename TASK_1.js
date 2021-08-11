@@ -56,7 +56,7 @@ class Task1 {
             //console.log('pathToScene', pathToScene);
             //путь ко всем папкам cut
             const pathToCutFolder = pathToScene + '\\cut';
-            arrOfCutPathes.push(pathToCutFolder);
+            // arrOfCutPathes.push(pathToCutFolder);
             //console.log('arrOfCutPathes', arrOfCutPathes);
 
             // console.log('>>>>>>_splitEntries', pathToCutFolder);
@@ -77,20 +77,21 @@ class Task1 {
             // await FfmpegUtils.extractingMP3(src, dest);
             // await FfmpegUtils.extractingFrame(src, dest);
 
+            let pathToSourseFiles = this.sourcePath+'\\'+entry[0];
+            await FfmpegUtils.convertingToMP4(pathToSourseFiles, pathToCutFolder+`\\${nameObject.sceneFullName}`);
+            await FfmpegUtils.extractingMP3(pathToSourseFiles, pathToCutFolder+`\\${nameObject.sceneFullName}`);
+            await FfmpegUtils.extractingFrame( pathToSourseFiles, pathToCutFolder+`\\${nameObject.sceneFullName}`);
+            console.log('Успешно!');
 
         });
         //console.log(pathToFfmpeg);
         // const nameObject = this.getNameObject(splitEntries); скорее всего не понадобится
         // await NameGenerator.getFileStructure(nameObject); скорее всего не понадобится
 
-
-        for (let i = 0; i <= entries.length - 1; i++) {
-            let pathToSourseFiles = this.sourcePath+'\\'+entries[i];
-            FfmpegUtils.convertingToMP4(pathToSourseFiles, arrOfCutPathes[i]+`\\video`);
-            FfmpegUtils.extractingMP3(pathToSourseFiles, arrOfCutPathes[i]+`\\audio`);
-            //FfmpegUtils.extractingFrame(pathToSourseFiles, arrOfCutPathes[i]+`\\frame`);
-            console.log('Успешно!');
-        }
+        //sceneFullName = nameObject.sceneFullName;
+        // for (let i = 0; i <= entries.length - 1; i++) {
+            
+        // }
 
         //console.log(JSON.stringify(splitEntries, true, '  ')); 
         console.log(chalk.bgMagenta('FINSH'));
