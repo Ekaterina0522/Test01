@@ -2,7 +2,6 @@ const fs = require('fs-extra');
 const chalk = require('chalk');
 const path = require('path');
 const Utils = require('../utils/utils');
-let nameObject = {};
 module.exports = class NameGenerator {
 
 
@@ -28,12 +27,12 @@ module.exports = class NameGenerator {
 
         if (epPattern) {
             //если имя источника ep### значит имя не уникально
-            console.log('Episode Name is Template');
+            //console.log('Episode Name is Template');
             episodeNumber = episodeName.substr(2, episodeName.length);
             episodeNameIsUnique = false;
         } else {
             //если имя просто текст, то имя уникально
-            console.log('Episode Name is Unique');
+            //console.log('Episode Name is Unique');
             episodeNameIsUnique = true;
         }
 
@@ -47,7 +46,7 @@ module.exports = class NameGenerator {
         let _sceneName = sceneName + sceneNumber;
 
         //объект в котором хранятся данные об episodeName,sequenceName,sceneName и тд
-        nameObject = {
+        let nameObject = {
             originalName: nameParts[0],
             episodeName,
             sequenceName: _sequenceName,
@@ -59,7 +58,7 @@ module.exports = class NameGenerator {
 
         nameObject.sequenceFullName = nameObject.episodeName + '_' + nameObject.sequenceName;
         nameObject.sceneFullName = nameObject.episodeName + '_' + nameObject.sequenceName + '_' + nameObject.sceneName;
-        console.log(JSON.stringify(nameObject, true, '  '));
+        //console.log(JSON.stringify(nameObject, true, '  '));
 
         return nameObject;
 

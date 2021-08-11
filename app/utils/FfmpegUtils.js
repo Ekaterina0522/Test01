@@ -9,6 +9,7 @@ module.exports = class FfmpegUtils {
     static async convertingToMP4(src, dest) {
         try {
             await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -r 60 -s hd720 -y "${dest}.mp4"`);
+            console.log('convertingVideo Complete. ');
         } catch (e) { console.log('convertingToMP4.Error:', e); }
     }
 
@@ -16,6 +17,7 @@ module.exports = class FfmpegUtils {
     static async extractingWAV(src, dest, bitrate=192, sample_rate=44100) {
         try {
             await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -vn -ar "${sample_rate}" -ac 2 -ab "${bitrate}k" -f wav -y "${dest}.wav"`);
+            console.log('extractingAudio Complete. ');
         } catch (e) { console.log('extractingWAV.Error:', e); }
     }
 
