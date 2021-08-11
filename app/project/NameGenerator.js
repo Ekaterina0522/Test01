@@ -22,15 +22,10 @@ module.exports = class NameGenerator {
 
         let episodeNameIsUnique;
 
-        // const episodeName = nameParts[0];
-        // const sequenceName = nameParts[1];
-        // const sceneName = nameParts[2];
-        // let episodeNumber = undefined;
-        // let episodeNameIsUnique;
-
         //epPattern ищем имя источника с ep и тремя цифрами,
         //чтобы идентифицировать его как episodeName
         const epPattern = episodeName.match(/ep\d\d\d/);
+        
         if (epPattern) {
             //если имя источника ep### значит имя не уникально
             console.log('Episode Name is Template');
@@ -46,7 +41,6 @@ module.exports = class NameGenerator {
         if (sceneNumber.length != 4) {
             sceneNumber = '00000' + sceneNumber
             sceneNumber = sceneNumber.substr(sceneNumber.length - 4);
-            //console.log(chalk.bgMagenta(sceneNumber));
         }
 
         let _sequenceName = sequenceName + sequenceNumber;
@@ -59,18 +53,12 @@ module.exports = class NameGenerator {
             sequenceName: _sequenceName,
             sceneName: _sceneName,
             episodeNumber,
-            //episodeNameIsUnique,
-            //sequenceNumber,
-            //sceneNumber,
             sceneSubName
 
         };
-        // console.log(chalk.yellow('episodeName: ', nameObject.episodeName));
-        nameObject.sequenceFullName = nameObject.episodeName + '_' + nameObject.sequenceName;
-        // console.log(chalk.yellow('episodeName_sequenceName: ', episodeName_sequenceName));
-        nameObject.sceneFullName = nameObject.episodeName + '_' + nameObject.sequenceName + '_' + nameObject.sceneName;
-        // console.log(chalk.yellow('episodeName_sequenceName_sceneName: ', episodeName_sequenceName_sceneName));
 
+        nameObject.sequenceFullName = nameObject.episodeName + '_' + nameObject.sequenceName;
+        nameObject.sceneFullName = nameObject.episodeName + '_' + nameObject.sequenceName + '_' + nameObject.sceneName;
         console.log(JSON.stringify(nameObject, true, '  '));
 
         return nameObject;
