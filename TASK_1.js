@@ -40,7 +40,7 @@ class Task1 {
 
             let pathToSourseFiles = this.sourcePath + '\\' + entry[0];
             await FfmpegUtils.convertingToMP4(pathToSourseFiles, pathToCutFolder + `\\${nameObject.sceneFullName}`);
-            await FfmpegUtils.extractingMP3(pathToSourseFiles, pathToCutFolder + `\\${nameObject.sceneFullName}`);
+            await FfmpegUtils.extractingWAV(pathToSourseFiles, pathToCutFolder + `\\${nameObject.sceneFullName}`, 192);
             await FfmpegUtils.extractingFrame(pathToSourseFiles, pathToCutFolder + `\\${nameObject.sceneFullName}`);
             console.log('Успешно!');
 
