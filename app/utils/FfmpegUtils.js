@@ -13,9 +13,9 @@ module.exports = class FfmpegUtils {
     }
 
     // извлекаем аудио
-    static async extractingWAV( src, dest, bitrate ) {
+    static async extractingWAV( src, dest, bitrate, sample_rate ) {
         try{
-            await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -vn -ar 44100 -ac 2 -ab "${bitrate}k" -f mp3 -y "${dest}.wav"`);
+            await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -vn -ar "${sample_rate}" -ac 2 -ab "${bitrate}k" -f wav -y "${dest}.wav"`);
         }catch(e) {console.log('extractingWAV.Error:',e);}
     }
 
