@@ -6,30 +6,27 @@ const exec = util.promisify(child_process.exec);
 const src_lst = [];
 module.exports = class FfmpegUtils {
 
-    // конвертируем в другой формат
-    static async creatingMP4( src, dest ) {
+    // изменение размера
+    static async resizingVideo( src, dest ) {
         return { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 60 -s hd720 ${dest}`);
     }
 
+
+    //конвертация в mp4
+    static async convertingToMP4( src, dest ){
+        return { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} ${dest}.mp4`);
+    }
+
+
     // извлекаем аудио
-    static async extractingMP3() {
+    static async extractingMP3( src, dest ) {
             return { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -vn -ar 44100 -ac 2 -ab 192k -f mp3 ${dest}.mp3`);
     }
 
     //извлекаем кадр
-    static async extractingFrame() {
+    static async extractingFrame( src, dest ) {
             return { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 1 -s WxH -f image2 ${dest}.jpeg`);
       
     }
-
-    
-    // static async isNumber(i) {
-    //     return (i >= '0' && i <= '9');
-    // }
-
-
-    // static async isLetter(i) {
-    //     return ((i >= 'a' && i <= 'z') || (i >= 'A' && i <= 'Z'));
-    // }
 
 }

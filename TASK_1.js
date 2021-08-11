@@ -36,7 +36,7 @@ class Task1 {
         */
         const arrOfCutPathes = [];
         const _splitEntries = [];
-
+        
         //с помощью функции processArray последовательно перебираем массив splitEntries
         //формируем путь где функция createFolder будет создавать папку(папки)
         await Utils.processArray(splitEntries, async (entry, i) => {
@@ -53,10 +53,11 @@ class Task1 {
 
             await fs.copy(__dirname + '\\app\\templates\\task1', pathToScene);
 
+            //console.log('pathToScene', pathToScene);
             //путь ко всем папкам cut
-            // const pathToCutFolder = pathToScene + '\\cut';
-            // arrOfCutPathes.push(pathToCutFolder);
-            //console.log(arrOfCutPathes);
+            const pathToCutFolder = pathToScene + '\\cut';
+            arrOfCutPathes.push(pathToCutFolder);
+            console.log('arrOfCutPathes', arrOfCutPathes);
 
             // console.log('>>>>>>_splitEntries', pathToCutFolder);
             //конвертаци, извлечение аудио, изменение размера видео
@@ -78,17 +79,22 @@ class Task1 {
 
 
         });
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // await FileSystem.addingVideoToCutFolder(splitEntries, async (entry, i) => {
-
-        //     const nameObject = NameGenerator.getNameObject(entry);
-        //     nameObject.sequenceFullName 
-
-        // });
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
         //console.log(pathToFfmpeg);
         // const nameObject = this.getNameObject(splitEntries); скорее всего не понадобится
         // await NameGenerator.getFileStructure(nameObject); скорее всего не понадобится
+
+        //let pathToSourseFiles = this.sourcePath+entries[i];
+        for (let i = 0; i <= entries.length - 1; i++) {
+            let pathToSourseFiles = this.sourcePath+'\\'+entries[i];
+            FfmpegUtils.convertingToMP4(pathToSourseFiles, arrOfCutPathes[i]+`\\video`);
+            console.log('Успешно!');
+        }
+
+
+
+        // arrWithoutLetter.forEach(a => {
+        //     const src = arrWithoutLetter[0];
+        // })
         //console.log(JSON.stringify(splitEntries, true, '  ')); 
         console.log(chalk.bgMagenta('FINSH'));
     }
@@ -124,7 +130,7 @@ class Task1 {
     // Получаем имена источников в заданной директории
     async getDirEntries(path) {
         const entries = await fs.readdir(path);
-        //console.log('entries', entries);
+        console.log('entries', entries);
         return entries;
     }
 
@@ -138,44 +144,28 @@ class Task1 {
             let cutName = e.slice(0, -4);
 
             //разделяем имя и номер секвенции
-            let _replaced = cutName.replace(/_sq000/g, '_sq_000');
-
+            let _replaced = cutName.replace(/_sq000/g, '_sq_001');
+            //console.log(chalk.green('>>>>>>>>_replaced ',typeof _replaced));
             //во всех источниках ищем sq0_A_0 и заменяем на sq_000
+
             let _AlmostReplaced = _replaced.replace(/_sq0_[AB]_0_/g, '_sq_001_');
 
-            
-
-
-
-
-
-            //замена буквы в конце имени на цифру ( не работает )
-            //_AlmostReplaced.replace(/[A-Z]$/, m => m.charCodeAt() - 64);
-
-            const lastCharIndex = Utils.getLetterIndex( _AlmostReplaced.substr(-1) );
+            const lastCharIndex = Utils.getLetterIndex(_AlmostReplaced.substr(-1));
             // const theLastCharIsLetter = FfmpegUtils.isLetter(lastChar); //возвращает true, если буква или false, если цифра
 
-            if( lastCharIndex ){
-                _AlmostReplaced = _AlmostReplaced.substr(0,_AlmostReplaced.length-1) + lastCharIndex;
-            }else{
+            if (lastCharIndex) {
+                _AlmostReplaced = _AlmostReplaced.substr(0, _AlmostReplaced.length - 1) + lastCharIndex;
+            } else {
                 _AlmostReplaced += '0';
 
             }
-            // if (!theLastCharIsLetter) {
-            //     _AlmostReplaced += '0';
-
-            // } else {
-            //     _AlmostReplaced.slice(-1);
-            //     _AlmostReplaced += '1';
-            // }
-
 
             //console.log(chalk.green('>>>>>>>>_AlmostReplaced ', _AlmostReplaced));
 
 
             //разделяем имя и номер сцены
             let replaced = _AlmostReplaced.replace(/_sh/g, '_sh_');
-            //console.log(chalk.green('>>>>>>>>_AlmostReplaced ', _AlmostReplaced));
+
 
             // let replacedWithoutLetter = replaced.replace(/A/g, '1').split('_');
 
@@ -184,15 +174,18 @@ class Task1 {
 
             //в начало массива ставим исходное имя источника
             replacedWithoutLetter.unshift(e);
+
             //console.log('>>>>>>>>>>>>>>replacedWithoutLetter', replacedWithoutLetter);
             //console.log(chalk.green('replacedWithoutLetter', replacedWithoutLetter));
             //console.log('>>>>>>>>replacedWithoutLetter', replacedWithoutLetter);
             //имена источников без букв в конце
             return replacedWithoutLetter;
         });
-        //console.log('arrWithoutLetter', arrWithoutLetter);
+        console.log('arrWithoutLetter', arrWithoutLetter);
         return arrWithoutLetter;
     }
+
+
 
     /*
         //парсим имена источников
@@ -208,6 +201,8 @@ class Task1 {
             return splitEntries;
         }
         */
+
+
 
 }
 
