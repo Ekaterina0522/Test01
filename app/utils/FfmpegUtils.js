@@ -12,7 +12,7 @@ module.exports = class FfmpegUtils {
         }catch(e) {console.log('convertingToMP4.Error:',e);}
     }
 
-    // извлекаем аудио 
+    // извлекаем аудио
     static async extractingWAV( src, dest, bitrate ) {
         try{
             await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -vn -ar 44100 -ac 2 -ab "${bitrate}k" -f mp3 -y "${dest}.wav"`);
