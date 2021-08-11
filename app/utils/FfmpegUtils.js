@@ -7,14 +7,14 @@ const src_lst = [];
 module.exports = class FfmpegUtils {
 
     // изменение размера
-    static async resizingVideo( src, dest ) {
-        return { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 60 -s hd720 ${dest}`);
-    }
+    // static async resizingVideo( src, dest ) {
+    //     return { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 60 -s hd720 ${dest}`);
+    // }
 
 
     //конвертация в mp4
     static async convertingToMP4( src, dest ){
-        return { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} ${dest}.mp4`);
+        return { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 60 -s hd720 ${dest}.mp4`);
     }
 
 
@@ -25,7 +25,7 @@ module.exports = class FfmpegUtils {
 
     //извлекаем кадр
     static async extractingFrame( src, dest ) {
-            return { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 1 -s WxH -f image2 ${dest}.jpeg`);
+            return { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 1 -s -f image2 ${dest}.jpeg`);
       
     }
 
