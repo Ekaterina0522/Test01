@@ -8,22 +8,22 @@ module.exports = class FfmpegUtils {
     //конвертация в wav
     static async convertingToMP4( src, dest ){
         try{
-            await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -r 60 -s hd720 -y ${dest}.mp4`);
+            await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -r 60 -s hd720 -y "${dest}.mp4"`);
         }catch(e) {console.log('convertingToMP4.Error:',e);}
     }
 
-    // извлекаем аудио 192 изменяемым сделать, WAV!!!
-    static async extractingMP3( src, dest ) {
+    // извлекаем аудио 
+    static async extractingWAV( src, dest, bitrate ) {
         try{
-            await exec(`c:\\ffmpeg\\bin\\ffmpeg -i ${src} -vn -ar 44100 -ac 2 -ab 192k -f mp3 -y ${dest}.mp3`);
-        }catch(e) {console.log('extractingMP3.Error:',e);}
+            await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -vn -ar 44100 -ac 2 -ab "${bitrate}k" -f mp3 -y "${dest}.wav"`);
+        }catch(e) {console.log('extractingWAV.Error:',e);}
     }
 
     //извлекаем кадр
     static async extractingFrame( src, dest ) {
         try{
 
-            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -ss 0 -i "${src}" -vframes 1 -y "${dest}.jpeg"`);
+            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -ss 0 -i "${src}" -vframes 1 -y "${dest}.jpg"`);
             console.log('extractingFrame Complete. ');
             return { stdout, stderr };
         }catch(e) {console.log('extractingFrame.Error:',e);}
