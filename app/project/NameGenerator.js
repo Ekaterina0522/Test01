@@ -2,6 +2,8 @@ const fs = require('fs-extra');
 const chalk = require('chalk');
 const path = require('path');
 const Utils = require('../utils/utils');
+
+
 module.exports = class NameGenerator {
 
 
