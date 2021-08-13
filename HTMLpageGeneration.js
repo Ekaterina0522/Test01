@@ -19,33 +19,33 @@ class PageGenerator {
 
         const versionNumber = await Readline.readLineAsync("Enter version number");
         console.log(chalk.bgGreen('versionNumber:', versionNumber));
-        
-
-
-        const example = {
-            sell1: "name1",
-            sell2: "name2",
-            sell3: "name3",
-        }
-        const example2 = {
-            sell1: "name11",
-            sell2: "name22",
-            sell3: "name33",
-        }
-        const example3 = {
-            sell1: "name111",
-            sell2: "name222",
-            sell3: "name333",
-        }
-
         const items = [];
-        items.push(example);
-        items.push(example2);
-        items.push(example3);  
+        
+        
+        // const example = {
+        //     sell1: "name1",
+        //     sell2: "name2",
+        //     sell3: "name3",
+        // }
+        // const example2 = {
+        //     sell1: "name11",
+        //     sell2: "name22",
+        //     sell3: "name33",
+        // }
+        // const example3 = {
+        //     sell1: "name111",
+        //     sell2: "name222",
+        //     sell3: "name333",
+        // }
+
+        // const items = [];
+        // items.push(example);
+        // items.push(example2);
+        // items.push(example3);  
 
         console.log(items);
 
-        const templatePath = __dirname + '\\app\\project\\test.tpl';
+        const templatePath = __dirname + '\\app\\project\\Table.tpl';
         const templateConent = await FileSystem.loadTextFile(templatePath);
 
         const template = Handlebars.compile( templateConent );
