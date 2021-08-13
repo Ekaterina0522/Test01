@@ -27,9 +27,7 @@ class PageGenerator {
 }
 
 
-
-
-
+//апро
 
     //передача аргументов командной строки
 // process.argv.forEach(function(val, index, array) {
