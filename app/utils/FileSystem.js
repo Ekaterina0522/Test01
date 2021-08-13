@@ -35,7 +35,7 @@ module.exports = class FileSystem {
             console.log('File saved!');
         });
     }
-
+    //бежит по папкам
     static async folderScaner(path){
         let dir1 = fs.readdir(path);
         for(let dir2 of dir1){
