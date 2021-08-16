@@ -6,15 +6,19 @@ const Readline = require('../../task1/src/app/utils/Readline');
 const NameGenerator = require('./app/project/NameGenerator');
 const Handlebars = require('Handlebars');
 const FileSystem = require('./app/utils/FileSystem');
+const Utils = require('./app/utils/utils');
 
+///
 const mp4Files = [];
 
+///
 class PageGenerator {
 
     async start() {
 
         console.log(chalk.bgMagenta('START'));
         //валидация
+        // D:\WORK\Katya\task1\mats\import\3_anim\opening
         const sourcePath = await Readline.validateParam(process.argv[2], "Enter Source Path");
         //console.log(chalk.bgBlue('sourcePath:', sourcePath));
         if (!sourcePath) return;
@@ -47,49 +51,78 @@ class PageGenerator {
         // items.push(example3);  
 
         await this.getFilesNames(sourcePath);
+
+        // sourcePath
+            // each Sequence
+                // each Scene
+                    // cut/*.mp4
+
         //console.log(items);
 
-        const templatePath = __dirname + '\\app\\project\\Table.tpl';
-        const templateConent = await FileSystem.loadTextFile(templatePath);
+        // const templatePath = __dirname + '\\app\\project\\Table.tpl';
+        // const templateConent = await FileSystem.loadTextFile(templatePath);
 
-        const template = Handlebars.compile(templateConent);
+        // const template = Handlebars.compile(templateConent);
 
-        const htmlContent = template({ items: items });
+        // const htmlContent = template({ items: items });
 
-        await FileSystem.saveTextFile(sourcePath + items, items);
+        // await FileSystem.saveTextFile(sourcePath + items, items);
 
 
-
+        
         console.log(chalk.bgMagenta('FINISH'));
+        
+        process.exit();
+
     }
 
 
 
-    getFilesNames(path) {
+    async getFilesNames(path) {
 
-        try {
-            fs.readdir(path, (err, files) => {
-                if (err) throw err;
+        const entries = await FileSystem.getDirEntries(path);
+        // console.log('getFilesNames:', path, entries );
+        // console.log('>>>', typeof entries, entries, entries[0] );
 
-                for (let file in files) {
+        // Iterate Sequence
+        await FileSystem.eachDirEntry( path, async ( sqEntry, sqI, sqEntryPath )=>{
+            // console.log('==>',sqI+')',sqEntry, sqEntryPath );
 
-                    if (fs.statSync(file).isFile() && path.extname(file) === '.mp4') {
-                        mp4Files.push(file);
+            // Iterate Scenes
+            await FileSystem.eachDirEntry( sqEntryPath, async ( scEntry, scI, scEntryPath )=>{
+                
+                console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
+                
+                const videoFile = await FileSystem.getLatestFile( scEntryPath+'\\cut', 'mp4' );
+                console.log('file: ', videoFile );
 
-                    } else if (fs.statSync(file).isDirectory()) {
-                        this.getFilesNames(path + '/' + file);
-                    }
-                }
-            });
-            
-        } catch (err) {
-            console.log(err);
-        }
-        return mp4Files;
+            }, true );
+
+        }, true );
+
+        // const sequences = await FileSystem.getDirEntries(path);
+        
+        // return sequences; 
+
+        /*
+        await fs.readdir(path, (err, files) => {
+                    files.forEach(file => {
+                        console.log(file);
+
+                        fs.readdir(path+'/'+file, (err, _files) => {
+                            files.forEach(_file => {
+                                console.log(_file);
+                            })
+                        });
+                    });
+                        
+        });
+        */
+
     }
+
 
 }
-
 
 //передача аргументов командной строки
 // process.argv.forEach(function(val, index, array) {
