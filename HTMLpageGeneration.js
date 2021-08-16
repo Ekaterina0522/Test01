@@ -6,7 +6,8 @@ const Readline = require('../../task1/src/app/utils/Readline');
 const NameGenerator = require('./app/project/NameGenerator');
 const Handlebars = require('Handlebars');
 const FileSystem = require('./app/utils/FileSystem');
-const async = require('async');
+
+const mp4Files = [];
 
 class PageGenerator {
 
@@ -21,7 +22,7 @@ class PageGenerator {
         const versionNumber = await Readline.readLineAsync("Enter version number");
         console.log(chalk.bgGreen('versionNumber:', versionNumber));
 
-        const items = [];
+        //const items = [];
 
 
         // const example = {
@@ -44,6 +45,7 @@ class PageGenerator {
         // items.push(example);
         // items.push(example2);
         // items.push(example3);  
+
         await this.getFilesNames(sourcePath);
         //console.log(items);
 
@@ -54,52 +56,38 @@ class PageGenerator {
 
         const htmlContent = template({ items: items });
 
-        await FileSystem.saveTextFile(sourcePath + items, );
+        await FileSystem.saveTextFile(sourcePath + items, items);
 
 
 
         console.log(chalk.bgMagenta('FINISH'));
     }
 
-    // getFiles(dirPath) {
 
-    //     fs.readdir(dirPath, function(err, files) {
-    //         if (err) throw err;
-
-    //         let _files = [];
-    //         async.eachSeries(files, function(fileName) {
-    //             let filePath = path.join(dirPath, fileName);
-
-    //             fs.stat(filePath, function(err, stat) {
-    //                 if (err) throw err;
-
-    //                 if (stat.isDirectory()) {
-    //                     getFiles(filePath, function(err, subDirFiles) {
-    //                         if (err) throw err;
-
-    //                         filePaths = filePaths.concat(subDirFiles);
-    //                     });
-
-    //                 } else {
-    //                     if (stat.isFile() && path.extname(file)==='.mp4') {
-    //                         _files.push(file);
-    //                     }
-    //                 }
-    //             });
-    //         });
-
-    //     });
-    // }
 
     getFilesNames(path) {
-        let names;
 
         try {
-            names = fs.readdir(path);
+            fs.readdir(path, (err, files) => {
+                if (err) throw err;
+
+                for (let file in files) {
+
+                    if (fs.statSync(file).isFile() && path.extname(file) === '.mp4') {
+                        mp4Files.push(file);
+
+                    } else if (fs.statSync(file).isDirectory()) {
+                        this.getFilesNames(path + '/' + file);
+                    }
+                }
+            });
+            
         } catch (err) {
             console.log(err);
         }
+        return mp4Files;
     }
+
 }
 
 
