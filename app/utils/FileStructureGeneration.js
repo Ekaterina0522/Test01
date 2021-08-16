@@ -1,12 +1,12 @@
 const fs = require('fs-extra');
 const chalk = require('chalk');
-const FileSystem = require('./app/utils/FileSystem');
-const Readline = require('./app/utils/Readline');
+const FileSystem = require('./FileSystem');
+const Readline = require('./Readline');
 const path = require('path')
-const NameGenerator = require('./app/project/NameGenerator');
-const Utils = require('./app/utils/utils');
-const FfmpegUtils = require('./app/utils/FfmpegUtils');
-
+const NameGenerator = require('../project/NameGenerator');
+const Utils = require('./utils');
+const FfmpegUtils = require('./FfmpegUtils');
+//const pathToCutFolders = [];
 //
 class FileStructureGeneration {
 
@@ -43,6 +43,7 @@ class FileStructureGeneration {
 
             //путь ко всем папкам cut
             const pathToCutFolder = pathToScene + '\\cut';
+            //pathToCutFolders.push(pathToCutFolder);
 
             let pathToSourseFiles = sourcePath + '\\' + entry[0];
             await FfmpegUtils.convertingToMP4(pathToSourseFiles, pathToCutFolder + `\\${nameObject.sceneFullName}`);
