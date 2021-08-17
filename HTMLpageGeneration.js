@@ -55,7 +55,7 @@ class PageGenerator {
 
 
     async getFilesNames(path) {
-
+        //получаем имена источников
         const entries = await FileSystem.getDirEntries(path);
         // console.log('getFilesNames:', path, entries );
         // console.log('>>>', typeof entries, entries, entries[0] );
@@ -68,10 +68,10 @@ class PageGenerator {
             await FileSystem.eachDirEntry( sqEntryPath, async ( scEntry, scI, scEntryPath )=>{
                 
                 console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
-                
+                //получаем самый новый файл в каждой папке cut с расширением mp4
                 const videoFile = await FileSystem.getLatestFile( scEntryPath+'\\cut', 'mp4' );
                 console.log('file: ', videoFile );
-
+            // true так как перебираем только папки, а не файлы (функция eachDirEntry в файле FileSystem)
             }, true );
 
         }, true );
