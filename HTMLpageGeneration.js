@@ -9,8 +9,8 @@ const FileSystem = require('./app/utils/FileSystem');
 const Utils = require('./app/utils/utils');
 
 ///
-const mp4Files = [];
-
+//const mp4Files = [];
+let videoFile = '';
 ///
 class PageGenerator {
 
@@ -28,6 +28,7 @@ class PageGenerator {
 
         await this.getFilesNames(sourcePath);
 
+        await FileSystem.getVideoLength(videoFile);
         // sourcePath
             // each Sequence
                 // each Scene
@@ -67,15 +68,15 @@ class PageGenerator {
             // Iterate Scenes
             await FileSystem.eachDirEntry( sqEntryPath, async ( scEntry, scI, scEntryPath )=>{
                 
-                console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
+                //console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
                 //получаем самый новый файл в каждой папке cut с расширением mp4
-                const videoFile = await FileSystem.getLatestFile( scEntryPath+'\\cut', 'mp4' );
-                console.log('file: ', videoFile );
+                videoFile += await FileSystem.getLatestFile( scEntryPath+'\\cut', 'mp4' );
+                //console.log('file: ', videoFile );
             // true так как перебираем только папки, а не файлы (функция eachDirEntry в файле FileSystem)
             }, true );
 
         }, true );
-
+        
     }
 
 
