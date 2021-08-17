@@ -9,14 +9,13 @@ const FileSystem = require('./app/utils/FileSystem');
 const Utils = require('./app/utils/utils');
 const FfmpegUtils = require('./app/utils/FfmpegUtils');
 ///
-
 const videoFileNames = [];
 const videoFilesDurations = [];
-const videoInSecondsOnly = [];
+const videoInSecondsOnly = []; //массив из длительности каждого файла в секундах (строки)
 const sequenceNumbers = [];
 const sceneNumbers = [];
 const videoFrames = [];
-const videoFramesOnly = [];
+const videoFramesOnly = []; //массив из длительности каждого файла в кадрах (строки)
 const videoFPS = [];
 ///
 class PageGenerator {
@@ -34,31 +33,31 @@ class PageGenerator {
         console.log(chalk.bgGreen('versionNumber:', versionNumber));
 
         await this.getFilesNames(sourcePath);
+
         //пробегаемся по всем именам файлов и для каждого ищем длительность в секундах
         await Utils.processArray(videoFileNames, async (videoFileName, i) => {
+
             //в массив записываем длительность в секундах
             const videoDuration = await FfmpegUtils.getVideoLength(videoFileName);
-            //console.log('videoDuration', videoDuration)
-            
-            //videoFilesDurations.push(Object.values(videoDuration));
-            videoFilesDurations.push(videoDuration.stdout);
+            const inSec = videoDuration.stdout;
+            const _inSec = inSec.slice(0, inSec.length - 2);
+            videoFilesDurations.push(+_inSec);
 
             //в массив записываем длительность в кадрах 
             const _videoFrames = await FfmpegUtils.countFrames(videoFileName);
-            //videoFrames.push(Object.values(_videoFrames));
-            videoFrames.push(_videoFrames.stdout);
+            const inFrames = _videoFrames.stdout;
+            const _inFrames = inFrames.slice(0, inFrames.length - 2);
+            videoFrames.push(+_inFrames);
 
-            // const fileInSeconds = videoFrames;
-            // videoInSecondsOnly.push(fileInSeconds);
-
-            // const _vidoeFps = _videoFrames/videoDuration;
-            // videoFPS.push(_vidoeFps);
+            //считаем FPS
+            const oneFileFPS = (+_inFrames) / (+_inSec);
+            videoFPS.push(oneFileFPS);
 
         });
+
         console.log('videoFilesDurations', videoFilesDurations);
         console.log('videoFrames', videoFrames);
-        
-        //console.log('videoInSecondsOnly', videoInSecondsOnly);
+        console.log('videoFPS', videoFPS);
 
 
         //console.log(items);
@@ -119,9 +118,22 @@ class PageGenerator {
             }, true);
 
         }, true);
-    //     console.log('<<<sequenceNumbers>>>', sequenceNumbers);
-    //     console.log('<<<sceneNumbers>>>', sceneNumbers);
-     }
+        //     console.log('<<<sequenceNumbers>>>', sequenceNumbers);
+        //     console.log('<<<sceneNumbers>>>', sceneNumbers);
+    }
+
+    //отрезает от строки ненужные последние 4 символа и приводит строку к типу 'число' и считает FPS
+    // async countFPS(durationInSeconds, durationInFrames) {
+
+    //     await Utils.processArray(videoFilesDurations, async (videoFileDuration, i) => {
+
+
+    //     });
+
+    //     const inSec = durationInSeconds.slice(0, durationInSeconds.length - 4);
+    //     const inFrame = durationInFrames.slice(0, durationInFrames.length - 4);
+    //     console.log('Duration', inSec)
+    // }
 
 
 }
