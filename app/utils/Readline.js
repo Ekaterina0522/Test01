@@ -29,8 +29,9 @@ module.exports = class Readline {
         }
 
         try {
-            
+            // stat - путь
             const stat = await fs.lstat(path);
+            //если путь есть и это папка то путь валидный
             if ( stat && stat.isDirectory()) {
                 console.log(`Path "${path}" is valid! `);
                 return path;
