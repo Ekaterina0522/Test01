@@ -7,10 +7,11 @@ const NameGenerator = require('./app/project/NameGenerator');
 const Handlebars = require('Handlebars');
 const FileSystem = require('./app/utils/FileSystem');
 const Utils = require('./app/utils/utils');
-
+const FfmpegUtils = require('./app/utils/FfmpegUtils');
 ///
-//const mp4Files = [];
-let videoFile = '';
+
+const videoFileNames = [];
+const videoFilesDurations = [];
 ///
 class PageGenerator {
 
@@ -27,8 +28,14 @@ class PageGenerator {
         console.log(chalk.bgGreen('versionNumber:', versionNumber)); 
 
         await this.getFilesNames(sourcePath);
+        //пробегаемся по всем именам файлов и для каждого ищем длительность в секундах
+        await Utils.processArray(videoFileNames, async (videoFileName, i) => {
 
-        await FileSystem.getVideoLength(videoFile);
+            const videoDuration = await FfmpegUtils.getVideoLength(videoFileName);
+            videoFilesDurations.push(videoDuration);
+         });
+        console.log('videoFilesDurations', videoFilesDurations);
+        //await FfmpegUtils.getVideoLength(videoFile);
         // sourcePath
             // each Sequence
                 // each Scene
@@ -70,8 +77,11 @@ class PageGenerator {
                 
                 //console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
                 //получаем самый новый файл в каждой папке cut с расширением mp4
-                videoFile += await FileSystem.getLatestFile( scEntryPath+'\\cut', 'mp4' );
+                const videoFile = await FileSystem.getLatestFile( scEntryPath+'\\cut', 'mp4' );
                 //console.log('file: ', videoFile );
+                //записываем каждый videoFile в массив videoFileNames
+                videoFileNames.push(videoFile);
+                //console.log('<<<videoFileNames>>>', videoFileNames)
             // true так как перебираем только папки, а не файлы (функция eachDirEntry в файле FileSystem)
             }, true );
 
