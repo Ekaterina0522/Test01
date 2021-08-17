@@ -18,37 +18,13 @@ class PageGenerator {
 
         console.log(chalk.bgMagenta('START'));
         //валидация
-        // D:\WORK\Katya\task1\mats\import\3_anim\opening
+        
         const sourcePath = await Readline.validateParam(process.argv[2], "Enter Source Path");
         //console.log(chalk.bgBlue('sourcePath:', sourcePath));
         if (!sourcePath) return;
 
         const versionNumber = await Readline.readLineAsync("Enter version number");
-        console.log(chalk.bgGreen('versionNumber:', versionNumber));
-
-        //const items = [];
-
-
-        // const example = {
-        //     sell1: "name1",
-        //     sell2: "name2",
-        //     sell3: "name3",
-        // }
-        // const example2 = {
-        //     sell1: "name11",
-        //     sell2: "name22",
-        //     sell3: "name33",
-        // }
-        // const example3 = {
-        //     sell1: "name111",
-        //     sell2: "name222",
-        //     sell3: "name333",
-        // }
-
-        // const items = [];
-        // items.push(example);
-        // items.push(example2);
-        // items.push(example3);  
+        console.log(chalk.bgGreen('versionNumber:', versionNumber)); 
 
         await this.getFilesNames(sourcePath);
 
@@ -99,25 +75,6 @@ class PageGenerator {
             }, true );
 
         }, true );
-
-        // const sequences = await FileSystem.getDirEntries(path);
-        
-        // return sequences; 
-
-        /*
-        await fs.readdir(path, (err, files) => {
-                    files.forEach(file => {
-                        console.log(file);
-
-                        fs.readdir(path+'/'+file, (err, _files) => {
-                            files.forEach(_file => {
-                                console.log(_file);
-                            })
-                        });
-                    });
-                        
-        });
-        */
 
     }
 
