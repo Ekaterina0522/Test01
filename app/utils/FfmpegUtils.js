@@ -31,27 +31,31 @@ module.exports = class FfmpegUtils {
 
     }
 
+
+
     //хронометраж видео в секундах
     static async getVideoLength(src) {
 
         try {
-            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -select_streams v:0 -show_entries stream=duration \
-  -of default=noprint_wrappers=1:nokey=1 "${src}"`);
+            
             //console.log('extractingFrame Complete. ');
-            return { stdout, stderr };
+            return await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -select_streams v:0 -show_entries stream=duration \
+  -of default=noprint_wrappers=1:nokey=1 "${src}"`);
         } catch (e) { console.log('getVideoLength.Error:', e); }
 
     }
 
-    //
+
+
+    //количество кадров во всем видеофайле
     static async countFrames(src) {
 
         try {
-            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "${src}" `);
             //console.log('extractingFrame Complete. ');
-            return { stdout, stderr };
+            return await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "${src}" `);
         } catch (e) { console.log('countFrames.Error:', e); }
 
     }
+
 
 }
