@@ -6,13 +6,6 @@ const Utils = require('./utils');
 
 module.exports = class FileSystem {
 
-    //хронометраж видео в секундах
-    static async getVideoLength(path) {
-        ffmpeg.ffprobe(path, function(err, metadata) {
-            console.log('metadata  ',metadata );
-        });
-    }
-
 
     //получаем последнюю версию файла
     static async getLatestFile(path, fileType) {
