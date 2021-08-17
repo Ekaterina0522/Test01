@@ -36,6 +36,7 @@ module.exports = class FfmpegUtils {
 
         try {
             const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffprobe -i "${src}" -show_format`);
+            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffprobe -i "${src}" -show_streams -v error`);
             //console.log('extractingFrame Complete. ');
             return { stdout, stderr };
         } catch (e) { console.log('getVideoLength.Error:', e); }
