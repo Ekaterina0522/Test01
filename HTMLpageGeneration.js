@@ -12,9 +12,12 @@ const FfmpegUtils = require('./app/utils/FfmpegUtils');
 
 const videoFileNames = [];
 const videoFilesDurations = [];
+const videoInSecondsOnly = [];
 const sequenceNumbers = [];
 const sceneNumbers = [];
 const videoFrames = [];
+const videoFramesOnly = [];
+const videoFPS = [];
 ///
 class PageGenerator {
 
@@ -35,22 +38,27 @@ class PageGenerator {
         await Utils.processArray(videoFileNames, async (videoFileName, i) => {
             //в массив записываем информацию о каждом видеофайле
             const videoDuration = await FfmpegUtils.getVideoLength(videoFileName);
-            videoFilesDurations.push(videoDuration);
+            videoFilesDurations.push(Object.values(videoDuration));
+
 
             //в массив записываем FPS каждого видеофайла
             const _videoFrames = await FfmpegUtils.countFrames(videoFileName);
-            videoFrames.push(_videoFrames);
+
+            // console.log('ONE _VIDEOFRAMES', _videoFrames);
+            videoFrames.push(Object.values(_videoFrames));
 
 
+            // const fileInSeconds = videoFrames;
+            // videoInSecondsOnly.push(fileInSeconds);
+
+            // const _vidoeFps = _videoFrames/videoDuration;
+            // videoFPS.push(_vidoeFps);
 
         });
         console.log('videoFrames', videoFrames);
         console.log('videoFilesDurations', videoFilesDurations);
-        //await FfmpegUtils.getVideoLength(videoFile);
-        // sourcePath
-        // each Sequence
-        // each Scene
-        // cut/*.mp4
+        //console.log('videoInSecondsOnly', videoInSecondsOnly);
+
 
         //console.log(items);
 
@@ -90,7 +98,7 @@ class PageGenerator {
 
                 //обрезаем начало названия видеофайла до номера секвенции
                 scEntry = scEntry.substr(scEntry.lastIndexOf("sq") + 2);
-                console.log(scEntry);
+                //console.log(scEntry);
 
                 //первые три цифры это номер секвенции
                 let sequenceNumber = scEntry.substr(0, 3)
@@ -105,8 +113,6 @@ class PageGenerator {
 
                 //записываем каждый videoFile в массив videoFileNames
                 videoFileNames.push(videoFile);
-
-
 
                 // true так как перебираем только папки, а не файлы (функция eachDirEntry в файле FileSystem)
             }, true);
