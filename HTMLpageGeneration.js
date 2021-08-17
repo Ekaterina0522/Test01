@@ -30,9 +30,13 @@ class PageGenerator {
         await this.getFilesNames(sourcePath);
         //пробегаемся по всем именам файлов и для каждого ищем длительность в секундах
         await Utils.processArray(videoFileNames, async (videoFileName, i) => {
-
+            //в массив записываем информацию о каждом видеофайле
             const videoDuration = await FfmpegUtils.getVideoLength(videoFileName);
             videoFilesDurations.push(videoDuration);
+
+        
+
+
          });
         console.log('videoFilesDurations', videoFilesDurations);
         //await FfmpegUtils.getVideoLength(videoFile);
