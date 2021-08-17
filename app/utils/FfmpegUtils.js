@@ -35,8 +35,8 @@ module.exports = class FfmpegUtils {
     static async getVideoLength( src ) {
 
         try {
-            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffprobe -i "${src}" -show_format`);
-            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffprobe -i "${src}" -show_streams -v error`);
+            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -select_streams v:0 -show_entries stream=duration \
+  -of default=noprint_wrappers=1:nokey=1 "${src}"`);
             //console.log('extractingFrame Complete. ');
             return { stdout, stderr };
         } catch (e) { console.log('getVideoLength.Error:', e); }
