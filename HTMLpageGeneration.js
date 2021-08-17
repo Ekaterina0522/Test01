@@ -14,6 +14,7 @@ const videoFileNames = [];
 const videoFilesDurations = [];
 const sequenceNumbers = [];
 const sceneNumbers = [];
+const videoFrames = [];
 ///
 class PageGenerator {
 
@@ -36,10 +37,14 @@ class PageGenerator {
             const videoDuration = await FfmpegUtils.getVideoLength(videoFileName);
             videoFilesDurations.push(videoDuration);
 
+            //в массив записываем FPS каждого видеофайла
+            const _videoFrames = await FfmpegUtils.countFrames(videoFileName);
+            videoFrames.push(_videoFrames);
 
 
 
         });
+        console.log('videoFrames', videoFrames);
         console.log('videoFilesDurations', videoFilesDurations);
         //await FfmpegUtils.getVideoLength(videoFile);
         // sourcePath
@@ -97,7 +102,7 @@ class PageGenerator {
                 //получаем самый новый файл в каждой папке cut с расширением mp4
                 const videoFile = await FileSystem.getLatestFile(scEntryPath + '\\cut', 'mp4');
                 //console.log('file: ', videoFile );
-                
+
                 //записываем каждый videoFile в массив videoFileNames
                 videoFileNames.push(videoFile);
 
@@ -109,7 +114,7 @@ class PageGenerator {
         }, true);
     //     console.log('<<<sequenceNumbers>>>', sequenceNumbers);
     //     console.log('<<<sceneNumbers>>>', sceneNumbers);
-    // }
+     }
 
 
 }
