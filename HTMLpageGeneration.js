@@ -17,7 +17,7 @@ const sceneNumbers = [];
 const videoFrames = [];
 const videoFramesOnly = []; //массив из длительности каждого файла в кадрах (строки)
 const videoFPS = [];
-const items = []; //массив с объектами где хранятся все sequenceNumbers и sceneNumbers
+const items = []; //массив с объектами где хранятся названия полей таблицы
 ///
 class PageGenerator {
 
