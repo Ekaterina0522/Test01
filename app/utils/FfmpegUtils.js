@@ -6,7 +6,7 @@ const exec = util.promisify(child_process.exec);
 module.exports = class FfmpegUtils {
 
     //конвертация в wav
-    static async convertingToMP4( src, dest ) {
+    static async convertingToMP4(src, dest) {
         try {
             await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -r 60 -s hd720 -y "${dest}.mp4"`);
             //console.log('convertingVideo Complete. ');
@@ -14,7 +14,7 @@ module.exports = class FfmpegUtils {
     }
 
     // извлекаем аудио
-    static async extractingWAV( src, dest, bitrate=192, sample_rate=44100 ) {
+    static async extractingWAV(src, dest, bitrate = 192, sample_rate = 44100) {
         try {
             await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -vn -ar "${sample_rate}" -ac 2 -ab "${bitrate}k" -f wav -y "${dest}.wav"`);
             //console.log('extractingAudio Complete. ');
@@ -22,7 +22,7 @@ module.exports = class FfmpegUtils {
     }
 
     //извлекаем кадр
-    static async extractingFrame( src, dest ) {
+    static async extractingFrame(src, dest) {
         try {
             const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -ss 0 -i "${src}" -vframes 1 -vf "scale=-1:320" -y "${dest}.jpg"`);
             //console.log('extractingFrame Complete. ');
@@ -32,7 +32,7 @@ module.exports = class FfmpegUtils {
     }
 
     //хронометраж видео в секундах
-    static async getVideoLength( src ) {
+    static async getVideoLength(src) {
 
         try {
             const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -select_streams v:0 -show_entries stream=duration \
@@ -40,6 +40,18 @@ module.exports = class FfmpegUtils {
             //console.log('extractingFrame Complete. ');
             return { stdout, stderr };
         } catch (e) { console.log('getVideoLength.Error:', e); }
-        
+
     }
+
+    //FPS видеофайла
+    static async getFPS(src) {
+
+        try {
+            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "${src}" `);
+            //console.log('extractingFrame Complete. ');
+            return { stdout, stderr };
+        } catch (e) { console.log('getVideoLength.Error:', e); }
+
+    }
+
 }
