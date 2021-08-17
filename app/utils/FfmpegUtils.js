@@ -43,14 +43,14 @@ module.exports = class FfmpegUtils {
 
     }
 
-    //FPS видеофайла
-    static async getFPS(src) {
+    //
+    static async countFrames(src) {
 
         try {
             const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "${src}" `);
             //console.log('extractingFrame Complete. ');
             return { stdout, stderr };
-        } catch (e) { console.log('getVideoLength.Error:', e); }
+        } catch (e) { console.log('countFrames.Error:', e); }
 
     }
 
