@@ -17,6 +17,7 @@ const sceneNumbers = [];
 const videoFrames = [];
 const videoFramesOnly = []; //массив из длительности каждого файла в кадрах (строки)
 const videoFPS = [];
+const items = []; //массив с объектами где хранятся все sequenceNumbers и sceneNumbers
 ///
 class PageGenerator {
 
@@ -53,12 +54,15 @@ class PageGenerator {
             const oneFileFPS = (+_inFrames) / (+_inSec);
             videoFPS.push(oneFileFPS);
 
+            //заполняем items
+            await this.makeObject( sequenceNumbers, sceneNumbers );
+
         });
 
-        console.log('videoFilesDurations', videoFilesDurations);
-        console.log('videoFrames', videoFrames);
-        console.log('videoFPS', videoFPS);
-
+        // console.log('videoFilesDurations', videoFilesDurations);
+        // console.log('videoFrames', videoFrames);
+        // console.log('videoFPS', videoFPS);
+        console.log('items', items);
 
         //console.log(items);
 
@@ -118,22 +122,16 @@ class PageGenerator {
             }, true);
 
         }, true);
-        //     console.log('<<<sequenceNumbers>>>', sequenceNumbers);
-        //     console.log('<<<sceneNumbers>>>', sceneNumbers);
+        console.log('<<<sequenceNumbers>>>', sequenceNumbers);
+        console.log('<<<sceneNumbers>>>', sceneNumbers);
     }
 
-    //отрезает от строки ненужные последние 4 символа и приводит строку к типу 'число' и считает FPS
-    // async countFPS(durationInSeconds, durationInFrames) {
+    //создаем массив с объектами где хранятся все sequenceNumbers и sceneNumbers
+    async makeObject( sqValue, shValue ) {
+        items.push({ 'sequenceNumber': `${sqValue}`,
+                    'sceneNumber': `${shValue}`});
 
-    //     await Utils.processArray(videoFilesDurations, async (videoFileDuration, i) => {
-
-
-    //     });
-
-    //     const inSec = durationInSeconds.slice(0, durationInSeconds.length - 4);
-    //     const inFrame = durationInFrames.slice(0, durationInFrames.length - 4);
-    //     console.log('Duration', inSec)
-    // }
+    }
 
 
 }
