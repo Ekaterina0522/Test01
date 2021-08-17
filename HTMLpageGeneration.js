@@ -36,17 +36,17 @@ class PageGenerator {
         await this.getFilesNames(sourcePath);
         //пробегаемся по всем именам файлов и для каждого ищем длительность в секундах
         await Utils.processArray(videoFileNames, async (videoFileName, i) => {
-            //в массив записываем информацию о каждом видеофайле
+            //в массив записываем длительность в секундах
             const videoDuration = await FfmpegUtils.getVideoLength(videoFileName);
-            videoFilesDurations.push(Object.values(videoDuration));
+            //console.log('videoDuration', videoDuration)
+            
+            //videoFilesDurations.push(Object.values(videoDuration));
+            videoFilesDurations.push(videoDuration.stdout);
 
-
-            //в массив записываем FPS каждого видеофайла
+            //в массив записываем длительность в кадрах 
             const _videoFrames = await FfmpegUtils.countFrames(videoFileName);
-
-            // console.log('ONE _VIDEOFRAMES', _videoFrames);
-            videoFrames.push(Object.values(_videoFrames));
-
+            //videoFrames.push(Object.values(_videoFrames));
+            videoFrames.push(_videoFrames.stdout);
 
             // const fileInSeconds = videoFrames;
             // videoInSecondsOnly.push(fileInSeconds);
@@ -55,8 +55,9 @@ class PageGenerator {
             // videoFPS.push(_vidoeFps);
 
         });
-        console.log('videoFrames', videoFrames);
         console.log('videoFilesDurations', videoFilesDurations);
+        console.log('videoFrames', videoFrames);
+        
         //console.log('videoInSecondsOnly', videoInSecondsOnly);
 
 
