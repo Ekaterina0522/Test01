@@ -33,31 +33,9 @@ class PageGenerator {
         const versionNumber = await Readline.readLineAsync("Enter version number");
         console.log(chalk.bgGreen('versionNumber:', versionNumber));
 
-        await this.getFilesNames(sourcePath);
+        await this.getFilesNumbers(sourcePath);
+        await this.makeItems(videoFileNames);
 
-        //пробегаемся по всем именам файлов и для каждого ищем длительность в секундах
-        await Utils.processArray(videoFileNames, async (videoFileName, i) => {
-
-            //в массив записываем длительность в секундах
-            const videoDuration = await FfmpegUtils.getVideoLength(videoFileName);
-            const inSec = videoDuration.stdout;
-            const _inSec = inSec.slice(0, inSec.length - 2);
-            videoFilesDurations.push(+_inSec);
-
-            //в массив записываем длительность в кадрах 
-            const _videoFrames = await FfmpegUtils.countFrames(videoFileName);
-            const inFrames = _videoFrames.stdout;
-            const _inFrames = inFrames.slice(0, inFrames.length - 2);
-            videoFrames.push(+_inFrames);
-
-            //считаем FPS
-            const oneFileFPS = (+_inFrames) / (+_inSec);
-            videoFPS.push(oneFileFPS);
-
-            //заполняем items
-            await this.makeObject( sequenceNumbers[i], sceneNumbers[i] );
-
-        });
 
         // console.log('videoFilesDurations', videoFilesDurations);
         // console.log('videoFrames', videoFrames);
@@ -83,9 +61,41 @@ class PageGenerator {
 
     }
 
+    async makeItems(videoFileNames) {
+
+        //пробегаемся по всем именам файлов и для каждого ищем длительность в секундах
+        await Utils.processArray(videoFileNames, async (videoFileName, i) => {
+
+            //в массив записываем длительность в секундах
+            const videoDuration = await FfmpegUtils.getVideoLength(videoFileName);
+            const inSec = videoDuration.stdout;
+            const _inSec = inSec.slice(0, inSec.length - 2);
+            videoFilesDurations.push(+_inSec);
+
+            //в массив записываем длительность в кадрах 
+            const _videoFrames = await FfmpegUtils.countFrames(videoFileName);
+            const inFrames = _videoFrames.stdout;
+            const _inFrames = inFrames.slice(0, inFrames.length - 2);
+            videoFrames.push(+_inFrames);
+
+            //считаем FPS
+            const oneFileFPS = (+_inFrames) / (+_inSec);
+            videoFPS.push(oneFileFPS);
+
+            //путь до каждого файла
+            
+
+            //заполняем items
+            await this.makeObject(sequenceNumbers[i], sceneNumbers[i], videoFilesDurations[i],
+               videoFrames[i] );
 
 
-    async getFilesNames(path) {
+
+        });
+    }
+
+
+    async getFilesNumbers(path) {
         //получаем имена источников
         const entries = await FileSystem.getDirEntries(path);
         // console.log('getFilesNames:', path, entries );
@@ -126,11 +136,17 @@ class PageGenerator {
         console.log('<<<sceneNumbers>>>', sceneNumbers);
     }
 
-    //создаем массив с объектами где хранятся все sequenceNumbers и sceneNumbers
-    async makeObject( sqValue, shValue ) {
-        items.push({ 'sequenceNumber': `${sqValue}`,
-                    'sceneNumber': `${shValue}`});
+    //создаем массив с объектами где хранятся все названия полей
+    async makeObject( sqValue, shValue, durationInSec, durationInFrames ) {
+        items.push({
+            'sequence': `${sqValue}`,
+            'scene': `${shValue}`,
+            'duration': `${durationInSec}`,
+            'frames': `${durationInFrames}`,
+            //'folder': `${}`,
 
+        });
+        return items;
     }
 
 
