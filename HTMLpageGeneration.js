@@ -18,7 +18,7 @@ const videoFrames = [];
 const videoFramesOnly = []; //массив из длительности каждого файла в кадрах (строки)
 const videoFPS = [];
 const items = []; //массив с объектами где хранятся названия полей таблицы
-let videoFile = '';
+const videoFile = [];
 ///
 class PageGenerator {
 
@@ -61,13 +61,15 @@ class PageGenerator {
         await Utils.processArray(videoFilePaths, async (videoFileName, i) => {
 
             //в массив записываем длительность в секундах
-            const videoDuration = await FfmpegUtils.getVideoLength(videoFile);
+            const videoDuration = await FfmpegUtils.getVideoLength(videoFile[i]);
+            
             const inSec = videoDuration.stdout;
             const _inSec = inSec.slice(0, inSec.length - 2);
             videoFilesDurations.push(+_inSec);
 
             //в массив записываем длительность в кадрах 
-            const _videoFrames = await FfmpegUtils.countFrames(videoFile);
+            const _videoFrames = await FfmpegUtils.countFrames(videoFile[i]);
+            //console.log('videoFile', videoFile[i]);
             const inFrames = _videoFrames.stdout;
             const _inFrames = inFrames.slice(0, inFrames.length - 2);
             videoFrames.push(+_inFrames);
@@ -81,6 +83,8 @@ class PageGenerator {
                 videoFrames[i], videoFilePaths[i]);
 
         });
+        console.log('videoFilesDurations', videoFilesDurations);
+        console.log('videoFrames', videoFrames);
     }
 
 
@@ -110,7 +114,7 @@ class PageGenerator {
                 sceneNumbers.push(sceneNumber);
 
                 //получаем самый новый файл в каждой папке cut с расширением mp4
-                videoFile = await FileSystem.getLatestFile(scEntryPath + '\\cut', 'mp4');
+                videoFile.push( await FileSystem.getLatestFile(scEntryPath + '\\cut', 'mp4'));
 
                 //записываем каждый scEntryPath в массив videoFilePaths
                 videoFilePaths.push(scEntryPath);
