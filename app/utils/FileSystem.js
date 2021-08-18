@@ -71,9 +71,7 @@ module.exports = class FileSystem {
         return result;
     }
 
-
     static async loadTextFile(filePath) {
-        //var fs = require('fs');
         const content = await fs.readFile(filePath, 'utf8');
         return content;
     }
