@@ -9,7 +9,7 @@ const FileSystem = require('./app/utils/FileSystem');
 const Utils = require('./app/utils/utils');
 const FfmpegUtils = require('./app/utils/FfmpegUtils');
 ///
-const videoFileNames = [];
+const videoFilePaths = [];
 const videoFilesDurations = [];
 const videoInSecondsOnly = []; //массив из длительности каждого файла в секундах (строки)
 const sequenceNumbers = [];
@@ -18,6 +18,7 @@ const videoFrames = [];
 const videoFramesOnly = []; //массив из длительности каждого файла в кадрах (строки)
 const videoFPS = [];
 const items = []; //массив с объектами где хранятся названия полей таблицы
+
 ///
 class PageGenerator {
 
@@ -33,8 +34,8 @@ class PageGenerator {
         const versionNumber = await Readline.readLineAsync("Enter version number");
         console.log(chalk.bgGreen('versionNumber:', versionNumber));
 
-        await this.getFilesNumbers(sourcePath);
-        await this.makeItems(videoFileNames);
+        await this.getSqShNumbers(sourcePath);
+        await this.makeItems(videoFilePaths);
 
 
         // console.log('videoFilesDurations', videoFilesDurations);
@@ -61,10 +62,10 @@ class PageGenerator {
 
     }
 
-    async makeItems(videoFileNames) {
+    async makeItems(videoFilePaths) {
 
         //пробегаемся по всем именам файлов и для каждого ищем длительность в секундах
-        await Utils.processArray(videoFileNames, async (videoFileName, i) => {
+        await Utils.processArray(videoFilePaths, async (videoFileName, i) => {
 
             //в массив записываем длительность в секундах
             const videoDuration = await FfmpegUtils.getVideoLength(videoFileName);
@@ -81,21 +82,16 @@ class PageGenerator {
             //считаем FPS
             const oneFileFPS = (+_inFrames) / (+_inSec);
             videoFPS.push(oneFileFPS);
-
-            //путь до каждого файла
             
-
             //заполняем items
             await this.makeObject(sequenceNumbers[i], sceneNumbers[i], videoFilesDurations[i],
-               videoFrames[i] );
-
-
+               videoFrames[i], videoFilePaths[i]);
 
         });
     }
 
 
-    async getFilesNumbers(path) {
+    async getSqShNumbers(path) {
         //получаем имена источников
         const entries = await FileSystem.getDirEntries(path);
         // console.log('getFilesNames:', path, entries );
@@ -123,10 +119,10 @@ class PageGenerator {
 
                 //получаем самый новый файл в каждой папке cut с расширением mp4
                 const videoFile = await FileSystem.getLatestFile(scEntryPath + '\\cut', 'mp4');
-                //console.log('file: ', videoFile );
+                console.log('file: ', videoFile );
 
-                //записываем каждый videoFile в массив videoFileNames
-                videoFileNames.push(videoFile);
+                //записываем каждый videoFile в массив videoFilePaths
+                videoFilePaths.push(videoFile);
 
                 // true так как перебираем только папки, а не файлы (функция eachDirEntry в файле FileSystem)
             }, true);
@@ -137,13 +133,13 @@ class PageGenerator {
     }
 
     //создаем массив с объектами где хранятся все названия полей
-    async makeObject( sqValue, shValue, durationInSec, durationInFrames ) {
+    async makeObject( sqValue, shValue, durationInSec, durationInFrames, videoFilePaths ) {
         items.push({
             'sequence': `${sqValue}`,
             'scene': `${shValue}`,
             'duration': `${durationInSec}`,
             'frames': `${durationInFrames}`,
-            //'folder': `${}`,
+            'folder': `${videoFilePaths}`,
 
         });
         return items;
