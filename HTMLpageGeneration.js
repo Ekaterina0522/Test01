@@ -9,7 +9,7 @@ const FileSystem = require('./app/utils/FileSystem');
 const Utils = require('./app/utils/utils');
 const FfmpegUtils = require('./app/utils/FfmpegUtils');
 ///
-const videoFilePaths = [];
+const videoFilePaths = [];//массив с путями для каждого файла
 const videoFilesDurations = [];
 const videoInSecondsOnly = []; //массив из длительности каждого файла в секундах (строки)
 const sequenceNumbers = [];
@@ -18,7 +18,7 @@ const videoFrames = [];
 const videoFramesOnly = []; //массив из длительности каждого файла в кадрах (строки)
 const videoFPS = [];
 const items = []; //массив с объектами где хранятся названия полей таблицы
-
+let videoFile = '';
 ///
 class PageGenerator {
 
@@ -68,13 +68,13 @@ class PageGenerator {
         await Utils.processArray(videoFilePaths, async (videoFileName, i) => {
 
             //в массив записываем длительность в секундах
-            const videoDuration = await FfmpegUtils.getVideoLength(videoFileName);
+            const videoDuration = await FfmpegUtils.getVideoLength(videoFile);
             const inSec = videoDuration.stdout;
             const _inSec = inSec.slice(0, inSec.length - 2);
             videoFilesDurations.push(+_inSec);
 
             //в массив записываем длительность в кадрах 
-            const _videoFrames = await FfmpegUtils.countFrames(videoFileName);
+            const _videoFrames = await FfmpegUtils.countFrames(videoFile);
             const inFrames = _videoFrames.stdout;
             const _inFrames = inFrames.slice(0, inFrames.length - 2);
             videoFrames.push(+_inFrames);
@@ -118,11 +118,11 @@ class PageGenerator {
                 sceneNumbers.push(sceneNumber);
 
                 //получаем самый новый файл в каждой папке cut с расширением mp4
-                const videoFile = await FileSystem.getLatestFile(scEntryPath + '\\cut', 'mp4');
-                console.log('file: ', videoFile );
+                videoFile = await FileSystem.getLatestFile(scEntryPath + '\\cut', 'mp4');
+                //console.log('file: ', videoFile );
 
-                //записываем каждый videoFile в массив videoFilePaths
-                videoFilePaths.push(videoFile);
+                //записываем каждый scEntryPath в массив videoFilePaths
+                videoFilePaths.push(scEntryPath);
 
                 // true так как перебираем только папки, а не файлы (функция eachDirEntry в файле FileSystem)
             }, true);
