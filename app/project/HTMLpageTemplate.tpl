@@ -24,6 +24,7 @@
                 <td>{{duration}}</td>
                 <td>{{frames}}</td>
                 <td>{{folder}}</td>
+                <td>{{image}}</td>
             </tr>
             {{/each}}
         </tbody>
