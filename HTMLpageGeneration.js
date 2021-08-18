@@ -19,10 +19,12 @@ const videoFramesOnly = []; //массив из длительности каж�
 const videoFPS = [];
 const items = []; //массив с объектами где хранятся названия полей таблицы
 const videoFile = [];
+let episodeName = '';
 ///
 class PageGenerator {
 
     async start() {
+
 
         console.log(chalk.bgMagenta('START'));
 
@@ -45,8 +47,9 @@ class PageGenerator {
 
         const htmlContent = template({ items: items });
 
-        await FileSystem.saveTextFile(sourcePath, htmlContent);
-
+        console.log('sourcePath', sourcePath);
+        await FileSystem.saveTextFile(sourcePath+`\\${episodeName}_v${versionNumber}.html`, htmlContent);
+//
 
         console.log(chalk.bgMagenta('FINISH'));
 
@@ -91,8 +94,10 @@ class PageGenerator {
     async getSqShNumbers(path) {
         //получаем имена источников
         const entries = await FileSystem.getDirEntries(path);
-        // console.log('getFilesNames:', path, entries );
-        // console.log('>>>', typeof entries, entries, entries[0] );
+        //console.log('entries[0]:', entries[0] );
+        episodeName = entries[0].slice(0, - 6);
+        // console.log('episodeName:', episodeName );
+        console.log('entries',  entries );
 
         // Iterate Sequence
         await FileSystem.eachDirEntry(path, async (sqEntry, sqI, sqEntryPath) => {
@@ -112,6 +117,7 @@ class PageGenerator {
 
                 let sceneNumber = scEntry.substr(scEntry.length - 3);
                 sceneNumbers.push(sceneNumber);
+
 
                 //получаем самый новый файл в каждой папке cut с расширением mp4
                 videoFile.push( await FileSystem.getLatestFile(scEntryPath + '\\cut', 'mp4'));
