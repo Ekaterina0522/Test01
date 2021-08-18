@@ -76,10 +76,9 @@ module.exports = class FileSystem {
         return content;
     }
 
-    static async saveTextFile(destPath, file) {
-        fs.writeFile(destPath, file);
+    static async saveTextFile(destPath, data) {
+        await fs.writeFile(destPath, data);
         console.log('File saved!');
-
     }
 
 }
