@@ -20,8 +20,9 @@ const videoFPS = [];
 const items = []; //массив с объектами где хранятся названия полей таблицы
 const videoFile = [];
 const imagesToCopy = [];
-const images = [];
+const image = [];
 let episodeName = '';
+let versionNumber = '';
 ///
 class PageGenerator {
 
@@ -34,7 +35,7 @@ class PageGenerator {
         //console.log(chalk.bgBlue('sourcePath:', sourcePath));
         if (!sourcePath) return;
 
-        const versionNumber = await Readline.readString(process.argv[3]);
+        versionNumber += await Readline.readString(process.argv[3]);
         console.log(chalk.bgGreen('versionNumber:', versionNumber));
 
         //console.log('__dirname', __dirname);
@@ -66,6 +67,10 @@ class PageGenerator {
     async makeColumnNames(videoFilePaths) {
 
         let networkPath = 'D:\\WORK\\Katya\\task1\\mats\\network';
+        
+        await FileSystem.createFolder(networkPath+'\\'+`task1`+'\\'+`${versionNumber}`);
+        let absolutePath = await path.resolve(networkPath+'\\'+`task1`+'\\'+`${versionNumber}`);
+
         //пробегаемся по всем именам файлов и для каждого ищем длительность в секундах,
         //кадрах, а также считаем FPS
         await Utils.processArray(videoFilePaths, async (videoFileName, i) => {
@@ -79,7 +84,7 @@ class PageGenerator {
 
             //в массив записываем длительность в кадрах 
             const _videoFrames = await FfmpegUtils.countFrames(videoFile[i]);
-            //console.log('videoFile', videoFile[i]);
+            console.log('absolutePath', absolutePath);
             const inFrames = _videoFrames.stdout;
             const _inFrames = inFrames.slice(0, inFrames.length - 2);
             videoFrames.push(+_inFrames);
@@ -87,15 +92,18 @@ class PageGenerator {
             //считаем FPS
             const oneFileFPS = (+_inFrames) / (+_inSec);
             videoFPS.push(oneFileFPS);
-            //console.log(imagesToCopy)
-            await fs.copyFile(imagesToCopy[i], networkPath+'\\'+imagesToCopy[i].split('\\').pop());
+            
+
+            
+            //копируем кадры каждого видеофайла в папку network
+            await fs.copyFile(imagesToCopy[i], absolutePath+'\\'+imagesToCopy[i].split('\\').pop());
             // await fs.createReadStream(`${imagesToCopy[i]}`).pipe(fs.createWriteStream(networkPath));
             //let image = await fs.copy(imagesToCopy[i]+'\\'+`${imagesToCopy}`, 'D:\\WORK\\Katya\\task1\\mats\\network');
             // images.push(image);
 
             //заполняем items
             await this.makeItems(sequenceNumbers[i], sceneNumbers[i], videoFilesDurations[i],
-                videoFrames[i], videoFilePaths[i]);
+                videoFrames[i], videoFilePaths[i], );
 
         });
         //console.log('videoFilePaths', videoFilePaths);
@@ -156,7 +164,7 @@ class PageGenerator {
             'duration': `${durationInSec}`,
             'frames': `${durationInFrames}`,
             'folder': `${videoFilePaths}`,
-            //'image': `${image}`,
+            'image': `${image}`,
 
         });
         return items;
