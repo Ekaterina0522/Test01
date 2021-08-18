@@ -2,7 +2,6 @@ const readline = require('readline');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 
-
 //
 module.exports = class Readline {
 
@@ -30,13 +29,16 @@ module.exports = class Readline {
         }
 
         try {
-            if (fs.statSync(path).isDirectory()) {
+            // stat - путь
+            const stat = await fs.lstat(path);
+            //если путь есть и это папка то путь валидный
+            if ( stat && stat.isDirectory()) {
                 console.log(`Path "${path}" is valid! `);
                 return path;
             }
 
         } catch (err) {
-            console.log(`Path "${path}" is not valid! `);
+            console.log(`Path "${path}" is not valid! `+err);
             return;
         }
     }

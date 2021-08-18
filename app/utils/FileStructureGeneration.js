@@ -1,22 +1,18 @@
 const fs = require('fs-extra');
 const chalk = require('chalk');
-const FileSystem = require('./app/utils/FileSystem');
-const Readline = require('./app/utils/Readline');
+const FileSystem = require('./FileSystem');
+const Readline = require('./Readline');
 const path = require('path')
-const NameGenerator = require('./app/project/NameGenerator');
-const Utils = require('./app/utils/utils');
-const FfmpegUtils = require('./app/utils/FfmpegUtils');
-
+const NameGenerator = require('../project/NameGenerator');
+const Utils = require('./utils');
+const FfmpegUtils = require('./FfmpegUtils');
+//const pathToCutFolders = [];
 //
-class Task1 {
+class FileStructureGeneration {
 
     async start() {
 
         console.log(chalk.bgMagenta('START'));
-
-
-
-        // await getPath() {
 
         //получаем начальный путь
         const sourcePath = await Readline.validateParam(process.argv[2], "Enter Source Path");
@@ -26,9 +22,6 @@ class Task1 {
         //получаем конечный путь
         const destPath = await Readline.validateParam(process.argv[3], "Enter Destination Path");
         if (!destPath) return;
-        // }
-
-
 
         const entries = await FileSystem.getDirEntries(sourcePath);
         const splitEntries = this.getSimilarStructure(entries);
@@ -38,7 +31,6 @@ class Task1 {
         //с помощью функции processArray последовательно перебираем массив splitEntries
         //формируем путь где функция createFolder будет создавать папку(папки)
         await Utils.processArray(splitEntries, async (entry, i) => {
-
 
             const nameObject = NameGenerator.getNameObject(entry);
 
@@ -51,39 +43,21 @@ class Task1 {
 
             //путь ко всем папкам cut
             const pathToCutFolder = pathToScene + '\\cut';
+            //pathToCutFolders.push(pathToCutFolder);
 
             let pathToSourseFiles = sourcePath + '\\' + entry[0];
             await FfmpegUtils.convertingToMP4(pathToSourseFiles, pathToCutFolder + `\\${nameObject.sceneFullName}`);
             //192 - битрейт
             await FfmpegUtils.extractingWAV(pathToSourseFiles, pathToCutFolder + `\\${nameObject.sceneFullName}`, 192, 44100);
             await FfmpegUtils.extractingFrame(pathToSourseFiles, pathToCutFolder + `\\${nameObject.sceneFullName}`);
-            console.log('Успешно!');
+            //console.log('Успешно!');
 
         });
 
-        //console.log(JSON.stringify(splitEntries, true, '  ')); 
+        //console.log(JSON.stringify(splitEntries, true, '  '));
+        console.log(chalk.green('Успешно!'));
         console.log(chalk.bgMagenta('FINSH'));
     }
-
-    // ввод пользователем пути
-    // async getPath() {
-
-    //     //получаем начальный путь
-    //     this.sourcePath = await Readline.validateParam(process.argv[2], "Enter Source Path");
-    //     console.log(chalk.bgBlue('sourcePath:', this.sourcePath));
-    //     if (!this.sourcePath) return;
-
-    //     //получаем конечный путь
-    //     this.destPath = await Readline.validateParam(process.argv[3], "Enter Destination Path");
-    //     if (!this.destPath) return;
-    // }
-
-    // Получаем имена источников в заданной директории
-    // async getDirEntries(path) {
-    //     const entries = await fs.readdir(path);
-    //     console.log('entries', entries);
-    //     return entries;
-    // }
 
     //делаем у всех источников одинаковое название
     getSimilarStructure(entries) {
@@ -127,4 +101,6 @@ class Task1 {
 //     console.log(index + ': ' + val);
 // });
 
-(new Task1).start();
+
+(new FileStructureGeneration).start();
+
