@@ -32,7 +32,7 @@ class PageGenerator {
         //console.log(chalk.bgBlue('sourcePath:', sourcePath));
         if (!sourcePath) return;
 
-        const versionNumber = await Readline.readLineAsync("Enter version number");
+        const versionNumber = await Readline.readString(process.argv[3]);
         console.log(chalk.bgGreen('versionNumber:', versionNumber));
 
         await this.getSqShNumbers(sourcePath);
@@ -47,7 +47,7 @@ class PageGenerator {
 
         const htmlContent = template({ items: items });
 
-        console.log('sourcePath', sourcePath);
+        //console.log('sourcePath', sourcePath);
         await FileSystem.saveTextFile(sourcePath+`\\${episodeName}_v${versionNumber}.html`, htmlContent);
 //
 
@@ -86,8 +86,8 @@ class PageGenerator {
                 videoFrames[i], videoFilePaths[i]);
 
         });
-        console.log('videoFilesDurations', videoFilesDurations);
-        console.log('videoFrames', videoFrames);
+        //console.log('videoFilesDurations', videoFilesDurations);
+        //console.log('videoFrames', videoFrames);
     }
 
 
@@ -97,7 +97,7 @@ class PageGenerator {
         //console.log('entries[0]:', entries[0] );
         episodeName = entries[0].slice(0, - 6);
         // console.log('episodeName:', episodeName );
-        console.log('entries',  entries );
+        //console.log('entries',  entries );
 
         // Iterate Sequence
         await FileSystem.eachDirEntry(path, async (sqEntry, sqI, sqEntryPath) => {
@@ -129,8 +129,8 @@ class PageGenerator {
             }, true);
 
         }, true);
-        console.log('<<<sequenceNumbers>>>', sequenceNumbers);
-        console.log('<<<sceneNumbers>>>', sceneNumbers);
+        //console.log('<<<sequenceNumbers>>>', sequenceNumbers);
+        //console.log('<<<sceneNumbers>>>', sceneNumbers);
     }
 
     //создаем массив с объектами где хранятся все названия полей

@@ -20,7 +20,14 @@ module.exports = class Readline {
         });
     }
 
-
+    static async readString( str, message ) {
+        if ( !str ){
+            await Readline.readLineAsync(message);
+        } else {
+            return str;
+        }
+        
+    }
     //проверка валидности пути
     static async validateParam(path, promptTitle) {
 
