@@ -17,7 +17,6 @@ module.exports = class FfmpegUtils {
     static async extractingWAV(src, dest, bitrate = 192, sample_rate = 44100) {
         try {
             await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -vn -ar "${sample_rate}" -ac 2 -ab "${bitrate}k" -f wav -y "${dest}.wav"`);
-            //console.log('extractingAudio Complete. ');
         } catch (e) { console.log('extractingWAV.Error:', e); }
     }
 
@@ -25,7 +24,6 @@ module.exports = class FfmpegUtils {
     static async extractingFrame(src, dest) {
         try {
             const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffmpeg -ss 0 -i "${src}" -vframes 1 -vf "scale=-1:320" -y "${dest}.jpg"`);
-            //console.log('extractingFrame Complete. ');
             return { stdout, stderr };
         } catch (e) { console.log('extractingFrame.Error:', e); }
 
@@ -37,8 +35,6 @@ module.exports = class FfmpegUtils {
     static async getVideoLength(src) {
 
         try {
-            
-            //console.log('extractingFrame Complete. ');
             return await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -select_streams v:0 -show_entries stream=duration \
   -of default=noprint_wrappers=1:nokey=1 "${src}"`);
         } catch (e) { console.log('getVideoLength.Error:', e); }
@@ -46,12 +42,10 @@ module.exports = class FfmpegUtils {
     }
 
 
-
     //количество кадров во всем видеофайле
     static async countFrames(src) {
 
         try {
-            //console.log('extractingFrame Complete. ');
             return await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "${src}" `);
         } catch (e) { console.log('countFrames.Error:', e); }
 
