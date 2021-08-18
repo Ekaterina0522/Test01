@@ -19,6 +19,8 @@ const videoFramesOnly = []; //массив из длительности каж�
 const videoFPS = [];
 const items = []; //массив с объектами где хранятся названия полей таблицы
 const videoFile = [];
+const imagesToCopy = [];
+const images = [];
 let episodeName = '';
 ///
 class PageGenerator {
@@ -35,7 +37,11 @@ class PageGenerator {
         const versionNumber = await Readline.readString(process.argv[3]);
         console.log(chalk.bgGreen('versionNumber:', versionNumber));
 
-        await this.getSqShNumbers(sourcePath);
+        //console.log('__dirname', __dirname);
+        
+
+
+        await this.getSourses(sourcePath);
         await this.makeColumnNames(videoFilePaths);
 
         console.log('items', items);
@@ -49,7 +55,7 @@ class PageGenerator {
 
         //console.log('sourcePath', sourcePath);
         await FileSystem.saveTextFile(sourcePath+`\\${episodeName}_v${versionNumber}.html`, htmlContent);
-//
+
 
         console.log(chalk.bgMagenta('FINISH'));
 
@@ -59,6 +65,7 @@ class PageGenerator {
 
     async makeColumnNames(videoFilePaths) {
 
+        let networkPath = 'D:\\WORK\\Katya\\task1\\mats\\network';
         //пробегаемся по всем именам файлов и для каждого ищем длительность в секундах,
         //кадрах, а также считаем FPS
         await Utils.processArray(videoFilePaths, async (videoFileName, i) => {
@@ -80,18 +87,23 @@ class PageGenerator {
             //считаем FPS
             const oneFileFPS = (+_inFrames) / (+_inSec);
             videoFPS.push(oneFileFPS);
+            //console.log(imagesToCopy)
+            await fs.copyFile(imagesToCopy[i], networkPath+'\\'+imagesToCopy[i].split('\\').pop());
+            // await fs.createReadStream(`${imagesToCopy[i]}`).pipe(fs.createWriteStream(networkPath));
+            //let image = await fs.copy(imagesToCopy[i]+'\\'+`${imagesToCopy}`, 'D:\\WORK\\Katya\\task1\\mats\\network');
+            // images.push(image);
 
             //заполняем items
             await this.makeItems(sequenceNumbers[i], sceneNumbers[i], videoFilesDurations[i],
                 videoFrames[i], videoFilePaths[i]);
 
         });
-        //console.log('videoFilesDurations', videoFilesDurations);
+        //console.log('videoFilePaths', videoFilePaths);
         //console.log('videoFrames', videoFrames);
     }
 
 
-    async getSqShNumbers(path) {
+    async getSourses(path) {
         //получаем имена источников
         const entries = await FileSystem.getDirEntries(path);
         //console.log('entries[0]:', entries[0] );
@@ -122,6 +134,9 @@ class PageGenerator {
                 //получаем самый новый файл в каждой папке cut с расширением mp4
                 videoFile.push( await FileSystem.getLatestFile(scEntryPath + '\\cut', 'mp4'));
 
+                //массив с полным путем до каждого кадра видеофайлов
+                imagesToCopy.push( await FileSystem.getLatestFile(scEntryPath + '\\cut', 'jpg'));
+
                 //записываем каждый scEntryPath в массив videoFilePaths
                 videoFilePaths.push(scEntryPath);
 
@@ -129,18 +144,19 @@ class PageGenerator {
             }, true);
 
         }, true);
-        //console.log('<<<sequenceNumbers>>>', sequenceNumbers);
+        //console.log('<<<imagesToCopy>>>', imagesToCopy);
         //console.log('<<<sceneNumbers>>>', sceneNumbers);
     }
 
     //создаем массив с объектами где хранятся все названия полей
-    async makeItems(sqValue, shValue, durationInSec, durationInFrames, videoFilePaths) {
+    async makeItems(sqValue, shValue, durationInSec, durationInFrames, videoFilePaths ) {
         items.push({
             'sequence': `${sqValue}`,
             'scene': `${shValue}`,
             'duration': `${durationInSec}`,
             'frames': `${durationInFrames}`,
             'folder': `${videoFilePaths}`,
+            //'image': `${image}`,
 
         });
         return items;
@@ -155,3 +171,8 @@ class PageGenerator {
 // });
 
 (new PageGenerator).start();
+
+/*
+D:\WORK\Katya\task1\mats\network\%projectName%\v%version%\%preview%.jpg
+=image("http://peppers-studio.ru/%projectName%/v%version%/%preview%.jpg")
+*/
