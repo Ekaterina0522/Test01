@@ -55,7 +55,7 @@ class PageGenerator {
             videoFPS.push(oneFileFPS);
 
             //заполняем items
-            await this.makeObject( sequenceNumbers, sceneNumbers );
+            await this.makeObject( sequenceNumbers[i], sceneNumbers[i] );
 
         });
 
