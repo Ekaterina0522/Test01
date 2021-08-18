@@ -14,6 +14,7 @@
                 <th>Duration</th>
                 <th>Frames</th>
                 <th>Folder</th>
+                <th>Image</th>
             </tr>
         </thead>
         <tbody>
