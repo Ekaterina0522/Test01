@@ -45,16 +45,15 @@ class PageGenerator {
 
         //console.log(items);
 
-        // const templatePath = __dirname + '\\app\\project\\Table.tpl';
-        // const templateConent = await FileSystem.loadTextFile(templatePath);
+        const templatePath = __dirname + '\\app\\project\\HTMLpageTemplate.tpl';
+        const templateConent = await FileSystem.loadTextFile(templatePath);
 
-        // const template = Handlebars.compile(templateConent);
+        const template = Handlebars.compile(templateConent);
 
-        // const htmlContent = template({ items: items });
+        const htmlContent = template({ items: items });
 
-        // await FileSystem.saveTextFile(sourcePath + items, items);
-
-
+        await FileSystem.saveTextFile(sourcePath, htmlContent);
+        
 
         console.log(chalk.bgMagenta('FINISH'));
 
