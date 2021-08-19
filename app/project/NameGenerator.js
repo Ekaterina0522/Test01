@@ -2,6 +2,8 @@ const fs = require('fs-extra');
 const chalk = require('chalk');
 const path = require('path');
 const Utils = require('../utils/utils');
+const FfmpegUtils = require('../utils/FfmpegUtils');
+const FileSystem = require('../utils/FileSystem');
 
 
 module.exports = class NameGenerator {
@@ -17,18 +19,28 @@ module.exports = class NameGenerator {
         const sequenceNumber = sceneFullName.shift();
         const sceneNumber = sceneFullName.pop();
 
-        const duration = FfmpegUtils.getVideoLength(fullPath);
-        const frames = FfmpegUtils.countFrames(fullPath);
+        const pathToCut = fullPath + '\\cut' + '\\';
+        
+        const folder = pathToCut + `${sceneFullName}.mp4`;
+        const duration = FfmpegUtils.getVideoLength(pathToCut + `${sceneFullName}.mp4`);
+        const frames = FfmpegUtils.countFrames(pathToCut + `${sceneFullName}.mp4`);
         const fps = frames/duration;
+
+        //получаем путь к последнему созданному кадру
+        const latestImage = await FileSystem.getLatestFile(pathToCut + `${sceneFullName}`, 'jpg');
+        
+        //копируем кадры каждого видеофайла в папку network
+        await fs.copyFile(latestImage, absolutePath + '\\' + `${sceneFullName}`);
+        const image = `=image("http://peppers-studio.ru/task1/v${versionNumber}/${sceneFullName}")`
 
         const itemObject = {
             episodeName,
             sequenceNumber,
             sceneNumber,
-            folder: fullPath,
+            folder,
             duration,
             frames,
-            //image: ,
+            image,
             fps,
         };
         return itemObject;
