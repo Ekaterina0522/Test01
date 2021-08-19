@@ -10,56 +10,47 @@ const Utils = require('./app/utils/utils');
 const FfmpegUtils = require('./app/utils/FfmpegUtils');
 
 ///
-const videoFilePaths = []; //массив с путями для каждого файла
-const videoFilesDurations = [];
-const videoInSecondsOnly = []; //массив из длительности каждого файла в секундах (строки)
-const sequenceNumbers = [];
-const sceneNumbers = [];
-const videoFrames = [];
-const videoFramesOnly = []; //массив из длительности каждого файла в кадрах (строки)
-const videoFPS = [];
+let absolutePath;
 const items = []; //массив с объектами где хранятся названия полей таблицы
-const videoFile = [];
-const imagesToCopy = [];
-const image = [];
-let episodeName = '';
+let episodeName;
 let versionNumber;
 let projectName;
-
-
 ///
-class PageGenerator {
+class HTMLpageGenerator {
+
+    
 
     async start() {
 
         console.log(chalk.bgMagenta('START'));
 
-        const sourcePath = await Readline.validateParam(process.argv[2], "Enter Source Path:");
+        const sourcePath = ''+ await Readline.validateParam(process.argv[2], "Enter Source Path:");
         //console.log(chalk.bgBlue('sourcePath:', sourcePath));
         if (!sourcePath) return;
 
-        versionNumber = ''+ await Readline.readString(process.argv[3], "Enter Version Number:");
+        const versionNumber = ''+ await Readline.readString(process.argv[3], "Enter Version Number:");
         console.log(chalk.bgGreen('versionNumber:', versionNumber));
 
-        projectName = ''+ await Readline.readString(process.argv[4], "Enter Project Name:");
+        const projectName = ''+ await Readline.readString(process.argv[4], "Enter Project Name:");
         console.log(chalk.bgGreen('projectName:', projectName));
 
-        //console.log('__dirname', __dirname);
+        await NameGenerator.makeNetworkFolder( projectName, versionNumber )
 
-        await this.validateSources(sourcePath);
-        //await this.makeColumnNames(videoFilePaths);
+        // //console.log('__dirname', __dirname);
 
-        //console.log('items', items);
+        await this.validateSourсes(sourcePath);
 
-        const templatePath = __dirname + '\\app\\project\\HTMLpageTemplate.tpl';
-        const templateConent = await FileSystem.loadTextFile(templatePath);
+        // //console.log('items', items);
 
-        const template = Handlebars.compile(templateConent);
+        // const templatePath = __dirname + '\\app\\project\\HTMLpageTemplate.tpl';
+        // const templateConent = await FileSystem.loadTextFile(templatePath);
 
-        const htmlContent = template({ items: items });
+        // const template = Handlebars.compile(templateConent);
 
-        //console.log('sourcePath', sourcePath);
-        await FileSystem.saveTextFile(sourcePath + `\\${episodeName}_v${versionNumber}.html`, htmlContent);
+        // const htmlContent = template({ items: items });
+
+        // //console.log('sourcePath', sourcePath);
+        // await FileSystem.saveTextFile(sourcePath + `\\${episodeName}_v${versionNumber}.html`, htmlContent);
 
 
         console.log(chalk.bgMagenta('FINISH'));
@@ -71,11 +62,10 @@ class PageGenerator {
     async validateSourсes(path) {
         //получаем имена источников
         const entries = await FileSystem.getDirEntries(path);
-        episodeName = entries[0].slice(0, -6);
-
+        //console.log('path', path);
         // Iterate Sequence
         await FileSystem.eachDirEntry(path, async (sqEntry, sqI, sqEntryPath) => {
-
+            //console.log('Путь до папки секвенции', sqEntryPath);
             let sqFlag = sqEntry.match(/^.*_sq\d\d\d$/);
             //если папка названа не по шаблону не заходим в нее 
             if (sqFlag === null) return;
@@ -83,21 +73,18 @@ class PageGenerator {
             // Iterate Scenes
             await FileSystem.eachDirEntry(sqEntryPath, async (scEntry, scI, scEntryPath) => {
 
+                console.log('Путь до папки сцены', scEntryPath);
                 let scFlag = scEntry.match(/^.*_sh\d\d\d\d$/);
                 //если папка названа не по шаблону не заходим в нее 
                 if (scFlag === null) return;
-
-                //console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
-                // const sceneNameObj = NameGenerator.fromSceneFullName( scEntry ); валидация. достаем все что нужно(потрошим название на эпизод, сцену и секв)
+                console.log('Dir is valid!');
                 
-                //получаем самый новый файл в каждой папке cut с расширением mp4
-                videoFile.push(await FileSystem.getLatestFile(scEntryPath + '\\cut', 'mp4'));
-
-                //массив с полным путем до каждого кадра видеофайлов
-                imagesToCopy.push(await FileSystem.getLatestFile(scEntryPath + '\\cut', 'jpg'));
+                //console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
+                //const sceneNameObj = NameGenerator.fromSceneFullName( scEntry, scEntryPath, versionNumber ); //валидация. достаем все что нужно(потрошим название на эпизод, сцену и секв)
+                //items.push(sceneNameObj);
 
                 //записываем каждый scEntryPath в массив videoFilePaths
-                videoFilePaths.push(scEntryPath);
+                //videoFilePaths.push(scEntryPath);
 
             // true так как перебираем только папки, а не файлы (функция eachDirEntry в файле FileSystem)
             }, true);
@@ -106,41 +93,19 @@ class PageGenerator {
     }
 
 
-    async makeColumnNames(videoFilePaths) {
+    // async makeNetworkFolder(videoFilePaths) {
 
-        //путь до папки где будут находиться копии кадров видеофайлов
-        let networkPath = 'D:\\WORK\\Katya\\task1\\mats\\network';
+    //     //путь до папки где будут находиться копии кадров видеофайлов
+    //     const networkPath = `D:\\WORK\\Katya\\${projectName}\\mats\\network`;
 
-        //создаем папки с именем проекта и версии в папке network
-        await FileSystem.createFolder(networkPath + '\\' + `task1` + '\\' + `${versionNumber}`);
+    //     //создаем папки с именем проекта и версии в папке network
+    //     await FileSystem.createFolder(networkPath + `\\${projectName}\\` + `${versionNumber}`);
 
-        //получаем абсолютный путь до папки с номером версии
-        let absolutePath = await path.resolve(networkPath + '\\' + `task1` + '\\' + `${versionNumber}`);
+    //     //получаем абсолютный путь до папки с номером версии
+    //     absolutePath = ''+ await path.resolve(networkPath + `\\${projectName}\\` + `${versionNumber}`);
 
-        //пробегаемся по всем именам файлов и для каждого считаем FPS и копируем кадры
-        await Utils.processArray(videoFilePaths, async (videoFileName, i) => {
-
-            const _videoFile = videoFile[i];
-            
-
-            //считаем FPS
-            const oneFileFPS = (_videoFrames) / (videoDuration);
-            videoFPS.push(oneFileFPS);
-
-            //достаем имя кадра
-            let frameName = imagesToCopy[i].split('\\').pop();
-
-            //копируем кадры каждого видеофайла в папку network
-            await fs.copyFile(imagesToCopy[i], absolutePath + '\\' + frameName);
-            
-            image.push(`=image("http://peppers-studio.ru/task1/v${versionNumber}/${frameName}")`)
-
-            //заполняем items
-            this.makeItems(sequenceNumbers[i], sceneNumbers[i], videoFilesDurations[i],
-                videoFrames[i], videoFilePaths[i], image[i]);
-
-        });
-    }
+    //     return absolutePath;
+    // }
 
 
     
@@ -169,7 +134,7 @@ class PageGenerator {
 //     console.log(index + ': ' + val);
 // });
 
-(new PageGenerator).start();
+(new HTMLpageGenerator).start();
 
 /*
 D:\WORK\Katya\task1\mats\network\%projectName%\v%version%\%preview%.jpg
