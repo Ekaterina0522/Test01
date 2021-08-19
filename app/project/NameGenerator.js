@@ -35,7 +35,8 @@ module.exports = class NameGenerator {
         const episodeName = sceneFullName[0];
         const sqNumber = sceneFullName[1].slice(2, 5);
         const scNumber = sceneFullName[2].slice(2, 6);
-
+        // console.log('sqNumber', sqNumber);
+        // console.log('scNumber', scNumber);
         const folder = scEntryPath+'\\cut';//fullPath + '\\cut' + '\\';
 
         //const folder = scEntryPath; pathToCut + `${sceneFullName}`+'.mp4';
@@ -57,8 +58,8 @@ module.exports = class NameGenerator {
 
         const sceneNameObject = {
             episodeName,
-            sequenceNumber: sqNumber,
-            sceneNumber: scNumber,
+            sequence: sqNumber,
+            scene: scNumber,
             folder: scEntryPath,
             duration,
             frames,
