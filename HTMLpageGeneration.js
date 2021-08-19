@@ -81,16 +81,9 @@ class PageGenerator {
 
                 //console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
                 // const sceneNameObj = NameGenerator.fromSceneFullName( scEntry ); валидация. достаем все что нужно(потрошим название на эпизод, сцену и секв)
+                
 
-                //обрезаем начало названия видеофайла до номера секвенции
-                scEntry = scEntry.substr(scEntry.lastIndexOf("sq") + 2);
-
-                //первые три цифры это номер секвенции
-                let sequenceNumber = scEntry.substr(0, 3)
-                sequenceNumbers.push(sequenceNumber);
-
-                let sceneNumber = scEntry.substr(scEntry.length - 3);
-                sceneNumbers.push(sceneNumber);
+                
 
 
                 //получаем самый новый файл в каждой папке cut с расширением mp4
