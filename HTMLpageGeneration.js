@@ -24,6 +24,8 @@ const imagesToCopy = [];
 const image = [];
 let episodeName = '';
 let versionNumber;
+let projectName;
+
 
 ///
 class PageGenerator {
@@ -32,16 +34,19 @@ class PageGenerator {
 
         console.log(chalk.bgMagenta('START'));
 
-        const sourcePath = await Readline.validateParam(process.argv[2], "Enter Source Path");
+        const sourcePath = await Readline.validateParam(process.argv[2], "Enter Source Path:");
         //console.log(chalk.bgBlue('sourcePath:', sourcePath));
         if (!sourcePath) return;
 
-        versionNumber = ''+ await Readline.readString(process.argv[3]);
+        versionNumber = ''+ await Readline.readString(process.argv[3], "Enter Version Number:");
         console.log(chalk.bgGreen('versionNumber:', versionNumber));
+
+        projectName = ''+ await Readline.readString(process.argv[4], "Enter Project Name:");
+        console.log(chalk.bgGreen('projectName:', projectName));
 
         //console.log('__dirname', __dirname);
 
-        await this.getSourses(sourcePath);
+        await this.getSources(sourcePath);
         await this.makeColumnNames(videoFilePaths);
 
         console.log('items', items);
@@ -63,7 +68,7 @@ class PageGenerator {
 
     }
 
-    async getSourses(path) {
+    async getSourсes(path) {
         //получаем имена источников
         const entries = await FileSystem.getDirEntries(path);
         //console.log('entries[0]:', entries[0] );
@@ -82,10 +87,6 @@ class PageGenerator {
                 //console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
                 // const sceneNameObj = NameGenerator.fromSceneFullName( scEntry ); валидация. достаем все что нужно(потрошим название на эпизод, сцену и секв)
                 
-
-                
-
-
                 //получаем самый новый файл в каждой папке cut с расширением mp4
                 videoFile.push(await FileSystem.getLatestFile(scEntryPath + '\\cut', 'mp4'));
 
@@ -106,30 +107,31 @@ class PageGenerator {
 
     async makeColumnNames(videoFilePaths) {
 
+        //путь до папки где будут находиться копии кадров видеофайлов
         let networkPath = 'D:\\WORK\\Katya\\task1\\mats\\network';
 
+        //создаем папки с именем проекта и версии в папке network
         await FileSystem.createFolder(networkPath + '\\' + `task1` + '\\' + `${versionNumber}`);
+
+        //получаем абсолютный путь до папки с номером версии
         let absolutePath = await path.resolve(networkPath + '\\' + `task1` + '\\' + `${versionNumber}`);
 
-        //пробегаемся по всем именам файлов и для каждого ищем длительность в секундах,
-        //кадрах, а также считаем FPS
+        //пробегаемся по всем именам файлов и для каждого считаем FPS и копируем кадры
         await Utils.processArray(videoFilePaths, async (videoFileName, i) => {
 
             const _videoFile = videoFile[i];
-            //в массив записываем длительность в секундах
-            //const videoDuration = FfmpegUtils.getVideoLength(_videoFile);
-            NameGenerator.fromStringToObject(_videoFile) = FfmpegUtils.getVideoLength(_videoFile);
-            //в массив записываем длительность в кадрах 
-            const _videoFrames = FfmpegUtils.countFrames(_videoFile);
+            
 
             //считаем FPS
             const oneFileFPS = (_videoFrames) / (videoDuration);
             videoFPS.push(oneFileFPS);
 
-
+            //достаем имя кадра
             let frameName = imagesToCopy[i].split('\\').pop();
+
             //копируем кадры каждого видеофайла в папку network
             await fs.copyFile(imagesToCopy[i], absolutePath + '\\' + frameName);
+            
             image.push(`=image("http://peppers-studio.ru/task1/v${versionNumber}/${frameName}")`)
 
             //заполняем items
@@ -137,24 +139,22 @@ class PageGenerator {
                 videoFrames[i], videoFilePaths[i], image[i]);
 
         });
-        //console.log('image', image);
-        //console.log('videoFrames', videoFrames);
     }
 
 
     
     //создаем массив с объектами где хранятся все названия полей
-    async makeItems(sqValue, shValue, durationInSec, durationInFrames, videoFilePaths, _image) {
-        items.push({
-            sequence: sqValue,
-            'scene': `${shValue}`,
-            'duration': `${durationInSec}`,
-            'frames': `${durationInFrames}`,
-            'folder': `${videoFilePaths}`,
-            'image': `${_image}`,
-        });
-        return items;
-    }
+    // async makeItems(sqValue, shValue, durationInSec, durationInFrames, videoFilePaths, _image) {
+    //     items.push({
+    //         sequence: sqValue,
+    //         'scene': `${shValue}`,
+    //         'duration': `${durationInSec}`,
+    //         'frames': `${durationInFrames}`,
+    //         'folder': `${videoFilePaths}`,
+    //         'image': `${_image}`,
+    //     });
+    //     return items;
+    // }
 
         
         
