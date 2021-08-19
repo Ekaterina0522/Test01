@@ -13,12 +13,16 @@ module.exports = class FfmpegUtils {
         } catch (e) { console.log('convertingToMP4.Error:', e); }
     }
 
+
+
     // извлекаем аудио
     static async extractingWAV(src, dest, bitrate = 192, sample_rate = 44100) {
         try {
             await exec(`c:\\ffmpeg\\bin\\ffmpeg -i "${src}" -vn -ar "${sample_rate}" -ac 2 -ab "${bitrate}k" -f wav -y "${dest}.wav"`);
         } catch (e) { console.log('extractingWAV.Error:', e); }
     }
+
+
 
     //извлекаем кадр
     static async extractingFrame(src, dest) {
@@ -44,8 +48,9 @@ module.exports = class FfmpegUtils {
             
 
         } catch (e) { console.log('getVideoLength.Error:', e); }
-
     }
+
+
 
 
     //количество кадров во всем видеофайле
@@ -57,10 +62,7 @@ module.exports = class FfmpegUtils {
             const inFrames = { stdout, stderr }.stdout;
             const _inFrames = +inFrames.slice(0, inFrames.length - 2);
             return _inFrames;
-            
+
         } catch (e) { console.log('countFrames.Error:', e); }
-
     }
-
-
 }
