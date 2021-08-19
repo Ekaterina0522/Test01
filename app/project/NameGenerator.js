@@ -37,10 +37,8 @@ module.exports = class NameGenerator {
         const scNumber = sceneFullName[2].slice(2, 6);
         // console.log('sqNumber', sqNumber);
         // console.log('scNumber', scNumber);
-        const folder = scEntryPath+'\\cut';//fullPath + '\\cut' + '\\';
+        const folder = scEntryPath+'\\cut';
 
-        //const folder = scEntryPath; pathToCut + `${sceneFullName}`+'.mp4';
-////////////////////////////
         //получаем путь к последнему созданному видеофайлу
         const latestVideo = FileSystem.getLatestFile(folder, 'mp4');
 
@@ -54,7 +52,7 @@ module.exports = class NameGenerator {
         // //копируем кадры каждого видеофайла в папку network
         //fs.copyFile(latestImage, absolutePath + `\\${scFullName}`);
 
-        // const image = `=image("http://peppers-studio.ru/task1/v${versionNumber}/${scFullName}")`
+        const image = `=image("http://peppers-studio.ru/task1/v${versionNumber}/${scFullName}")`
 
         const sceneNameObject = {
             episodeName,
@@ -63,7 +61,7 @@ module.exports = class NameGenerator {
             folder: scEntryPath,
             duration,
             frames,
-            //image,
+            image,
             fps,
         };
         return sceneNameObject;
