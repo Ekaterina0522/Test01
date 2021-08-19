@@ -34,13 +34,13 @@ class HTMLpageGenerator {
         const projectName = ''+ await Readline.readString(process.argv[4], "Enter Project Name:");
         console.log(chalk.bgGreen('projectName:', projectName));
 
-        await NameGenerator.makeNetworkFolder( projectName, versionNumber )
+        await NameGenerator.makeNetworkFolder( projectName, versionNumber ); //работает
 
         // //console.log('__dirname', __dirname);
 
         await this.validateSourсes(sourcePath);
 
-        // //console.log('items', items);
+        console.log('items', items);
 
         // const templatePath = __dirname + '\\app\\project\\HTMLpageTemplate.tpl';
         // const templateConent = await FileSystem.loadTextFile(templatePath);
@@ -78,10 +78,10 @@ class HTMLpageGenerator {
                 //если папка названа не по шаблону не заходим в нее 
                 if (scFlag === null) return;
                 console.log('Dir is valid!');
-                
+
                 //console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
-                //const sceneNameObj = NameGenerator.fromSceneFullName( scEntry, scEntryPath, versionNumber ); //валидация. достаем все что нужно(потрошим название на эпизод, сцену и секв)
-                //items.push(sceneNameObj);
+                const sceneNameObj = await NameGenerator.fromSceneFullName( scEntry, scEntryPath, versionNumber ); //валидация. достаем все что нужно(потрошим название на эпизод, сцену и секв)
+                items.push(sceneNameObj);
 
                 //записываем каждый scEntryPath в массив videoFilePaths
                 //videoFilePaths.push(scEntryPath);
