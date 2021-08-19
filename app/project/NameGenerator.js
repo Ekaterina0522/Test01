@@ -4,46 +4,68 @@ const path = require('path');
 const Utils = require('../utils/utils');
 const FfmpegUtils = require('../utils/FfmpegUtils');
 const FileSystem = require('../utils/FileSystem');
-
-
+///
+let absolutePath;
+///
 module.exports = class NameGenerator {
 
-    
+    //придумать куда воткнуть эту функцию!!!
+    static async makeNetworkFolder( projectName, versNumber ) {
+
+        //путь до папки где будут находиться копии кадров видеофайлов
+        const networkPath = `D:\\WORK\\Katya\\${projectName}\\mats\\network`;
+
+        //создаем папки с именем проекта и версии в папке network
+        await FileSystem.createFolder(networkPath + `\\${projectName}\\` + `${versNumber}`);
+
+        //получаем абсолютный путь до папки с номером версии
+        absolutePath = ''+ await path.resolve(networkPath + `\\${projectName}\\` + `${versNumber}`);
+
+    }
+
     //функция получающая на входе строку(полный путь до папки сцены), возвращает объект с распотрошенными частями строки
-    static fromStringToObject( fullPath ){
+    static fromSceneFullName( scFullName, scEntryPath, versionNumber ){
+
+        //       sceneFullName = ['opening', 'sq001', 'sh0010']
+        //       scFullName = 'opening_sq001_sh0010'
 
         //берем полное название файла с расширением
-        const sceneFullName = fullPath.split('\\').pop().split('_');
-        
-        const episodeName = sceneFullName.shift();
-        const sequenceNumber = sceneFullName.shift();
-        const sceneNumber = sceneFullName.pop();
+        const sceneFullName = scFullName.split('_');
 
-        const pathToCut = fullPath + '\\cut' + '\\';
+        const episodeName = sceneFullName[0];
+        const sequenceNumber = sceneFullName[1].slice(0, 2);
+        const sceneNumber = sceneFullName[2].slice(0, 2);
 
-        const folder = pathToCut + `${sceneFullName}.mp4`;
-        const duration = FfmpegUtils.getVideoLength(pathToCut + `${sceneFullName}.mp4`);
-        const frames = FfmpegUtils.countFrames(pathToCut + `${sceneFullName}.mp4`);
+        const folder = scEntryPath+'\\cut';//fullPath + '\\cut' + '\\';
+
+        //const folder = scEntryPath; pathToCut + `${sceneFullName}`+'.mp4';
+
+        //получаем путь к последнему созданному видеофайлу
+        const latestVideo = FileSystem.getLatestFile(folder, 'mp4');
+
+        const duration = FfmpegUtils.getVideoLength(folder+`\\${scFullName}.mp4`);
+        const frames = FfmpegUtils.countFrames(folder+`\\${scFullName}.mp4`);
         const fps = frames/duration;
 
         //получаем путь к последнему созданному кадру
-        const latestImage = FileSystem.getLatestFile(pathToCut + `${sceneFullName}`, 'jpg');
-        
-        //копируем кадры каждого видеофайла в папку network
-        fs.copyFile(latestImage, absolutePath + '\\' + `${sceneFullName}`);
-        const image = `=image("http://peppers-studio.ru/task1/v${versionNumber}/${sceneFullName}")`
+        const latestImage = FileSystem.getLatestFile(folder, 'jpg');
 
-        const itemObject = {
+        //копируем кадры каждого видеофайла в папку network
+        fs.copyFile(latestImage, absolutePath + `\\${scFullName}`);
+
+        const image = `=image("http://peppers-studio.ru/task1/v${versionNumber}/${scFullName}")`
+
+        const sceneNameObject = {
             episodeName,
             sequenceNumber,
             sceneNumber,
-            folder,
+            folder: scEntryPath,
             duration,
             frames,
             image,
             fps,
         };
-        return itemObject;
+        return sceneNameObject;
     }
 
 
