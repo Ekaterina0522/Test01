@@ -6,7 +6,24 @@ const Utils = require('../utils/utils');
 
 module.exports = class NameGenerator {
 
+    
+    //функция получающая на входе строку(название папки), возвращает объект с распотрошенными частями строки
+    static fromStringToObject( path ){
 
+        const sceneFullName = path.split('\\').pop().split('_');
+        
+        const episodeName = sceneFullName.shift();
+        const sequenceNumber = sceneFullName.shift();
+        const sceneNumber = sceneFullName.pop();
+        
+
+        //обрезаем начало названия видеофайла до номера секвенции
+        scEntry = scEntry.substr(scEntry.lastIndexOf("sq") + 2);
+
+        //первые три цифры это номер секвенции
+        // let sequenceNumber = scEntry.substr(0, 3)
+        // sequenceNumbers.push(sequenceNumber);
+    }
     //функция генерирующая имена для названия папок
     static getNameObject(nameParts) {
         //добавила некоторые элементы
