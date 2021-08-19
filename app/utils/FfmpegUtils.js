@@ -35,8 +35,14 @@ module.exports = class FfmpegUtils {
     static async getVideoLength(src) {
 
         try {
-            return await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -select_streams v:0 -show_entries stream=duration \
+            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -select_streams v:0 -show_entries stream=duration \
   -of default=noprint_wrappers=1:nokey=1 "${src}"`);
+
+            const inSec = { stdout, stderr }.stdout;
+            const _inSec = +inSec.slice(0, inSec.length - 2);
+            return _inSec;
+            
+
         } catch (e) { console.log('getVideoLength.Error:', e); }
 
     }
@@ -46,7 +52,12 @@ module.exports = class FfmpegUtils {
     static async countFrames(src) {
 
         try {
-            return await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "${src}" `);
+            
+            const { stdout, stderr } = await exec(`c:\\ffmpeg\\bin\\ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 "${src}" `);
+            const inFrames = { stdout, stderr }.stdout;
+            const _inFrames = +inFrames.slice(0, inFrames.length - 2);
+            return _inFrames;
+            
         } catch (e) { console.log('countFrames.Error:', e); }
 
     }
