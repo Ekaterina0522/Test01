@@ -88,6 +88,7 @@ class HTMLpageGenerator {
                 //записываем каждый scEntryPath в массив videoFilePaths
                 //videoFilePaths.push(scEntryPath);
 
+                return items;
             // true так как перебираем только папки, а не файлы (функция eachDirEntry в файле FileSystem)
             }, true);
 
