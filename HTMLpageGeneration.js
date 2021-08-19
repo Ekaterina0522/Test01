@@ -117,8 +117,8 @@ class PageGenerator {
 
             const _videoFile = videoFile[i];
             //в массив записываем длительность в секундах
-            const videoDuration = FfmpegUtils.getVideoLength(_videoFile);
-
+            //const videoDuration = FfmpegUtils.getVideoLength(_videoFile);
+            NameGenerator.fromStringToObject(_videoFile) = FfmpegUtils.getVideoLength(_videoFile);
             //в массив записываем длительность в кадрах 
             const _videoFrames = FfmpegUtils.countFrames(_videoFile);
 
