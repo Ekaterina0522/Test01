@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <table border="1" cellspacing="0" cellpadding="2">
+    <table border="1" cellspacing="0" cellpadding="4">
         <thead>
             <tr align="center">
                 <th>Sequence</th>
