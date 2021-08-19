@@ -8,6 +8,7 @@ const Handlebars = require('Handlebars');
 const FileSystem = require('./app/utils/FileSystem');
 const Utils = require('./app/utils/utils');
 const FfmpegUtils = require('./app/utils/FfmpegUtils');
+
 ///
 const videoFilePaths = []; //массив с путями для каждого файла
 const videoFilesDurations = [];
@@ -22,12 +23,12 @@ const videoFile = [];
 const imagesToCopy = [];
 const image = [];
 let episodeName = '';
-let versionNumber = '';
+let versionNumber;
+
 ///
 class PageGenerator {
 
     async start() {
-
 
         console.log(chalk.bgMagenta('START'));
 
@@ -35,12 +36,10 @@ class PageGenerator {
         //console.log(chalk.bgBlue('sourcePath:', sourcePath));
         if (!sourcePath) return;
 
-        versionNumber += await Readline.readString(process.argv[3]);
+        versionNumber = ''+ await Readline.readString(process.argv[3]);
         console.log(chalk.bgGreen('versionNumber:', versionNumber));
 
         //console.log('__dirname', __dirname);
-
-
 
         await this.getSourses(sourcePath);
         await this.makeColumnNames(videoFilePaths);
@@ -75,11 +74,13 @@ class PageGenerator {
         // Iterate Sequence
         await FileSystem.eachDirEntry(path, async (sqEntry, sqI, sqEntryPath) => {
             // console.log('==>',sqI+')',sqEntry, sqEntryPath );
-
+            // sqEntry = <SMTH>_sq### ^.*_sq\d\d\d$
+            // if (!episodeName) episodeName = 
             // Iterate Scenes
             await FileSystem.eachDirEntry(sqEntryPath, async (scEntry, scI, scEntryPath) => {
 
                 //console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
+                // const sceneNameObj = NameGenerator.fromSceneFullName( scEntry ); валидация. достаем все что нужно(потрошим название на эпизод, сцену и секв)
 
                 //обрезаем начало названия видеофайла до номера секвенции
                 scEntry = scEntry.substr(scEntry.lastIndexOf("sq") + 2);
@@ -121,22 +122,15 @@ class PageGenerator {
         //кадрах, а также считаем FPS
         await Utils.processArray(videoFilePaths, async (videoFileName, i) => {
 
+            const _videoFile = videoFile[i];
             //в массив записываем длительность в секундах
-            const videoDuration = await FfmpegUtils.getVideoLength(videoFile[i]);
-
-            const inSec = videoDuration.stdout;
-            const _inSec = inSec.slice(0, inSec.length - 2);
-            videoFilesDurations.push(+_inSec);
+            const videoDuration = FfmpegUtils.getVideoLength(_videoFile);
 
             //в массив записываем длительность в кадрах 
-            const _videoFrames = await FfmpegUtils.countFrames(videoFile[i]);
-            console.log('absolutePath', absolutePath);
-            const inFrames = _videoFrames.stdout;
-            const _inFrames = inFrames.slice(0, inFrames.length - 2);
-            videoFrames.push(+_inFrames);
+            const _videoFrames = FfmpegUtils.countFrames(_videoFile);
 
             //считаем FPS
-            const oneFileFPS = (+_inFrames) / (+_inSec);
+            const oneFileFPS = (_videoFrames) / (videoDuration);
             videoFPS.push(oneFileFPS);
 
 
@@ -146,7 +140,7 @@ class PageGenerator {
             image.push(`=image("http://peppers-studio.ru/task1/v${versionNumber}/${frameName}")`)
 
             //заполняем items
-            await this.makeItems(sequenceNumbers[i], sceneNumbers[i], videoFilesDurations[i],
+            this.makeItems(sequenceNumbers[i], sceneNumbers[i], videoFilesDurations[i],
                 videoFrames[i], videoFilePaths[i], image[i]);
 
         });
@@ -159,19 +153,22 @@ class PageGenerator {
     //создаем массив с объектами где хранятся все названия полей
     async makeItems(sqValue, shValue, durationInSec, durationInFrames, videoFilePaths, _image) {
         items.push({
-            'sequence': `${sqValue}`,
+            sequence: sqValue,
             'scene': `${shValue}`,
             'duration': `${durationInSec}`,
             'frames': `${durationInFrames}`,
             'folder': `${videoFilePaths}`,
             'image': `${_image}`,
-
         });
         return items;
     }
 
+        
+        
+    }
 
-}
+
+
 
 //передача аргументов командной строки
 // process.argv.forEach(function(val, index, array) {
