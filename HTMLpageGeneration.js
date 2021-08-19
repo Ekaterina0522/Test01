@@ -46,10 +46,10 @@ class PageGenerator {
 
         //console.log('__dirname', __dirname);
 
-        await this.getSources(sourcePath);
-        await this.makeColumnNames(videoFilePaths);
+        await this.validateSources(sourcePath);
+        //await this.makeColumnNames(videoFilePaths);
 
-        console.log('items', items);
+        //console.log('items', items);
 
         const templatePath = __dirname + '\\app\\project\\HTMLpageTemplate.tpl';
         const templateConent = await FileSystem.loadTextFile(templatePath);
@@ -68,21 +68,24 @@ class PageGenerator {
 
     }
 
-    async getSourсes(path) {
+    async validateSourсes(path) {
         //получаем имена источников
         const entries = await FileSystem.getDirEntries(path);
-        //console.log('entries[0]:', entries[0] );
         episodeName = entries[0].slice(0, -6);
-        // console.log('episodeName:', episodeName );
-        //console.log('entries',  entries );
 
         // Iterate Sequence
         await FileSystem.eachDirEntry(path, async (sqEntry, sqI, sqEntryPath) => {
-            // console.log('==>',sqI+')',sqEntry, sqEntryPath );
-            // sqEntry = <SMTH>_sq### ^.*_sq\d\d\d$
-            // if (!episodeName) episodeName = 
+
+            let sqFlag = sqEntry.match(/^.*_sq\d\d\d$/);
+            //если папка названа не по шаблону не заходим в нее 
+            if (sqFlag === null) return;
+
             // Iterate Scenes
             await FileSystem.eachDirEntry(sqEntryPath, async (scEntry, scI, scEntryPath) => {
+
+                let scFlag = scEntry.match(/^.*_sh\d\d\d\d$/);
+                //если папка названа не по шаблону не заходим в нее 
+                if (scFlag === null) return;
 
                 //console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
                 // const sceneNameObj = NameGenerator.fromSceneFullName( scEntry ); валидация. достаем все что нужно(потрошим название на эпизод, сцену и секв)
@@ -96,12 +99,10 @@ class PageGenerator {
                 //записываем каждый scEntryPath в массив videoFilePaths
                 videoFilePaths.push(scEntryPath);
 
-                // true так как перебираем только папки, а не файлы (функция eachDirEntry в файле FileSystem)
+            // true так как перебираем только папки, а не файлы (функция eachDirEntry в файле FileSystem)
             }, true);
 
         }, true);
-        //console.log('<<<imagesToCopy>>>', imagesToCopy);
-        //console.log('<<<sceneNumbers>>>', sceneNumbers);
     }
 
 
