@@ -40,8 +40,8 @@ class HTMLpageGenerator {
 
         await this.validateSourсes(sourcePath);
 
-        //console.log('items', items);
-        //console.log('items.episodeName', items[1].episodeName)
+        //console.log('items.scNum', items[].sceneNumber);
+        //console.log('items', items)
         const templatePath = __dirname + '\\app\\project\\HTMLpageTemplate.tpl';
         const templateConent = await FileSystem.loadTextFile(templatePath);
 
@@ -52,7 +52,8 @@ class HTMLpageGenerator {
         //console.log('sourcePath', sourcePath);
         await Utils.processArray(items, async (item, i) => {
             await FileSystem.saveTextFile(sourcePath + `\\${items[i].episodeName}_v${versionNumber}.html`, htmlContent);
-
+            // console.log('items.sqNum', items[i].sequenceNumber);
+            // console.log('items.scNum', items[i].sceneNumber);
         });
 
         console.log(chalk.bgMagenta('FINISH'));
@@ -84,10 +85,9 @@ class HTMLpageGenerator {
                 //console.log('Scene Folder ==>',scI+')',scEntry, scEntryPath );
                 const sceneNameObj = await NameGenerator.fromSceneFullName( scEntry, scEntryPath, versionNumber ); //валидация. достаем все что нужно(потрошим название на эпизод, сцену и секв)
                 items.push(sceneNameObj);
-
+                //console.log('sequenceNumber', sceneNameObj.sequenceNumber)
                 //записываем каждый scEntryPath в массив videoFilePaths
                 //videoFilePaths.push(scEntryPath);
-
                 return items;
             // true так как перебираем только папки, а не файлы (функция eachDirEntry в файле FileSystem)
             }, true);
