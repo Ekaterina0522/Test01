@@ -8,22 +8,33 @@ module.exports = class NameGenerator {
 
     
     //функция получающая на входе строку(название папки), возвращает объект с распотрошенными частями строки
-    static fromStringToObject( path ){
+    static fromStringToObject( fullPath ){
 
-        const sceneFullName = path.split('\\').pop().split('_');
+        //берем полное название файла с расширением
+        const sceneFullName = fullPath.split('\\').pop().split('_');
         
         const episodeName = sceneFullName.shift();
         const sequenceNumber = sceneFullName.shift();
         const sceneNumber = sceneFullName.pop();
-        
 
-        //обрезаем начало названия видеофайла до номера секвенции
-        scEntry = scEntry.substr(scEntry.lastIndexOf("sq") + 2);
+        const duration = FfmpegUtils.getVideoLength(fullPath);
+        const frames = FfmpegUtils.countFrames(fullPath);
+        const fps = frames/duration;
 
-        //первые три цифры это номер секвенции
-        // let sequenceNumber = scEntry.substr(0, 3)
-        // sequenceNumbers.push(sequenceNumber);
+        const itemObject = {
+            episodeName,
+            sequenceNumber,
+            sceneNumber,
+            folder: fullPath,
+            duration,
+            frames,
+            //image: ,
+            fps,
+        };
+        return itemObject;
     }
+
+
     //функция генерирующая имена для названия папок
     static getNameObject(nameParts) {
         //добавила некоторые элементы
