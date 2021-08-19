@@ -24,7 +24,7 @@ module.exports = class NameGenerator {
     }
 
     //функция получающая на входе строку(полный путь до папки сцены), возвращает объект с распотрошенными частями строки
-    static fromSceneFullName( scFullName, scEntryPath, versionNumber ){
+    static async fromSceneFullName( scFullName, scEntryPath, versionNumber ){
 
         //       sceneFullName = ['opening', 'sq001', 'sh0010']
         //       scFullName = 'opening_sq001_sh0010'
@@ -33,27 +33,27 @@ module.exports = class NameGenerator {
         const sceneFullName = scFullName.split('_');
 
         const episodeName = sceneFullName[0];
-        const sequenceNumber = sceneFullName[1].slice(0, 2);
-        const sceneNumber = sceneFullName[2].slice(0, 2);
+        const sequenceNumber = sceneFullName[1].slice(2, 5);
+        const sceneNumber = sceneFullName[2].slice(2, 6);
 
         const folder = scEntryPath+'\\cut';//fullPath + '\\cut' + '\\';
 
         //const folder = scEntryPath; pathToCut + `${sceneFullName}`+'.mp4';
-
+////////////////////////////
         //получаем путь к последнему созданному видеофайлу
         const latestVideo = FileSystem.getLatestFile(folder, 'mp4');
 
-        const duration = FfmpegUtils.getVideoLength(folder+`\\${scFullName}.mp4`);
-        const frames = FfmpegUtils.countFrames(folder+`\\${scFullName}.mp4`);
+        const duration = await FfmpegUtils.getVideoLength(folder+`\\${scFullName}.mp4`);
+        const frames = await FfmpegUtils.countFrames(folder+`\\${scFullName}.mp4`);
         const fps = frames/duration;
 
-        //получаем путь к последнему созданному кадру
+        // //получаем путь к последнему созданному кадру
         const latestImage = FileSystem.getLatestFile(folder, 'jpg');
 
-        //копируем кадры каждого видеофайла в папку network
-        fs.copyFile(latestImage, absolutePath + `\\${scFullName}`);
+        // //копируем кадры каждого видеофайла в папку network
+        //fs.copyFile(latestImage, absolutePath + `\\${scFullName}`);
 
-        const image = `=image("http://peppers-studio.ru/task1/v${versionNumber}/${scFullName}")`
+        // const image = `=image("http://peppers-studio.ru/task1/v${versionNumber}/${scFullName}")`
 
         const sceneNameObject = {
             episodeName,
@@ -62,7 +62,7 @@ module.exports = class NameGenerator {
             folder: scEntryPath,
             duration,
             frames,
-            image,
+            //image,
             fps,
         };
         return sceneNameObject;
