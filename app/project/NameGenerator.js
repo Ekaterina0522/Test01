@@ -20,17 +20,17 @@ module.exports = class NameGenerator {
         const sceneNumber = sceneFullName.pop();
 
         const pathToCut = fullPath + '\\cut' + '\\';
-        
+
         const folder = pathToCut + `${sceneFullName}.mp4`;
         const duration = FfmpegUtils.getVideoLength(pathToCut + `${sceneFullName}.mp4`);
         const frames = FfmpegUtils.countFrames(pathToCut + `${sceneFullName}.mp4`);
         const fps = frames/duration;
 
         //получаем путь к последнему созданному кадру
-        const latestImage = await FileSystem.getLatestFile(pathToCut + `${sceneFullName}`, 'jpg');
+        const latestImage = FileSystem.getLatestFile(pathToCut + `${sceneFullName}`, 'jpg');
         
         //копируем кадры каждого видеофайла в папку network
-        await fs.copyFile(latestImage, absolutePath + '\\' + `${sceneFullName}`);
+        fs.copyFile(latestImage, absolutePath + '\\' + `${sceneFullName}`);
         const image = `=image("http://peppers-studio.ru/task1/v${versionNumber}/${sceneFullName}")`
 
         const itemObject = {

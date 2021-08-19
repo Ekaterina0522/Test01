@@ -33,7 +33,7 @@ module.exports = class FileSystem {
     static async eachDirEntry(path, entryAction, fileType) {
         //получаем имена каждого файла mp4
         let entries = await FileSystem.getDirEntries(path);
-
+        
         if (typeof fileType === 'string') {
             //разбиваем названия файлов по . берем то что осталось после точки
             //и смотрим совпадает ли с fileType
