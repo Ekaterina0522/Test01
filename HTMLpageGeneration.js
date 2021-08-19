@@ -12,7 +12,7 @@ const FfmpegUtils = require('./app/utils/FfmpegUtils');
 ///
 let absolutePath;
 const items = []; //массив с объектами где хранятся названия полей таблицы
-let episodeName;
+//let episodeName;
 let versionNumber;
 let projectName;
 ///
@@ -40,18 +40,20 @@ class HTMLpageGenerator {
 
         await this.validateSourсes(sourcePath);
 
-        console.log('items', items);
+        //console.log('items', items);
+        //console.log('items.episodeName', items[1].episodeName)
+        const templatePath = __dirname + '\\app\\project\\HTMLpageTemplate.tpl';
+        const templateConent = await FileSystem.loadTextFile(templatePath);
 
-        // const templatePath = __dirname + '\\app\\project\\HTMLpageTemplate.tpl';
-        // const templateConent = await FileSystem.loadTextFile(templatePath);
+        const template = Handlebars.compile(templateConent);
 
-        // const template = Handlebars.compile(templateConent);
+        const htmlContent = template({ items: items });
 
-        // const htmlContent = template({ items: items });
+        //console.log('sourcePath', sourcePath);
+        await Utils.processArray(items, async (item, i) => {
+            await FileSystem.saveTextFile(sourcePath + `\\${items[i].episodeName}_v${versionNumber}.html`, htmlContent);
 
-        // //console.log('sourcePath', sourcePath);
-        // await FileSystem.saveTextFile(sourcePath + `\\${episodeName}_v${versionNumber}.html`, htmlContent);
-
+        });
 
         console.log(chalk.bgMagenta('FINISH'));
 
@@ -73,7 +75,7 @@ class HTMLpageGenerator {
             // Iterate Scenes
             await FileSystem.eachDirEntry(sqEntryPath, async (scEntry, scI, scEntryPath) => {
 
-                console.log('Путь до папки сцены', scEntryPath);
+                console.log('Проверена папка сцены>>>>>', scEntryPath);
                 let scFlag = scEntry.match(/^.*_sh\d\d\d\d$/);
                 //если папка названа не по шаблону не заходим в нее 
                 if (scFlag === null) return;
