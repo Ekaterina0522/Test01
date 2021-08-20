@@ -9,20 +9,6 @@ const FileSystem = require('../utils/FileSystem');
 ///
 module.exports = class NameGenerator {
 
-    // //придумать куда воткнуть эту функцию!!!
-    // static async makeNetworkFolder( projectName, versNumber ) {
-
-    //     //путь до папки где будут находиться копии кадров видеофайлов
-    //     const networkPath = `D:\\WORK\\Katya\\${projectName}\\mats\\network`;
-
-    //     //создаем папки с именем проекта и версии в папке network
-    //     await FileSystem.createFolder(networkPath + `\\${projectName}\\` + `v${versNumber}`);
-
-    //     //получаем абсолютный путь до папки с номером версии
-    //     absolutePath = ''+ await path.resolve(networkPath + `\\${projectName}\\` + `v${versNumber}`);
-
-    // }
-
     //функция получающая на входе строку(полный путь до папки сцены), возвращает объект с распотрошенными частями строки
     static async fromSceneFullName( scFullName, scEntryPath, versNumber, projectName ){
         //console.log('versNumber', versNumber);
@@ -42,8 +28,8 @@ module.exports = class NameGenerator {
         //получаем путь к последнему созданному видеофайлу
         const latestVideo = FileSystem.getLatestFile(folder, 'mp4');
 
-        const duration = await FfmpegUtils.getVideoLength(folder+`\\${scFullName}.mp4`);
-        const frames = await FfmpegUtils.countFrames(folder+`\\${scFullName}.mp4`);
+        const duration = FfmpegUtils.getVideoLength(folder+`\\${scFullName}.mp4`);
+        const frames = FfmpegUtils.countFrames(folder+`\\${scFullName}.mp4`);
         const fps = frames/duration;
 
         // //получаем путь к последнему созданному кадру
@@ -55,7 +41,7 @@ module.exports = class NameGenerator {
         const networkPath = `D:\\WORK\\Katya\\${projectName}\\mats\\network`;
 
         //создаем папки с именем проекта и версии в папке network
-        await FileSystem.createFolder(networkPath + `\\${projectName}\\` + `v${versNumber}`);
+        FileSystem.createFolder(networkPath + `\\${projectName}\\` + `v${versNumber}`);
         
         //получаем абсолютный путь до папки с номером версии
         let absolutePath = ''+ await path.resolve(networkPath + `\\${projectName}\\` + `v${versNumber}`);
