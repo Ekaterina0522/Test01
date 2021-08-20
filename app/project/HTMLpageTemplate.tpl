@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Задача 2</title>
+    <title>{{title}}</title>
 </head>
 
 <body>
