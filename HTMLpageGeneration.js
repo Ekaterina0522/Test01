@@ -33,9 +33,7 @@ class HTMLpageGenerator {
         const projectName = ''+ await Readline.readString(process.argv[4], "Enter Project Name:");
         console.log(chalk.bgGreen('projectName:', projectName));
 
-        //await NameGenerator.makeNetworkFolder( projectName, versionNumber ); //работает
-
-        // //console.log('__dirname', __dirname);
+        //console.log('__dirname', __dirname);
 
         await this.validateSourсes(sourcePath, versionNumber, projectName);
         const templatePath = __dirname + '\\app\\project\\HTMLpageTemplate.tpl';
