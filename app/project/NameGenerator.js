@@ -5,27 +5,27 @@ const Utils = require('../utils/utils');
 const FfmpegUtils = require('../utils/FfmpegUtils');
 const FileSystem = require('../utils/FileSystem');
 ///
-let absolutePath;
+//let absolutePath;
 ///
 module.exports = class NameGenerator {
 
-    //придумать куда воткнуть эту функцию!!!
-    static async makeNetworkFolder( projectName, versNumber ) {
+    // //придумать куда воткнуть эту функцию!!!
+    // static async makeNetworkFolder( projectName, versNumber ) {
 
-        //путь до папки где будут находиться копии кадров видеофайлов
-        const networkPath = `D:\\WORK\\Katya\\${projectName}\\mats\\network`;
+    //     //путь до папки где будут находиться копии кадров видеофайлов
+    //     const networkPath = `D:\\WORK\\Katya\\${projectName}\\mats\\network`;
 
-        //создаем папки с именем проекта и версии в папке network
-        await FileSystem.createFolder(networkPath + `\\${projectName}\\` + `${versNumber}`);
+    //     //создаем папки с именем проекта и версии в папке network
+    //     await FileSystem.createFolder(networkPath + `\\${projectName}\\` + `v${versNumber}`);
 
-        //получаем абсолютный путь до папки с номером версии
-        absolutePath = ''+ await path.resolve(networkPath + `\\${projectName}\\` + `${versNumber}`);
+    //     //получаем абсолютный путь до папки с номером версии
+    //     absolutePath = ''+ await path.resolve(networkPath + `\\${projectName}\\` + `v${versNumber}`);
 
-    }
+    // }
 
     //функция получающая на входе строку(полный путь до папки сцены), возвращает объект с распотрошенными частями строки
-    static async fromSceneFullName( scFullName, scEntryPath, versionNumber ){
-
+    static async fromSceneFullName( scFullName, scEntryPath, versNumber, projectName ){
+        //console.log('versNumber', versNumber);
         //       sceneFullName = ['opening', 'sq001', 'sh0010']
         //       scFullName = 'opening_sq001_sh0010'
 
@@ -47,12 +47,22 @@ module.exports = class NameGenerator {
         const fps = frames/duration;
 
         // //получаем путь к последнему созданному кадру
-        const latestImage = FileSystem.getLatestFile(folder, 'jpg');
+        const latestImage = await FileSystem.getLatestFile(folder, 'jpg');
+        //console.log('latestImage', latestImage);
+        //console.log('absolutePath', absolutePath+`\\${scFullName}.jpg`);
+        
+        //путь до папки где будут находиться копии кадров видеофайлов
+        const networkPath = `D:\\WORK\\Katya\\${projectName}\\mats\\network`;
 
-        // //копируем кадры каждого видеофайла в папку network
-        //fs.copyFile(latestImage, absolutePath + `\\${scFullName}`);
-
-        const image = `=image("http://peppers-studio.ru/task1/v${versionNumber}/${scFullName}")`
+        //создаем папки с именем проекта и версии в папке network
+        await FileSystem.createFolder(networkPath + `\\${projectName}\\` + `v${versNumber}`);
+        
+        //получаем абсолютный путь до папки с номером версии
+        let absolutePath = ''+ await path.resolve(networkPath + `\\${projectName}\\` + `v${versNumber}`);
+        // //копируем кадры каждого видеофайла в папку network- не работает!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        fs.copyFile(latestImage, absolutePath+`\\${scFullName}.jpg`);
+        
+        const image = `=image("http://peppers-studio.ru/task1/v${versNumber}/${scFullName}")`;
 
         const sceneNameObject = {
             episodeName,
